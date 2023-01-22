@@ -1,13 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { View, Text } from "react-native-ui-lib";
+import "reflect-metadata";
+import App from "./src/App";
 
-export default function App() {
-  return (
-    <View flex paddingH-25 paddingT-120>
-      <Text blue50 text20>
-        Moi
-      </Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+export default App;

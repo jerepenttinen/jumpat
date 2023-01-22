@@ -3,13 +3,13 @@ module.exports = function (api) {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
-      [
-        "module-resolver",
-        {
-          extensions: [".tsx", ".ts", ".js", ".json"],
-        },
-      ],
-      "react-native-reanimated/plugin",
+      "@babel/transform-react-jsx-source",
+      "babel-plugin-transform-typescript-metadata",
     ],
+    env: {
+      production: {
+        plugins: ["react-native-paper/babel"],
+      },
+    },
   };
 };
