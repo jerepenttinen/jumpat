@@ -1,27 +1,59 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import { Surface, Card, FAB, IconButton, Text } from "react-native-paper";
+import { FlatList } from "react-native-gesture-handler";
+import { Surface, Card, FAB, IconButton, Text, Menu } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDataSource } from "../data/datasource";
 import { WorkoutModel } from "../data/entities/WorkoutModel";
 import { StackParamList } from "../navigation/Navigator";
 
-function WorkoutCard({ workout }: { workout: WorkoutModel }) {
+function WorkoutCard({
+  workout,
+  navigation,
+  deleteWorkout,
+}: { workout: WorkoutModel; deleteWorkout: (id: number) => void } & Pick<
+  NativeStackScreenProps<StackParamList, "Workouts">,
+  "navigation"
+>) {
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = useCallback(() => setVisible(true), []);
+  const closeMenu = useCallback(() => setVisible(false), []);
+
   return (
-    <Card style={{ marginBottom: 10 }}>
+    <Card style={{ marginBottom: 10, marginHorizontal: 10 }}>
       <Card.Title
         title={
-          <Text variant="titleMedium">{workout.createdAt.toDateString()}</Text>
+          <Text variant="titleMedium">
+            {workout.createdAt?.toDateString()} {workout.id}
+          </Text>
         }
         right={(props) => (
-          <IconButton
-            {...props}
-            icon={(props) => <MaterialIcons {...props} name="more-vert" />}
-            onPress={() => {}}
-          />
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+              <IconButton {...props} icon="dots-vertical" onPress={openMenu} />
+            }
+          >
+            <Menu.Item
+              leadingIcon="pencil-outline"
+              onPress={() => {
+                closeMenu();
+                navigation.navigate("EditWorkout", { workoutId: workout.id });
+              }}
+              title="Muokkaa"
+            />
+            <Menu.Item
+              leadingIcon="trash-can-outline"
+              onPress={() => {
+                deleteWorkout(workout.id);
+              }}
+              title="Poista"
+            />
+          </Menu>
         )}
       />
       <Card.Content>
@@ -47,12 +79,26 @@ export default function Workouts({
     workoutRepository.getAll().then(setWorkouts);
   }, []);
 
+  const deleteWorkout = useCallback((workoutId: number) => {
+    workoutRepository.delete(workoutId).then(() => {
+      setWorkouts((last) => last.filter((workout) => workout.id !== workoutId));
+    });
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Surface elevation={0}>
-        {workouts?.map((workout) => (
-          <WorkoutCard key={workout.id} workout={workout} />
-        ))}
+        <FlatList
+          data={workouts}
+          inverted
+          renderItem={({ item }) => (
+            <WorkoutCard
+              workout={item}
+              navigation={navigation}
+              deleteWorkout={deleteWorkout}
+            />
+          )}
+        />
       </Surface>
       <FAB
         icon="plus"
@@ -60,6 +106,7 @@ export default function Workouts({
         onPress={async () => {
           const workout = await workoutRepository.create();
           navigation.navigate("EditWorkout", { workoutId: workout.id });
+          setWorkouts((last) => [...last, workout]);
         }}
       />
     </SafeAreaView>
