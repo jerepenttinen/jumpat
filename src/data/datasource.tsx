@@ -9,10 +9,15 @@ import { ActivityIndicator } from "react-native-paper";
 import { DataSource } from "typeorm";
 
 import { ExerciseModel } from "./entities/ExerciseModel";
+import { RepetitionModel } from "./entities/RepetitionModel";
+import { SetModel } from "./entities/SetModel";
+import { WorkoutModel } from "./entities/WorkoutModel";
 import { ExerciseRepository } from "./repositories/ExerciseRepository";
+import { WorkoutRepository } from "./repositories/WorkoutRepository";
 
 type DataSourceContextData = {
   exerciseRepository: ExerciseRepository;
+  workoutRepository: WorkoutRepository;
 };
 
 const DataSourceContext = createContext<DataSourceContextData>(
@@ -31,7 +36,7 @@ export function DataSourceContextProvider({
       database: "jumppa.db",
       driver: require("expo-sqlite"),
       type: "expo",
-      entities: [ExerciseModel],
+      entities: [ExerciseModel, RepetitionModel, SetModel, WorkoutModel],
       synchronize: true,
     });
 
@@ -52,6 +57,7 @@ export function DataSourceContextProvider({
     <DataSourceContext.Provider
       value={{
         exerciseRepository: new ExerciseRepository(dataSource),
+        workoutRepository: new WorkoutRepository(dataSource),
       }}
     >
       {children}

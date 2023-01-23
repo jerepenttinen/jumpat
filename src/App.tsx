@@ -1,49 +1,27 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import { Provider as PaperProvider } from "react-native-paper";
+import {
+  NavigationContainer,
+  DefaultTheme as NavigationLightTheme,
+} from "@react-navigation/native";
+import {
+  MD3LightTheme,
+  Provider as PaperProvider,
+  adaptNavigationTheme,
+} from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import Main from "./Main";
-import Other from "./Other";
 import { DataSourceContextProvider } from "./data/datasource";
-
-const Tab = createMaterialBottomTabNavigator();
+import Navigator from "./navigation/Navigator";
 
 export default function App() {
+  const { LightTheme } = adaptNavigationTheme({
+    reactNavigationLight: NavigationLightTheme,
+  });
   return (
     <SafeAreaProvider>
-      <PaperProvider>
+      <PaperProvider theme={MD3LightTheme}>
         <DataSourceContextProvider>
-          <NavigationContainer>
-            <Tab.Navigator>
-              <Tab.Screen
-                name="Main"
-                component={Main}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons
-                      name="home"
-                      color={color}
-                      size={24}
-                    />
-                  ),
-                }}
-              />
-              <Tab.Screen
-                name="Other"
-                component={Other}
-                options={{
-                  tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons
-                      name="library"
-                      color={color}
-                      size={24}
-                    />
-                  ),
-                }}
-              />
-            </Tab.Navigator>
+          <NavigationContainer theme={LightTheme}>
+            <Navigator />
           </NavigationContainer>
         </DataSourceContextProvider>
       </PaperProvider>
