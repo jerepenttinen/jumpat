@@ -13,6 +13,6 @@ export class RepetitionModel {
   @Column({ type: "datetime", default: () => "date('now')" })
   createdAt: Date;
 
-  @ManyToOne(() => SetModel, (set) => set.repetitions)
+  @ManyToOne(() => SetModel, (set) => set.repetitions, { onDelete: "CASCADE" })
   set: SetModel;
 }

@@ -27,6 +27,8 @@ export class SetModel {
   @ManyToOne(() => ExerciseModel, (exercise) => exercise.sets)
   exercise: ExerciseModel;
 
-  @ManyToOne(() => WorkoutModel, (workout) => workout.sets)
+  @ManyToOne(() => WorkoutModel, (workout) => workout.sets, {
+    onDelete: "CASCADE",
+  })
   workout: WorkoutModel;
 }

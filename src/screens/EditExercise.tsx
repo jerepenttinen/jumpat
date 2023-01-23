@@ -37,7 +37,7 @@ export default function EditExercise({
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 10 }}>
         <TextInput value={weightStr} onChangeText={handleSetWeight} />
         {repetitions?.map((repetition, i) => (

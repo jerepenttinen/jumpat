@@ -28,4 +28,8 @@ export class WorkoutRepository {
   public async delete(id: number) {
     await this.ormRepository.delete(id);
   }
+
+  public async findById(workoutId: number) {
+    return await this.ormRepository.findOneByOrFail({ id: workoutId });
+  }
 }
