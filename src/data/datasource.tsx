@@ -13,11 +13,15 @@ import { RepetitionModel } from "./entities/RepetitionModel";
 import { SetModel } from "./entities/SetModel";
 import { WorkoutModel } from "./entities/WorkoutModel";
 import { ExerciseRepository } from "./repositories/ExerciseRepository";
+import { RepetitionRepository } from "./repositories/RepetitionRepository";
+import { SetRepository } from "./repositories/SetRepository";
 import { WorkoutRepository } from "./repositories/WorkoutRepository";
 
 type DataSourceContextData = {
   exerciseRepository: ExerciseRepository;
   workoutRepository: WorkoutRepository;
+  setRepository: SetRepository;
+  repetitionRepository: RepetitionRepository;
 };
 
 const DataSourceContext = createContext<DataSourceContextData>(
@@ -58,6 +62,8 @@ export function DataSourceContextProvider({
       value={{
         exerciseRepository: new ExerciseRepository(dataSource),
         workoutRepository: new WorkoutRepository(dataSource),
+        setRepository: new SetRepository(dataSource),
+        repetitionRepository: new RepetitionRepository(dataSource),
       }}
     >
       {children}

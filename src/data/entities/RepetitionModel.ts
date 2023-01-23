@@ -7,7 +7,7 @@ export class RepetitionModel {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column("int")
+  @Column({ type: "int", nullable: true })
   count: number;
 
   @Column({ type: "datetime", default: () => "date('now')" })

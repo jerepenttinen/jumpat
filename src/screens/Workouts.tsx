@@ -1,7 +1,8 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import { Surface, Card, Portal, FAB } from "react-native-paper";
+import { Surface, Card, FAB, IconButton, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDataSource } from "../data/datasource";
@@ -10,10 +11,21 @@ import { StackParamList } from "../navigation/Navigator";
 
 function WorkoutCard({ workout }: { workout: WorkoutModel }) {
   return (
-    <Card>
-      <Card.Title title={workout.createdAt.toDateString()} />
+    <Card style={{ marginBottom: 10 }}>
+      <Card.Title
+        title={
+          <Text variant="titleMedium">{workout.createdAt.toDateString()}</Text>
+        }
+        right={(props) => (
+          <IconButton
+            {...props}
+            icon={(props) => <MaterialIcons {...props} name="more-vert" />}
+            onPress={() => {}}
+          />
+        )}
+      />
       <Card.Content>
-        {workout.sets.map((set) => (
+        {workout.sets?.map((set) => (
           <TouchableOpacity>
             {set.exercise.name} {set.weight}{" "}
             {set.repetitions.map((rep) => rep.count).join(" ")}
@@ -36,19 +48,20 @@ export default function Workouts({
   }, []);
 
   return (
-    <SafeAreaView style={{ height: "100%" }}>
-      <Portal.Host>
-        <FAB
-          icon="plus"
-          style={styles.fab}
-          onPress={() => navigation.navigate("EditWorkout")}
-        />
-      </Portal.Host>
-      <Surface>
-        {workouts.map((workout) => (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Surface elevation={0}>
+        {workouts?.map((workout) => (
           <WorkoutCard key={workout.id} workout={workout} />
         ))}
       </Surface>
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={async () => {
+          const workout = await workoutRepository.create();
+          navigation.navigate("EditWorkout", { workoutId: workout.id });
+        }}
+      />
     </SafeAreaView>
   );
 }

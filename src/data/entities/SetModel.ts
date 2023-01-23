@@ -15,7 +15,7 @@ export class SetModel {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @Column("float")
+  @Column({ type: "float", nullable: true })
   weight: number;
 
   @Column({ type: "datetime", default: () => "date('now')" })
