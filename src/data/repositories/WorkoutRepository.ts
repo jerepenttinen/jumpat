@@ -30,6 +30,9 @@ export class WorkoutRepository {
   }
 
   public async findById(workoutId: number) {
-    return await this.ormRepository.findOneByOrFail({ id: workoutId });
+    return await this.ormRepository.findOneOrFail({
+      where: { id: workoutId },
+      relations: ["sets"],
+    });
   }
 }

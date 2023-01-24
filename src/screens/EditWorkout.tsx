@@ -56,7 +56,6 @@ export default function EditWorkout({
     workoutRepository.findById(route.params.workoutId).then((workout) => {
       if (typeof workout.sets !== "undefined") {
         setSets(workout.sets);
-        console.log(workout.sets);
       }
     });
   }, []);

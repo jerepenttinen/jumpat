@@ -5,7 +5,7 @@ import {
 import { HeaderButtonProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { Appbar } from "react-native-paper";
 
-import EditExercise from "../screens/EditExercise";
+import EditExercise, { EditExerciseHeader } from "../screens/EditExercise";
 import EditWorkout, { EditWorkoutHeader } from "../screens/EditWorkout";
 import Workouts from "../screens/Workouts";
 
@@ -59,6 +59,7 @@ export default function Navigator() {
         component={EditExercise}
         options={{
           title: "Muokkaa",
+          headerRight: () => <EditExerciseHeader />,
         }}
       />
     </Stack.Navigator>

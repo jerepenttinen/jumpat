@@ -15,7 +15,12 @@ export class SetRepository {
   }
 
   public async findById(setId: number) {
-    return await this.ormRepository.findOneByOrFail({ id: setId });
+    return await this.ormRepository.findOneOrFail({
+      where: {
+        id: setId,
+      },
+      relations: ["repetitions"],
+    });
   }
 
   public async updateWeight(setId: number, weight: number) {
