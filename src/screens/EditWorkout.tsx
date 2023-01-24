@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet } from "react-native";
-import { Appbar, FAB, Surface, Text } from "react-native-paper";
+import { Appbar, FAB, IconButton, List, Surface } from "react-native-paper";
 
 import { useDataSource } from "../data/datasource";
 import { SetModel } from "../data/entities/SetModel";
@@ -22,6 +22,29 @@ export function EditWorkoutHeader() {
   );
 }
 
+function ExerciseListItem({
+  set,
+  navigation,
+}: { set: SetModel } & Pick<
+  NativeStackScreenProps<StackParamList, "EditWorkout">,
+  "navigation"
+>) {
+  return (
+    <List.Item
+      title={set.exercise?.name}
+      right={(props) => (
+        <IconButton
+          {...props}
+          icon="pencil-outline"
+          onPress={() => {
+            navigation.navigate("EditExercise", { setId: set.id });
+          }}
+        />
+      )}
+    />
+  );
+}
+
 export default function EditWorkout({
   navigation,
   route,
@@ -31,8 +54,10 @@ export default function EditWorkout({
 
   useEffect(() => {
     workoutRepository.findById(route.params.workoutId).then((workout) => {
-      setSets(workout.sets);
-      console.log(workout.sets);
+      if (typeof workout.sets !== "undefined") {
+        setSets(workout.sets);
+        console.log(workout.sets);
+      }
     });
   }, []);
 
@@ -41,7 +66,9 @@ export default function EditWorkout({
       <Surface elevation={0}>
         <FlatList
           data={sets}
-          renderItem={({ item }) => <Text>{item.id}</Text>}
+          renderItem={({ item }) => (
+            <ExerciseListItem set={item} navigation={navigation} />
+          )}
         />
       </Surface>
       <FAB
