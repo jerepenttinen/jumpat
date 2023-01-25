@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Appbar, FAB, TextInput } from "react-native-paper";
 import WheelPicker from "react-native-wheely";
@@ -63,27 +63,18 @@ export default function EditExercise({
   route,
 }: NativeStackScreenProps<StackParamList, "EditExercise">) {
   const { repetitionRepository, setRepository } = useDataSource();
-  const [weight, setWeight] = useState<number>();
-  const [repetitions, setRepetitions] = useState<RepetitionModel[]>([]);
+  const [weight, setWeight] = useState<number>(route.params.set.weight);
+  const [repetitions, setRepetitions] = useState<RepetitionModel[]>(
+    route.params.set.repetitions,
+  );
 
   const weightStr = weight?.toString();
-
-  useEffect(() => {
-    setRepository.findById(route.params.setId).then((set) => {
-      if (typeof set.repetitions !== "undefined") {
-        setRepetitions(set.repetitions);
-      }
-      if (typeof set.weight !== "undefined") {
-        setWeight(set.weight);
-      }
-    });
-  }, []);
 
   const handleSetWeight = useCallback(async (weigthStr: string | undefined) => {
     if (typeof weigthStr === "string") {
       const w = Number(weigthStr);
       if (!Number.isNaN(w)) {
-        await setRepository.updateWeight(route.params.setId, w);
+        await setRepository.updateWeight(route.params.set.id, w);
         setWeight(w);
       }
     }
@@ -106,7 +97,7 @@ export default function EditExercise({
         style={styles.fab}
         onPress={async () => {
           const repetition = await repetitionRepository.create(
-            route.params.setId,
+            route.params.set.id,
           );
           setRepetitions((previous) => [...previous, repetition]);
         }}

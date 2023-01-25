@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet } from "react-native";
 import { Appbar, FAB, IconButton, List, Surface } from "react-native-paper";
 
@@ -29,6 +29,7 @@ function ExerciseListItem({
   NativeStackScreenProps<StackParamList, "EditWorkout">,
   "navigation"
 >) {
+  const { setRepository } = useDataSource();
   return (
     <List.Item
       title={set.exercise?.name}
@@ -36,8 +37,10 @@ function ExerciseListItem({
         <IconButton
           {...props}
           icon="pencil-outline"
-          onPress={() => {
-            navigation.navigate("EditExercise", { setId: set.id });
+          onPress={async () => {
+            navigation.navigate("EditExercise", {
+              set: await setRepository.findById(set.id),
+            });
           }}
         />
       )}
@@ -49,16 +52,8 @@ export default function EditWorkout({
   navigation,
   route,
 }: NativeStackScreenProps<StackParamList, "EditWorkout">) {
-  const { setRepository, workoutRepository } = useDataSource();
-  const [sets, setSets] = useState<SetModel[]>([]);
-
-  useEffect(() => {
-    workoutRepository.findById(route.params.workoutId).then((workout) => {
-      if (typeof workout.sets !== "undefined") {
-        setSets(workout.sets);
-      }
-    });
-  }, []);
+  const { setRepository } = useDataSource();
+  const [sets, setSets] = useState<SetModel[]>(route.params.workout.sets);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -74,8 +69,8 @@ export default function EditWorkout({
         icon="plus"
         style={styles.fab}
         onPress={async () => {
-          const set = await setRepository.create(route.params.workoutId);
-          navigation.navigate("EditExercise", { setId: set.id });
+          const set = await setRepository.create(route.params.workout.id);
+          navigation.navigate("EditExercise", { set });
           setSets((last) => [...last, set]);
         }}
       />

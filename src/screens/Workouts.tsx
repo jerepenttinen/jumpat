@@ -42,7 +42,7 @@ function WorkoutCard({
               leadingIcon="pencil-outline"
               onPress={() => {
                 closeMenu();
-                navigation.navigate("EditWorkout", { workoutId: workout.id });
+                navigation.navigate("EditWorkout", { workout });
               }}
               title="Muokkaa"
             />
@@ -59,8 +59,10 @@ function WorkoutCard({
       <Card.Content>
         {workout.sets?.map((set) => (
           <TouchableOpacity>
-            {set.exercise.name} {set.weight}{" "}
-            {set.repetitions.map((rep) => rep.count).join(" ")}
+            <Text>
+              {set.exercise?.name} {set.weight}{" "}
+              {set.repetitions?.map((rep) => rep.count).join(" ")}
+            </Text>
           </TouchableOpacity>
         ))}
       </Card.Content>
@@ -105,7 +107,7 @@ export default function Workouts({
         style={styles.fab}
         onPress={async () => {
           const workout = await workoutRepository.create();
-          navigation.navigate("EditWorkout", { workoutId: workout.id });
+          navigation.navigate("EditWorkout", { workout });
           setWorkouts((last) => [...last, workout]);
         }}
       />

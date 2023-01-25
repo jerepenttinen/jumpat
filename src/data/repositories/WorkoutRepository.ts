@@ -10,7 +10,9 @@ export class WorkoutRepository {
   }
 
   public async getAll() {
-    return await this.ormRepository.find();
+    return await this.ormRepository.find({
+      relations: ["sets", "sets.repetitions"],
+    });
   }
 
   public async create() {

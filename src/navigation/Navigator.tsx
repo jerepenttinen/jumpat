@@ -5,14 +5,16 @@ import {
 import { HeaderButtonProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { Appbar } from "react-native-paper";
 
+import { SetModel } from "../data/entities/SetModel";
+import { WorkoutModel } from "../data/entities/WorkoutModel";
 import EditExercise, { EditExerciseHeader } from "../screens/EditExercise";
 import EditWorkout, { EditWorkoutHeader } from "../screens/EditWorkout";
 import Workouts from "../screens/Workouts";
 
 export type StackParamList = {
   Workouts: undefined;
-  EditWorkout: { workoutId: number };
-  EditExercise: { setId: number };
+  EditWorkout: { workout: WorkoutModel };
+  EditExercise: { set: SetModel };
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
