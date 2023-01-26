@@ -1,19 +1,26 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { Surface, Card, FAB, IconButton, Text, Menu } from "react-native-paper";
+import {
+  Surface,
+  Card,
+  FAB,
+  IconButton,
+  Text,
+  Menu,
+  ActivityIndicator,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useDataSource } from "../data/datasource";
-import { WorkoutModel } from "../data/entities/WorkoutModel";
+import { Workout } from "../data/entities/Workout";
+import { useCreateWorkout, useWorkouts } from "../hooks/workouts";
 import { StackParamList } from "../navigation/Navigator";
 
 function WorkoutCard({
   workout,
   navigation,
-  deleteWorkout,
-}: { workout: WorkoutModel; deleteWorkout: (id: number) => void } & Pick<
+}: { workout: Workout } & Pick<
   NativeStackScreenProps<StackParamList, "Workouts">,
   "navigation"
 >) {
@@ -42,14 +49,14 @@ function WorkoutCard({
               leadingIcon="pencil-outline"
               onPress={() => {
                 closeMenu();
-                navigation.navigate("EditWorkout", { workout });
+                navigation.navigate("EditWorkout", { workoutId: workout.id });
               }}
               title="Muokkaa"
             />
             <Menu.Item
               leadingIcon="trash-can-outline"
               onPress={() => {
-                deleteWorkout(workout.id);
+                // deleteWorkout(workout.id);
               }}
               title="Poista"
             />
@@ -58,7 +65,7 @@ function WorkoutCard({
       />
       <Card.Content>
         {workout.sets?.map((set) => (
-          <TouchableOpacity>
+          <TouchableOpacity key={set.id}>
             <Text>
               {set.exercise?.name} {set.weight}{" "}
               {set.repetitions?.map((rep) => rep.count).join(" ")}
@@ -73,32 +80,21 @@ function WorkoutCard({
 export default function Workouts({
   navigation,
 }: NativeStackScreenProps<StackParamList, "Workouts">) {
-  const { workoutRepository } = useDataSource();
+  const workouts = useWorkouts();
+  const createWorkoutMutation = useCreateWorkout();
 
-  const [workouts, setWorkouts] = useState<WorkoutModel[]>([]);
-
-  useEffect(() => {
-    workoutRepository.getAll().then(setWorkouts);
-  }, []);
-
-  const deleteWorkout = useCallback((workoutId: number) => {
-    workoutRepository.delete(workoutId).then(() => {
-      setWorkouts((last) => last.filter((workout) => workout.id !== workoutId));
-    });
-  }, []);
+  if (workouts.isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Surface elevation={0}>
         <FlatList
-          data={workouts}
+          data={workouts.data}
           inverted
           renderItem={({ item }) => (
-            <WorkoutCard
-              workout={item}
-              navigation={navigation}
-              deleteWorkout={deleteWorkout}
-            />
+            <WorkoutCard key={item.id} workout={item} navigation={navigation} />
           )}
         />
       </Surface>
@@ -106,9 +102,8 @@ export default function Workouts({
         icon="plus"
         style={styles.fab}
         onPress={async () => {
-          const workout = await workoutRepository.create();
-          navigation.navigate("EditWorkout", { workout });
-          setWorkouts((last) => [...last, workout]);
+          const workout = await createWorkoutMutation.mutateAsync();
+          navigation.navigate("EditWorkout", { workoutId: workout.id });
         }}
       />
     </SafeAreaView>

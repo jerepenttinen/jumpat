@@ -1,12 +1,21 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet } from "react-native";
-import { Appbar, FAB, IconButton, List, Surface } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Appbar,
+  FAB,
+  IconButton,
+  List,
+  Surface,
+} from "react-native-paper";
 
-import { useDataSource } from "../data/datasource";
-import { SetModel } from "../data/entities/SetModel";
+import { Set } from "../data/entities/Set";
+import { useCreateSet } from "../hooks/sets";
+import { useWorkout } from "../hooks/workouts";
 import { StackParamList } from "../navigation/Navigator";
+
+type ScreenProps = NativeStackScreenProps<StackParamList, "EditWorkout">;
 
 export function EditWorkoutHeader() {
   return (
@@ -25,11 +34,10 @@ export function EditWorkoutHeader() {
 function ExerciseListItem({
   set,
   navigation,
-}: { set: SetModel } & Pick<
+}: { set: Set } & Pick<
   NativeStackScreenProps<StackParamList, "EditWorkout">,
   "navigation"
 >) {
-  const { setRepository } = useDataSource();
   return (
     <List.Item
       title={set.exercise?.name}
@@ -37,9 +45,9 @@ function ExerciseListItem({
         <IconButton
           {...props}
           icon="pencil-outline"
-          onPress={async () => {
+          onPress={() => {
             navigation.navigate("EditExercise", {
-              set: await setRepository.findById(set.id),
+              setId: set.id,
             });
           }}
         />
@@ -48,30 +56,46 @@ function ExerciseListItem({
   );
 }
 
-export default function EditWorkout({
-  navigation,
-  route,
-}: NativeStackScreenProps<StackParamList, "EditWorkout">) {
-  const { setRepository } = useDataSource();
-  const [sets, setSets] = useState<SetModel[]>(route.params.workout.sets);
+function CreateSetFAB({
+  workoutId,
+  action,
+}: {
+  workoutId: number;
+  action: (setId: number) => void;
+}) {
+  const createSetMutation = useCreateSet();
+  return (
+    <FAB
+      icon="plus"
+      style={styles.fab}
+      onPress={() => {
+        createSetMutation.mutateAsync(workoutId).then((set) => action(set.id));
+      }}
+    />
+  );
+}
+
+export default function EditWorkout({ navigation, route }: ScreenProps) {
+  const workout = useWorkout(route.params.workoutId);
+
+  if (workout.isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Surface elevation={0}>
         <FlatList
-          data={sets}
+          data={workout.data?.sets}
           renderItem={({ item }) => (
             <ExerciseListItem set={item} navigation={navigation} />
           )}
         />
       </Surface>
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={async () => {
-          const set = await setRepository.create(route.params.workout.id);
-          navigation.navigate("EditExercise", { set });
-          setSets((last) => [...last, set]);
+      <CreateSetFAB
+        workoutId={route.params.workoutId}
+        action={(setId) => {
+          navigation.navigate("EditExercise", { setId });
         }}
       />
     </SafeAreaView>

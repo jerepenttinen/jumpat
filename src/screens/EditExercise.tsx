@@ -2,12 +2,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Appbar, FAB, TextInput } from "react-native-paper";
+import { ActivityIndicator, Appbar, FAB, TextInput } from "react-native-paper";
 import WheelPicker from "react-native-wheely";
 
-import { useDataSource } from "../data/datasource";
-import { RepetitionModel } from "../data/entities/RepetitionModel";
+import { Repetition } from "../data/entities/Repetition";
+import { Set } from "../data/entities/Set";
+import { useCreateRepetition } from "../hooks/repetitions";
+import { useSet } from "../hooks/sets";
 import { StackParamList } from "../navigation/Navigator";
+
+type ScreenProps = NativeStackScreenProps<StackParamList, "EditExercise">;
 
 export function EditExerciseHeader() {
   return (
@@ -32,10 +36,8 @@ function RepetitionListItem({
   repetition,
 }: {
   listIndex: number;
-  repetition: RepetitionModel;
+  repetition: Repetition;
 }) {
-  const { repetitionRepository } = useDataSource();
-
   const [selected, setSelected] = useState((repetition.count ?? 10) - 1);
   const numbers = useMemo(
     () =>
@@ -46,7 +48,7 @@ function RepetitionListItem({
   );
 
   const handleChange = useCallback((index: number) => {
-    repetitionRepository.updateCount(repetition.id, index + 1);
+    // repetitionRepository.updateCount(repetition.id, index + 1);
     setSelected(index);
   }, []);
 
@@ -58,33 +60,47 @@ function RepetitionListItem({
     />
   );
 }
-export default function EditExercise({
-  navigation,
-  route,
-}: NativeStackScreenProps<StackParamList, "EditExercise">) {
-  const { repetitionRepository, setRepository } = useDataSource();
-  const [weight, setWeight] = useState<number>(route.params.set.weight);
-  const [repetitions, setRepetitions] = useState<RepetitionModel[]>(
-    route.params.set.repetitions,
-  );
 
+function Weight({ set }: { set: Set }) {
+  const [weight, setWeight] = useState<number>(set.weight);
   const weightStr = weight?.toString();
 
   const handleSetWeight = useCallback(async (weigthStr: string | undefined) => {
     if (typeof weigthStr === "string") {
       const w = Number(weigthStr);
       if (!Number.isNaN(w)) {
-        await setRepository.updateWeight(route.params.set.id, w);
+        // await setRepository.updateWeight(set.id, w);
         setWeight(w);
       }
     }
   }, []);
+  return <TextInput value={weightStr} onChangeText={handleSetWeight} />;
+}
+
+function CreateRepetitionFAB({ setId }: { setId: number }) {
+  const createRepetitionMutation = useCreateRepetition();
+  return (
+    <FAB
+      icon="plus"
+      style={styles.fab}
+      onPress={() => {
+        createRepetitionMutation.mutate(setId);
+      }}
+    />
+  );
+}
+export default function EditExercise({ navigation, route }: ScreenProps) {
+  const set = useSet(route.params.setId);
+
+  if (set.isLoading || !set.data) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 10 }}>
-        <TextInput value={weightStr} onChangeText={handleSetWeight} />
-        {repetitions?.map((repetition, i) => (
+        {/* <Weight set={set.data} /> */}
+        {set.data.repetitions?.map((repetition, i) => (
           <RepetitionListItem
             listIndex={i + 1}
             repetition={repetition}
@@ -92,16 +108,7 @@ export default function EditExercise({
           />
         ))}
       </View>
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={async () => {
-          const repetition = await repetitionRepository.create(
-            route.params.set.id,
-          );
-          setRepetitions((previous) => [...previous, repetition]);
-        }}
-      />
+      <CreateRepetitionFAB setId={set.data.id!} />
     </SafeAreaView>
   );
 }

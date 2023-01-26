@@ -8,21 +8,12 @@ import React, {
 import { ActivityIndicator } from "react-native-paper";
 import { DataSource } from "typeorm";
 
-import { ExerciseModel } from "./entities/ExerciseModel";
-import { RepetitionModel } from "./entities/RepetitionModel";
-import { SetModel } from "./entities/SetModel";
-import { WorkoutModel } from "./entities/WorkoutModel";
-import { ExerciseRepository } from "./repositories/ExerciseRepository";
-import { RepetitionRepository } from "./repositories/RepetitionRepository";
-import { SetRepository } from "./repositories/SetRepository";
-import { WorkoutRepository } from "./repositories/WorkoutRepository";
+import { Exercise } from "./entities/Exercise";
+import { Repetition } from "./entities/Repetition";
+import { Set } from "./entities/Set";
+import { Workout } from "./entities/Workout";
 
-type DataSourceContextData = {
-  exerciseRepository: ExerciseRepository;
-  workoutRepository: WorkoutRepository;
-  setRepository: SetRepository;
-  repetitionRepository: RepetitionRepository;
-};
+type DataSourceContextData = object;
 
 const DataSourceContext = createContext<DataSourceContextData>(
   {} as DataSourceContextData,
@@ -40,7 +31,7 @@ export function DataSourceContextProvider({
       database: "jumppa.db",
       driver: require("expo-sqlite"),
       type: "expo",
-      entities: [ExerciseModel, RepetitionModel, SetModel, WorkoutModel],
+      entities: [Exercise, Repetition, Set, Workout],
       synchronize: true,
     });
 
@@ -58,14 +49,7 @@ export function DataSourceContextProvider({
   }
 
   return (
-    <DataSourceContext.Provider
-      value={{
-        exerciseRepository: new ExerciseRepository(dataSource),
-        workoutRepository: new WorkoutRepository(dataSource),
-        setRepository: new SetRepository(dataSource),
-        repetitionRepository: new RepetitionRepository(dataSource),
-      }}
-    >
+    <DataSourceContext.Provider value={{}}>
       {children}
     </DataSourceContext.Provider>
   );
