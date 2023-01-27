@@ -93,6 +93,7 @@ export default function EditWorkout({ navigation, route }: ScreenProps) {
           renderItem={({ item }) => (
             <ExerciseListItem set={item} navigation={navigation} />
           )}
+          contentContainerStyle={{ paddingBottom: 100 }}
         />
       </Surface>
       <CreateSetFAB
