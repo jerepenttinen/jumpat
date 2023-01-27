@@ -47,6 +47,7 @@ function ExerciseListItem({
           icon="pencil-outline"
           onPress={() => {
             navigation.navigate("EditExercise", {
+              workoutId: set.workout.id,
               setId: set.id,
             });
           }}
@@ -61,7 +62,7 @@ function CreateSetFAB({
   action,
 }: {
   workoutId: number;
-  action: (setId: number) => void;
+  action: (workoutId: number, setId: number) => void;
 }) {
   const createSetMutation = useCreateSet();
   return (
@@ -69,7 +70,9 @@ function CreateSetFAB({
       icon="plus"
       style={styles.fab}
       onPress={() => {
-        createSetMutation.mutateAsync(workoutId).then((set) => action(set.id));
+        createSetMutation
+          .mutateAsync(workoutId)
+          .then((set) => action(workoutId, set.id));
       }}
     />
   );
@@ -94,8 +97,8 @@ export default function EditWorkout({ navigation, route }: ScreenProps) {
       </Surface>
       <CreateSetFAB
         workoutId={route.params.workoutId}
-        action={(setId) => {
-          navigation.navigate("EditExercise", { setId });
+        action={(workoutId, setId) => {
+          navigation.navigate("EditExercise", { workoutId, setId });
         }}
       />
     </SafeAreaView>

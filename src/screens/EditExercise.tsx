@@ -8,7 +8,7 @@ import WheelPicker from "react-native-wheely";
 import { Repetition } from "../data/entities/Repetition";
 import { Set } from "../data/entities/Set";
 import { useCreateRepetition } from "../hooks/repetitions";
-import { useSet } from "../hooks/sets";
+import { useChangeSetWeight, useSet } from "../hooks/sets";
 import { StackParamList } from "../navigation/Navigator";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditExercise">;
@@ -62,19 +62,31 @@ function RepetitionListItem({
 }
 
 function Weight({ set }: { set: Set }) {
-  const [weight, setWeight] = useState<number>(set.weight);
-  const weightStr = weight?.toString();
+  const changeSetWeight = useChangeSetWeight();
+  const weightStr = set.weight?.toString() ?? "";
 
   const handleSetWeight = useCallback(async (weigthStr: string | undefined) => {
     if (typeof weigthStr === "string") {
-      const w = Number(weigthStr);
-      if (!Number.isNaN(w)) {
-        // await setRepository.updateWeight(set.id, w);
-        setWeight(w);
+      weightStr.replace(/[^0-9]/g, "");
+      const newWeight = Number(weigthStr);
+      if (!Number.isNaN(newWeight)) {
+        changeSetWeight.mutate({
+          workoutId: set.workout.id,
+          setId: set.id,
+          newWeight,
+        });
       }
     }
   }, []);
-  return <TextInput value={weightStr} onChangeText={handleSetWeight} />;
+  return (
+    <TextInput
+      keyboardType="numeric"
+      defaultValue={weightStr}
+      onEndEditing={(e) => {
+        handleSetWeight(e.nativeEvent.text);
+      }}
+    />
+  );
 }
 
 function CreateRepetitionFAB({ setId }: { setId: number }) {
@@ -89,8 +101,9 @@ function CreateRepetitionFAB({ setId }: { setId: number }) {
     />
   );
 }
+
 export default function EditExercise({ navigation, route }: ScreenProps) {
-  const set = useSet(route.params.setId);
+  const set = useSet(route.params.workoutId, route.params.setId);
 
   if (set.isLoading || !set.data) {
     return <ActivityIndicator />;
@@ -99,7 +112,7 @@ export default function EditExercise({ navigation, route }: ScreenProps) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 10 }}>
-        {/* <Weight set={set.data} /> */}
+        <Weight set={set.data} />
         {set.data.repetitions?.map((repetition, i) => (
           <RepetitionListItem
             listIndex={i + 1}

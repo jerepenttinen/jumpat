@@ -12,7 +12,7 @@ import Workouts from "../screens/Workouts";
 export type StackParamList = {
   Workouts: undefined;
   EditWorkout: { workoutId: number };
-  EditExercise: { setId: number };
+  EditExercise: { workoutId: number; setId: number };
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
