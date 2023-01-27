@@ -43,3 +43,13 @@ export function useCreateWorkout() {
     },
   });
 }
+
+export function useDeleteWorkout() {
+  const queryClient = useQueryClient();
+
+  return useMutation((workoutId: number) => Workout.delete({ id: workoutId }), {
+    onSettled() {
+      queryClient.invalidateQueries();
+    },
+  });
+}

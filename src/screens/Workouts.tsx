@@ -14,16 +14,21 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Workout } from "../data/entities/Workout";
-import { useCreateWorkout, useWorkouts } from "../hooks/workouts";
+import {
+  useCreateWorkout,
+  useDeleteWorkout,
+  useWorkouts,
+} from "../hooks/workouts";
 import { StackParamList } from "../navigation/Navigator";
+
+type ScreenProps = NativeStackScreenProps<StackParamList, "Workouts">;
 
 function WorkoutCard({
   workout,
   navigation,
-}: { workout: Workout } & Pick<
-  NativeStackScreenProps<StackParamList, "Workouts">,
-  "navigation"
->) {
+}: { workout: Workout } & Pick<ScreenProps, "navigation">) {
+  const deleteWorkout = useDeleteWorkout();
+
   const [visible, setVisible] = useState(false);
 
   const openMenu = useCallback(() => setVisible(true), []);
@@ -56,7 +61,7 @@ function WorkoutCard({
             <Menu.Item
               leadingIcon="trash-can-outline"
               onPress={() => {
-                // deleteWorkout(workout.id);
+                deleteWorkout.mutate(workout.id);
               }}
               title="Poista"
             />
@@ -77,9 +82,7 @@ function WorkoutCard({
   );
 }
 
-export default function Workouts({
-  navigation,
-}: NativeStackScreenProps<StackParamList, "Workouts">) {
+export default function Workouts({ navigation }: ScreenProps) {
   const workouts = useWorkouts();
   const createWorkoutMutation = useCreateWorkout();
 
