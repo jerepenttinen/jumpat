@@ -1,13 +1,16 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { ActivityIndicator, Appbar, FAB, TextInput } from "react-native-paper";
 import WheelPicker from "react-native-wheely";
 
 import { Repetition } from "../data/entities/Repetition";
 import { Set } from "../data/entities/Set";
-import { useCreateRepetition } from "../hooks/repetitions";
+import {
+  useChangeRepetitionCount,
+  useCreateRepetition,
+} from "../hooks/repetitions";
 import { useChangeSetWeight, useSet } from "../hooks/sets";
 import { StackParamList } from "../navigation/Navigator";
 
@@ -38,23 +41,22 @@ function RepetitionListItem({
   listIndex: number;
   repetition: Repetition;
 }) {
-  const [selected, setSelected] = useState((repetition.count ?? 10) - 1);
+  const changeRepetitionCount = useChangeRepetitionCount();
   const numbers = useMemo(
-    () =>
-      Array.from(Array(31).keys())
-        .map((n) => n.toString())
-        .slice(1),
+    () => Array.from(Array(31).keys()).map((n) => n.toString()),
     [],
   );
 
   const handleChange = useCallback((index: number) => {
-    // repetitionRepository.updateCount(repetition.id, index + 1);
-    setSelected(index);
+    changeRepetitionCount.mutate({
+      repetitionId: repetition.id,
+      newCount: index,
+    });
   }, []);
 
   return (
     <WheelPicker
-      selectedIndex={selected}
+      selectedIndex={repetition.count}
       options={numbers}
       onChange={handleChange}
     />

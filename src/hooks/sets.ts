@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Set } from "../data/entities/Set";
 import { KEYS } from "./keys";
-import { Workout } from "../data/entities/Workout";
 
 export function useSet(workoutId: number, setId: number) {
   return useQuery({

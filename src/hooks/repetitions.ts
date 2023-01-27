@@ -18,3 +18,24 @@ export function useCreateRepetition() {
     },
   );
 }
+
+export function useChangeRepetitionCount() {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({
+      repetitionId,
+      newCount,
+    }: {
+      repetitionId: number;
+      newCount: number;
+    }) => {
+      return Repetition.update({ id: repetitionId }, { count: newCount });
+    },
+    {
+      onSettled() {
+        queryClient.invalidateQueries();
+      },
+    },
+  );
+}
