@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -164,6 +165,14 @@ function CreateSetFAB({
 
 export default function EditWorkout({ navigation, route }: ScreenProps) {
   const workout = useWorkout(route.params.workoutId);
+
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({
+        title: workout.data?.createdAt.toLocaleDateString(),
+      });
+    }, [workout.data]),
+  );
 
   if (workout.isLoading) {
     return <ActivityIndicator />;

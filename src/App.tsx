@@ -1,3 +1,4 @@
+import "./locales";
 import {
   NavigationContainer,
   DefaultTheme as NavigationLightTheme,
@@ -11,6 +12,7 @@ import {
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { DataSourceContextProvider } from "./data/datasource";
+import { AppLocaleProvider } from "./locales/locale";
 import Navigator from "./navigation/Navigator";
 
 const queryClient = new QueryClient();
@@ -25,7 +27,9 @@ export default function App() {
         <DataSourceContextProvider>
           <QueryClientProvider client={queryClient}>
             <NavigationContainer theme={LightTheme}>
-              <Navigator />
+              <AppLocaleProvider>
+                <Navigator />
+              </AppLocaleProvider>
             </NavigationContainer>
           </QueryClientProvider>
         </DataSourceContextProvider>

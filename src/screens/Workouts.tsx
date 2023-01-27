@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import {
@@ -85,6 +86,12 @@ function WorkoutCard({
 export default function Workouts({ navigation }: ScreenProps) {
   const workouts = useWorkouts();
   const createWorkoutMutation = useCreateWorkout();
+
+  const { t } = useTranslation(["Workouts"]);
+
+  useEffect(() => {
+    navigation.setOptions({ title: t("Workouts:title")! });
+  }, []);
 
   if (workouts.isLoading) {
     return <ActivityIndicator />;
