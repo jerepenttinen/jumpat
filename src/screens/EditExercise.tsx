@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
@@ -83,6 +84,7 @@ function Weight({ set }: { set: Set }) {
   return (
     <TextInput
       keyboardType="numeric"
+      label="Paino"
       defaultValue={weightStr}
       onEndEditing={(e) => {
         handleSetWeight(e.nativeEvent.text);
@@ -106,6 +108,12 @@ function CreateRepetitionFAB({ setId }: { setId: number }) {
 
 export default function EditExercise({ navigation, route }: ScreenProps) {
   const set = useSet(route.params.workoutId, route.params.setId);
+
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({ title: set.data?.exercise.name ?? "Muokkaa" });
+    }, [set.data]),
+  );
 
   if (set.isLoading || !set.data) {
     return <ActivityIndicator />;

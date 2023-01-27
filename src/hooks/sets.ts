@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { Exercise } from "../data/entities/Exercise";
 import { Set } from "../data/entities/Set";
 import { Workout } from "../data/entities/Workout";
 import { KEYS } from "./keys";
@@ -10,7 +11,7 @@ export function useSet(workoutId: number, setId: number) {
     queryFn: () =>
       Set.findOne({
         where: { id: setId },
-        relations: ["workout", "repetitions"],
+        relations: ["workout", "repetitions", "exercise"],
       }),
   });
 }
@@ -19,10 +20,12 @@ export function useCreateSet() {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (workoutId: number) => {
+    ({ workoutId, exerciseId }: { workoutId: number; exerciseId: number }) => {
       const set = new Set();
       set.workout = new Workout();
       set.workout.id = workoutId;
+      set.exercise = new Exercise();
+      set.exercise.id = exerciseId;
       return set.save();
     },
     {

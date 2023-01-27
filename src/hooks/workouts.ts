@@ -7,7 +7,14 @@ export function useWorkouts() {
   return useQuery({
     queryKey: KEYS.WORKOUTS,
     queryFn: () =>
-      Workout.find({ relations: ["sets", "sets.repetitions", "sets.workout"] }),
+      Workout.find({
+        relations: [
+          "sets",
+          "sets.repetitions",
+          "sets.workout",
+          "sets.exercise",
+        ],
+      }),
   });
 }
 
@@ -17,7 +24,12 @@ export function useWorkout(workoutId: number) {
     queryFn: () =>
       Workout.findOne({
         where: { id: workoutId },
-        relations: ["sets", "sets.repetitions", "sets.workout"],
+        relations: [
+          "sets",
+          "sets.repetitions",
+          "sets.workout",
+          "sets.exercise",
+        ],
       }),
   });
 }
