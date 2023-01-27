@@ -4,6 +4,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from "typeorm";
 
 import { Set } from "./Set";
@@ -14,6 +15,7 @@ export class Exercise extends BaseEntity {
   id: number;
 
   @Column("text")
+  @Unique()
   name: string;
 
   @OneToMany(() => Set, (set) => set.exercise)
