@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Set } from "../data/entities/Set";
+import { Workout } from "../data/entities/Workout";
 import { KEYS } from "./keys";
 
 export function useSet(workoutId: number, setId: number) {
@@ -20,6 +21,7 @@ export function useCreateSet() {
   return useMutation(
     (workoutId: number) => {
       const set = new Set();
+      set.workout = new Workout();
       set.workout.id = workoutId;
       return set.save();
     },
