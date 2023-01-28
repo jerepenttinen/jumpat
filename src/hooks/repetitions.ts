@@ -1,14 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Repetition } from "../data/entities/Repetition";
+import { Set } from "../data/entities/Set";
 
 export function useCreateRepetition() {
   const queryClient = useQueryClient();
 
   return useMutation(
-    (workoutId: number) => {
+    (setId: number) => {
       const repetition = new Repetition();
-      repetition.set.id = workoutId;
+      repetition.set = new Set();
+      repetition.set.id = setId;
+      repetition.count = 10;
       return repetition.save();
     },
     {
