@@ -167,11 +167,9 @@ export default function EditWorkout({ navigation, route }: ScreenProps) {
 
   useFocusEffect(
     useCallback(() => {
-      if (workout.data) {
-        navigation.setOptions({
-          title: formatDate(workout.data.createdAt),
-        });
-      }
+      navigation.setOptions({
+        title: formatDate(workout.data?.createdAt!),
+      });
     }, [workout.data]),
   );
 
