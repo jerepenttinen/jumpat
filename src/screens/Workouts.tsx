@@ -29,7 +29,9 @@ function WorkoutCard({
   workout,
   navigation,
 }: { workout: Workout } & Pick<ScreenProps, "navigation">) {
+  const { t } = useTranslation(["Workouts"]);
   const { formatDate } = useAppLocale();
+
   const deleteWorkout = useDeleteWorkout();
 
   const [visible, setVisible] = useState(false);
@@ -57,14 +59,14 @@ function WorkoutCard({
                 closeMenu();
                 navigation.navigate("EditWorkout", { workoutId: workout.id });
               }}
-              title="Muokkaa"
+              title={t("Workouts:edit")}
             />
             <Menu.Item
               leadingIcon="trash-can-outline"
               onPress={() => {
                 deleteWorkout.mutate(workout.id);
               }}
-              title="Poista"
+              title={t("Workouts:delete")}
             />
           </Menu>
         )}
