@@ -20,6 +20,7 @@ import {
   useDeleteWorkout,
   useWorkouts,
 } from "../hooks/workouts";
+import { useAppLocale } from "../locales/locale";
 import { StackParamList } from "../navigation/Navigator";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "Workouts">;
@@ -28,6 +29,7 @@ function WorkoutCard({
   workout,
   navigation,
 }: { workout: Workout } & Pick<ScreenProps, "navigation">) {
+  const { formatDate } = useAppLocale();
   const deleteWorkout = useDeleteWorkout();
 
   const [visible, setVisible] = useState(false);
@@ -39,9 +41,7 @@ function WorkoutCard({
     <Card style={{ marginBottom: 10, marginHorizontal: 10 }}>
       <Card.Title
         title={
-          <Text variant="titleMedium">
-            {workout.createdAt?.toDateString()} {workout.id}
-          </Text>
+          <Text variant="titleMedium">{formatDate(workout.createdAt)}</Text>
         }
         right={(props) => (
           <Menu

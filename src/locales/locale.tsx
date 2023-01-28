@@ -1,8 +1,10 @@
+import dayjs from "dayjs";
 import React, { createContext, useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 type AppLocaleContextData = {
   handleChangeLocale(language: string): void;
+  formatDate(date: Date): string;
 };
 
 const AppLocaleContext = createContext<AppLocaleContextData>(
@@ -22,8 +24,13 @@ function AppLocaleProvider({
     [i18n],
   );
 
+  const formatDate = useCallback(
+    (date: Date) => dayjs(date).format("dddd L"),
+    [i18n],
+  );
+
   return (
-    <AppLocaleContext.Provider value={{ handleChangeLocale }}>
+    <AppLocaleContext.Provider value={{ handleChangeLocale, formatDate }}>
       {children}
     </AppLocaleContext.Provider>
   );

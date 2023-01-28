@@ -28,6 +28,7 @@ import { Set } from "../data/entities/Set";
 import { useCreateExercise, useExercises } from "../hooks/exercises";
 import { useCreateSet } from "../hooks/sets";
 import { useWorkout } from "../hooks/workouts";
+import { useAppLocale } from "../locales/locale";
 import { StackParamList } from "../navigation/Navigator";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditWorkout">;
@@ -49,10 +50,7 @@ export function EditWorkoutHeader() {
 function ExerciseListItem({
   set,
   navigation,
-}: { set: Set } & Pick<
-  NativeStackScreenProps<StackParamList, "EditWorkout">,
-  "navigation"
->) {
+}: { set: Set } & Pick<ScreenProps, "navigation">) {
   return (
     <List.Item
       title={set.exercise?.name}
@@ -165,12 +163,15 @@ function CreateSetFAB({
 
 export default function EditWorkout({ navigation, route }: ScreenProps) {
   const workout = useWorkout(route.params.workoutId);
+  const { formatDate } = useAppLocale();
 
   useFocusEffect(
     useCallback(() => {
-      navigation.setOptions({
-        title: workout.data?.createdAt.toLocaleDateString(),
-      });
+      if (workout.data) {
+        navigation.setOptions({
+          title: formatDate(workout.data.createdAt),
+        });
+      }
     }, [workout.data]),
   );
 
