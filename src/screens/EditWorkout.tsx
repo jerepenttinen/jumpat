@@ -30,6 +30,7 @@ import { useCreateSet } from "../hooks/sets";
 import { useWorkout } from "../hooks/workouts";
 import { useAppLocale } from "../locales/locale";
 import { StackParamList } from "../navigation/Navigator";
+import formatSet from "../util/formatSet";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditWorkout">;
 
@@ -53,7 +54,7 @@ function ExerciseListItem({
 }: { set: Set } & Pick<ScreenProps, "navigation">) {
   return (
     <List.Item
-      title={set.exercise?.name}
+      title={formatSet(set)}
       right={(props) => (
         <IconButton
           {...props}
