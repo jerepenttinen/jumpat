@@ -3,6 +3,7 @@ module.exports = function (api) {
   return {
     presets: ["babel-preset-expo"],
     plugins: [
+      ["@babel/plugin-proposal-decorators", { legacy: true }],
       "@babel/transform-react-jsx-source",
       "babel-plugin-transform-typescript-metadata",
     ],
