@@ -1,4 +1,5 @@
 import "./locales";
+import "./data";
 import {
   NavigationContainer,
   DefaultTheme as NavigationLightTheme,

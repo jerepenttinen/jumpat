@@ -1,18 +1,20 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
+import withObservables, { ObservableifyProps } from "@nozbe/with-observables";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Appbar, FAB, TextInput } from "react-native-paper";
+import { Appbar, FAB, TextInput } from "react-native-paper";
 import WheelPicker from "react-native-wheely";
+import { compose } from "recompose";
 
-import { Repetition } from "../data/entities/Repetition";
-import { Set } from "../data/entities/Set";
+import { sets } from "../data/controllers/SetsController";
+import Repetition from "../data/models/Repetition";
+import Set from "../data/models/Set";
 import {
   useChangeRepetitionCount,
   useCreateRepetition,
 } from "../hooks/repetitions";
-import { useChangeSetWeight, useSet } from "../hooks/sets";
+import { useChangeSetWeight } from "../hooks/sets";
 import { StackParamList } from "../navigation/Navigator";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditExercise">;
@@ -35,13 +37,7 @@ export function EditExerciseHeader() {
   );
 }
 
-function RepetitionListItem({
-  listIndex,
-  repetition,
-}: {
-  listIndex: number;
-  repetition: Repetition;
-}) {
+function RepetitionListItem({ repetition }: { repetition: Repetition }) {
   const changeRepetitionCount = useChangeRepetitionCount();
   const numbers = useMemo(
     () => Array.from(Array(31).keys()).map((n) => n.toString()),
@@ -49,10 +45,10 @@ function RepetitionListItem({
   );
 
   const handleChange = useCallback((index: number) => {
-    changeRepetitionCount.mutate({
-      repetitionId: repetition.id,
-      newCount: index,
-    });
+    // changeRepetitionCount.mutate({
+    //   repetitionId: repetition.id,
+    //   newCount: index,
+    // });
   }, []);
 
   return (
@@ -65,22 +61,22 @@ function RepetitionListItem({
 }
 
 function Weight({ set }: { set: Set }) {
-  const changeSetWeight = useChangeSetWeight();
   const weightStr = set.weight?.toString() ?? "";
 
   const handleSetWeight = useCallback(async (weigthStr: string | undefined) => {
-    if (typeof weigthStr === "string") {
-      weightStr.replace(/[^0-9]/g, "");
-      const newWeight = Number(weigthStr);
-      if (!Number.isNaN(newWeight)) {
-        changeSetWeight.mutate({
-          workoutId: set.workout.id,
-          setId: set.id,
-          newWeight,
-        });
-      }
+    if (typeof weigthStr !== "string") {
+      return;
     }
+
+    weightStr.replace(/[^0-9]/g, "");
+    const newWeight = Number(weigthStr);
+    if (Number.isNaN(newWeight)) {
+      return;
+    }
+
+    set.updateWeight(newWeight);
   }, []);
+
   return (
     <TextInput
       keyboardType="numeric"
@@ -106,35 +102,50 @@ function CreateRepetitionFAB({ setId }: { setId: number }) {
   );
 }
 
-export default function EditExercise({ navigation, route }: ScreenProps) {
-  const set = useSet(route.params.workoutId, route.params.setId);
+type Props = {
+  set: Set;
+  repetitions: Repetition[];
+};
 
-  useFocusEffect(
-    useCallback(() => {
-      navigation.setOptions({ title: set.data?.exercise.name ?? "Muokkaa" });
-    }, [set.data]),
-  );
+function EditExercise({ set, repetitions }: Props) {
+  // const set = useSet(route.params.workoutId, route.params.setId);
 
-  if (set.isLoading || !set.data) {
-    return <ActivityIndicator />;
-  }
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     navigation.setOptions({ title: set.data?.exercise.name ?? "Muokkaa" });
+  //   }, [set.data]),
+  // );
+
+  // if (set.isLoading || !set.data) {
+  //   return <ActivityIndicator />;
+  // }
+
+  console.log(set);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 10 }}>
-        <Weight set={set.data} />
-        {set.data.repetitions?.map((repetition, i) => (
-          <RepetitionListItem
-            listIndex={i + 1}
-            repetition={repetition}
-            key={repetition.id}
-          />
-        ))}
+        <Weight set={set} />
+        {/* {set.data.repetitions?.map((repetition) => (
+          <RepetitionListItem repetition={repetition} key={repetition.id} />
+        ))} */}
       </View>
-      <CreateRepetitionFAB setId={set.data.id!} />
+      {/* <CreateRepetitionFAB setId={set.data.id!} /> */}
     </SafeAreaView>
   );
 }
+
+type InputProps = ObservableifyProps<Props & ScreenProps, "set">;
+const enhance = compose(
+  withObservables(["route"], ({ route }: InputProps) => ({
+    set: sets.findAndObserve(route.params.setId),
+  })),
+  withObservables(["set"], ({ set }: { set: Set }) => ({
+    repetitions: set.repetitions.observe(),
+  })),
+);
+
+export default enhance(EditExercise);
 
 const styles = StyleSheet.create({
   fab: {

@@ -1,39 +1,32 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import withObservables from "@nozbe/with-observables";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import {
-  Surface,
-  Card,
-  FAB,
-  IconButton,
-  Text,
-  Menu,
-  ActivityIndicator,
-} from "react-native-paper";
+import { Surface, Card, FAB, IconButton, Text, Menu } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { compose } from "recompose";
 
-import { Workout } from "../data/entities/Workout";
-import {
-  useCreateWorkout,
-  useDeleteWorkout,
-  useWorkouts,
-} from "../hooks/workouts";
+import WorkoutsController, {
+  workouts,
+} from "../data/controllers/WorkoutsController";
+import Workout from "../data/models/Workout";
 import { useAppLocale } from "../locales/locale";
 import { StackParamList } from "../navigation/Navigator";
 import formatSet from "../util/formatSet";
+import Set from "../data/models/Set";
 
-type ScreenProps = NativeStackScreenProps<StackParamList, "Workouts">;
+type WorkoutCardProps = {
+  workout: Workout;
+  sets: Set[];
+};
 
-function WorkoutCard({
-  workout,
-  navigation,
-}: { workout: Workout } & Pick<ScreenProps, "navigation">) {
+function WorkoutCard({ workout, sets }: WorkoutCardProps) {
   const { t } = useTranslation(["Workouts"]);
   const { formatDate } = useAppLocale();
 
-  const deleteWorkout = useDeleteWorkout();
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
 
   const [visible, setVisible] = useState(false);
 
@@ -65,7 +58,7 @@ function WorkoutCard({
             <Menu.Item
               leadingIcon="trash-can-outline"
               onPress={() => {
-                deleteWorkout.mutate(workout.id);
+                // deleteWorkout.mutate(workout.id);
               }}
               title={t("Workouts:delete")}
             />
@@ -73,13 +66,9 @@ function WorkoutCard({
         )}
       />
       <Card.Content>
-        {workout.sets?.map((set) => (
+        {sets.map((set) => (
           <TouchableOpacity key={set.id}>
-            <Text>
-              {formatSet(set)}
-              {/* {set.exercise?.name} {set.weight}{" "}
-              {set.repetitions?.map((rep) => rep.count).join(" ")} */}
-            </Text>
+            <Text>{set.weight}</Text>
           </TouchableOpacity>
         ))}
       </Card.Content>
@@ -87,9 +76,17 @@ function WorkoutCard({
   );
 }
 
-export default function Workouts({ navigation }: ScreenProps) {
-  const workouts = useWorkouts();
-  const createWorkoutMutation = useCreateWorkout();
+const EnhancedWorkoutCard = withObservables(["workout"], ({ workout }) => ({
+  workout,
+  sets: workout.sets,
+}))(WorkoutCard);
+
+type Props = {
+  workouts: Workout[];
+};
+
+function Workouts({ workouts }: Props) {
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
 
   const { t } = useTranslation(["Workouts"]);
 
@@ -97,18 +94,14 @@ export default function Workouts({ navigation }: ScreenProps) {
     navigation.setOptions({ title: t("Workouts:title")! });
   }, []);
 
-  if (workouts.isLoading) {
-    return <ActivityIndicator />;
-  }
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Surface elevation={0}>
         <FlatList
-          data={workouts.data}
+          data={workouts}
           inverted
           renderItem={({ item }) => (
-            <WorkoutCard key={item.id} workout={item} navigation={navigation} />
+            <EnhancedWorkoutCard key={item.id} workout={item} />
           )}
         />
       </Surface>
@@ -116,13 +109,21 @@ export default function Workouts({ navigation }: ScreenProps) {
         icon="plus"
         style={styles.fab}
         onPress={async () => {
-          const workout = await createWorkoutMutation.mutateAsync();
+          const workout = await WorkoutsController.create();
           navigation.navigate("EditWorkout", { workoutId: workout.id });
         }}
       />
     </SafeAreaView>
   );
 }
+
+const enhance = compose(
+  withObservables([], () => ({
+    workouts: workouts.query().observe(),
+  })),
+);
+
+export default enhance(Workouts);
 
 const styles = StyleSheet.create({
   fab: {

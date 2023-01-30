@@ -6,13 +6,15 @@ import { HeaderButtonProps } from "@react-navigation/native-stack/lib/typescript
 import { Appbar } from "react-native-paper";
 
 import EditExercise, { EditExerciseHeader } from "../screens/EditExercise";
-import EditWorkout, { EditWorkoutHeader } from "../screens/EditWorkout";
+import EditWorkoutScreen, {
+  EditWorkoutHeader,
+} from "../screens/EditWorkout/EditWorkoutScreen";
 import Workouts from "../screens/Workouts";
 
 export type StackParamList = {
   Workouts: undefined;
-  EditWorkout: { workoutId: number };
-  EditExercise: { workoutId: number; setId: number };
+  EditWorkout: { workoutId: string };
+  EditExercise: { setId: string };
 };
 
 const Stack = createNativeStackNavigator<StackParamList>();
@@ -48,7 +50,7 @@ export default function Navigator() {
       />
       <Stack.Screen
         name="EditWorkout"
-        component={EditWorkout}
+        component={EditWorkoutScreen}
         options={{
           title: "Maanantai 23.1.2023",
           headerRight: () => <EditWorkoutHeader />,
