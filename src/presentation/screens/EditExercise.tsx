@@ -12,11 +12,11 @@ import { Appbar, FAB, TextInput } from "react-native-paper";
 import WheelPicker from "react-native-wheely";
 import { compose } from "recompose";
 
-import { sets } from "../data/controllers/SetsController";
-import Exercise from "../data/models/Exercise";
-import Repetition from "../data/models/Repetition";
-import Set from "../data/models/Set";
-import { StackParamList } from "../navigation/Navigator";
+import { sets } from "~/data/controllers/SetsController";
+import Exercise from "~/data/models/Exercise";
+import Repetition from "~/data/models/Repetition";
+import Set from "~/data/models/Set";
+import { StackParamList } from "~/presentation/navigation/Navigator";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditExercise">;
 

@@ -1,5 +1,5 @@
-import "./locales";
-import "./data";
+import "~/presentation/locales";
+import "~/data";
 import {
   NavigationContainer,
   DefaultTheme as NavigationLightTheme,
@@ -11,8 +11,8 @@ import {
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { AppLocaleProvider } from "./locales/locale";
-import Navigator from "./navigation/Navigator";
+import { AppLocaleProvider } from "~/presentation/locales/locale";
+import Navigator from "~/presentation/navigation/Navigator";
 
 export default function App() {
   const { LightTheme } = adaptNavigationTheme({

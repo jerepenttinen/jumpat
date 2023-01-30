@@ -13,10 +13,10 @@ import {
 
 import ExercisesController, {
   exercises,
-} from "../../../data/controllers/ExercisesController";
-import SetsController from "../../../data/controllers/SetsController";
-import { workouts } from "../../../data/controllers/WorkoutsController";
-import Exercise from "../../../data/models/Exercise";
+} from "~/data/controllers/ExercisesController";
+import SetsController from "~/data/controllers/SetsController";
+import { workouts } from "~/data/controllers/WorkoutsController";
+import Exercise from "~/data/models/Exercise";
 
 type OnSelectFunc = (exercise: Exercise) => void;
 

@@ -5,11 +5,13 @@ import {
 import { HeaderButtonProps } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { Appbar } from "react-native-paper";
 
-import EditExercise, { EditExerciseHeader } from "../screens/EditExercise";
+import EditExercise, {
+  EditExerciseHeader,
+} from "~/presentation/screens/EditExercise";
 import EditWorkoutScreen, {
   EditWorkoutHeader,
-} from "../screens/EditWorkout/EditWorkoutScreen";
-import Workouts from "../screens/Workouts";
+} from "~/presentation/screens/EditWorkout/EditWorkoutScreen";
+import Workouts from "~/presentation/screens/Workouts";
 
 export type StackParamList = {
   Workouts: undefined;

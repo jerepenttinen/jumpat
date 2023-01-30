@@ -3,7 +3,11 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
-    // "strictPropertyInitialization": false
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
   }
 }

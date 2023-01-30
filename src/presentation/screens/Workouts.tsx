@@ -9,12 +9,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import WorkoutsController, {
   workouts,
-} from "../data/controllers/WorkoutsController";
-import Set from "../data/models/Set";
-import Workout from "../data/models/Workout";
-import { useAppLocale } from "../locales/locale";
-import { StackParamList } from "../navigation/Navigator";
-// import formatSet from "../util/formatSet";
+} from "~/data/controllers/WorkoutsController";
+import Set from "~/data/models/Set";
+import Workout from "~/data/models/Workout";
+import { useAppLocale } from "~/presentation/locales/locale";
+import { StackParamList } from "~/presentation/navigation/Navigator";
+import FormatSet from "~/presentation/util/formatSet";
 
 type WorkoutCardProps = {
   workout: Workout;
@@ -67,7 +67,7 @@ function WorkoutCard({ workout, sets }: WorkoutCardProps) {
       <Card.Content>
         {sets.map((set) => (
           <TouchableOpacity key={set.id}>
-            <Text>{set.weight}</Text>
+            <FormatSet set={set} />
           </TouchableOpacity>
         ))}
       </Card.Content>

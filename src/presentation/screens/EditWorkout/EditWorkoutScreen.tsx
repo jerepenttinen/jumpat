@@ -8,18 +8,19 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 import { Appbar, IconButton, List, Surface } from "react-native-paper";
 import { compose } from "recompose";
 
-import { workouts } from "../../data/controllers/WorkoutsController";
-import Set from "../../data/models/Set";
-import Workout from "../../data/models/Workout";
-import { useAppLocale } from "../../locales/locale";
-import { StackParamList } from "../../navigation/Navigator";
-import formatSet from "../../util/formatSet";
 import CreateSetFAB from "./components/CreateSetFAB";
+
+import { workouts } from "~/data/controllers/WorkoutsController";
+import Set from "~/data/models/Set";
+import Workout from "~/data/models/Workout";
+import { useAppLocale } from "~/presentation/locales/locale";
+import { StackParamList } from "~/presentation/navigation/Navigator";
+import FormatSet from "~/presentation/util/formatSet";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditWorkout">;
 
@@ -38,17 +39,11 @@ export function EditWorkoutHeader() {
 }
 
 function ExerciseListItem({ set }: { set: Set }) {
-  const [title, setTitle] = useState("");
-
-  useEffect(() => {
-    formatSet(set).then(setTitle);
-  }, [set]);
-
   const navigation = useNavigation<NavigationProp<StackParamList>>();
 
   return (
     <List.Item
-      title={title}
+      title={<FormatSet set={set} />}
       right={(props) => (
         <IconButton
           {...props}
