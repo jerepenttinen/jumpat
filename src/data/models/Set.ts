@@ -1,7 +1,7 @@
 import { Model, Query, Relation } from "@nozbe/watermelondb";
 import { Associations } from "@nozbe/watermelondb/Model";
 import {
-  action,
+  writer,
   children,
   field,
   relation,
@@ -17,7 +17,15 @@ export default class Set extends Model {
   public static associations: Associations = {
     [TableName.REPETITIONS]: {
       type: "has_many",
-      foreignKey: "id",
+      foreignKey: "set_id",
+    },
+    [TableName.EXERCISES]: {
+      type: "belongs_to",
+      key: "exercise_id",
+    },
+    [TableName.WORKOUTS]: {
+      type: "belongs_to",
+      key: "workout_id",
     },
   };
 
@@ -29,7 +37,7 @@ export default class Set extends Model {
 
   @children(TableName.REPETITIONS) repetitions!: Query<Repetition>;
 
-  @action async updateWeight(weight: number) {
+  @writer async updateWeight(weight: number) {
     await this.update((set) => {
       set.weight = weight;
     });

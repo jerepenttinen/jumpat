@@ -1,11 +1,12 @@
-import { Set } from "../data/entities/Set";
+import Set from "../data/models/Set";
 
-export default function (set: Set) {
-  const reps = set.repetitions
-    ? [...set.repetitions].reverse()
-    : set.repetitions;
+export default async function (set: Set) {
+  const repetitions = await set.repetitions.fetch();
+  const exercise = await set.exercise.fetch();
 
-  return `${set.exercise?.name} ${set.weight} ${reps
+  const reps = repetitions ? [...repetitions].reverse() : repetitions;
+
+  return `${exercise.name} ${set.weight} ${reps
     ?.map((rep) => rep.count)
     .join(" ")}`;
 }

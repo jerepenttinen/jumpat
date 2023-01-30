@@ -6,16 +6,15 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Surface, Card, FAB, IconButton, Text, Menu } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { compose } from "recompose";
 
 import WorkoutsController, {
   workouts,
 } from "../data/controllers/WorkoutsController";
+import Set from "../data/models/Set";
 import Workout from "../data/models/Workout";
 import { useAppLocale } from "../locales/locale";
 import { StackParamList } from "../navigation/Navigator";
-import formatSet from "../util/formatSet";
-import Set from "../data/models/Set";
+// import formatSet from "../util/formatSet";
 
 type WorkoutCardProps = {
   workout: Workout;
@@ -117,12 +116,9 @@ function Workouts({ workouts }: Props) {
   );
 }
 
-const enhance = compose(
-  withObservables([], () => ({
-    workouts: workouts.query().observe(),
-  })),
-);
-
+const enhance = withObservables([], () => ({
+  workouts: workouts.query().observe(),
+}));
 export default enhance(Workouts);
 
 const styles = StyleSheet.create({

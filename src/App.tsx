@@ -4,7 +4,6 @@ import {
   NavigationContainer,
   DefaultTheme as NavigationLightTheme,
 } from "@react-navigation/native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   MD3LightTheme,
   Provider as PaperProvider,
@@ -12,11 +11,8 @@ import {
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { DataSourceContextProvider } from "./data/datasource";
 import { AppLocaleProvider } from "./locales/locale";
 import Navigator from "./navigation/Navigator";
-
-const queryClient = new QueryClient();
 
 export default function App() {
   const { LightTheme } = adaptNavigationTheme({
@@ -25,15 +21,11 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <PaperProvider theme={MD3LightTheme}>
-        <DataSourceContextProvider>
-          <QueryClientProvider client={queryClient}>
-            <NavigationContainer theme={LightTheme}>
-              <AppLocaleProvider>
-                <Navigator />
-              </AppLocaleProvider>
-            </NavigationContainer>
-          </QueryClientProvider>
-        </DataSourceContextProvider>
+        <NavigationContainer theme={LightTheme}>
+          <AppLocaleProvider>
+            <Navigator />
+          </AppLocaleProvider>
+        </NavigationContainer>
       </PaperProvider>
     </SafeAreaProvider>
   );

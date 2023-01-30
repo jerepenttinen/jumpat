@@ -11,7 +11,7 @@ export default class Exercise extends Model {
   public static associations: Associations = {
     [TableName.SETS]: {
       type: "has_many",
-      foreignKey: "id",
+      foreignKey: "exercise_id",
     },
   };
 

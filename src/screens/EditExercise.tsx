@@ -1,5 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import withObservables, { ObservableifyProps } from "@nozbe/with-observables";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
@@ -8,13 +13,9 @@ import WheelPicker from "react-native-wheely";
 import { compose } from "recompose";
 
 import { sets } from "../data/controllers/SetsController";
+import Exercise from "../data/models/Exercise";
 import Repetition from "../data/models/Repetition";
 import Set from "../data/models/Set";
-import {
-  useChangeRepetitionCount,
-  useCreateRepetition,
-} from "../hooks/repetitions";
-import { useChangeSetWeight } from "../hooks/sets";
 import { StackParamList } from "../navigation/Navigator";
 
 type ScreenProps = NativeStackScreenProps<StackParamList, "EditExercise">;
@@ -38,7 +39,7 @@ export function EditExerciseHeader() {
 }
 
 function RepetitionListItem({ repetition }: { repetition: Repetition }) {
-  const changeRepetitionCount = useChangeRepetitionCount();
+  // const changeRepetitionCount = useChangeRepetitionCount();
   const numbers = useMemo(
     () => Array.from(Array(31).keys()).map((n) => n.toString()),
     [],
@@ -90,13 +91,13 @@ function Weight({ set }: { set: Set }) {
 }
 
 function CreateRepetitionFAB({ setId }: { setId: number }) {
-  const createRepetitionMutation = useCreateRepetition();
+  // const createRepetitionMutation = useCreateRepetition();
   return (
     <FAB
       icon="plus"
       style={styles.fab}
       onPress={() => {
-        createRepetitionMutation.mutate(setId);
+        // createRepetitionMutation.mutate(setId);
       }}
     />
   );
@@ -104,23 +105,18 @@ function CreateRepetitionFAB({ setId }: { setId: number }) {
 
 type Props = {
   set: Set;
+  exercise: Exercise;
   repetitions: Repetition[];
 };
 
-function EditExercise({ set, repetitions }: Props) {
-  // const set = useSet(route.params.workoutId, route.params.setId);
+function EditExercise({ set, repetitions, exercise }: Props) {
+  const navigation = useNavigation<NavigationProp<StackParamList>>();
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     navigation.setOptions({ title: set.data?.exercise.name ?? "Muokkaa" });
-  //   }, [set.data]),
-  // );
-
-  // if (set.isLoading || !set.data) {
-  //   return <ActivityIndicator />;
-  // }
-
-  console.log(set);
+  useFocusEffect(
+    useCallback(() => {
+      navigation.setOptions({ title: exercise.name ?? "Muokkaa" });
+    }, [set]),
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -142,6 +138,7 @@ const enhance = compose(
   })),
   withObservables(["set"], ({ set }: { set: Set }) => ({
     repetitions: set.repetitions.observe(),
+    exercise: set.exercise.observe(),
   })),
 );
 
