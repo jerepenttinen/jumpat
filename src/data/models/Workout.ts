@@ -1,10 +1,10 @@
 import { Model, Query } from "@nozbe/watermelondb";
 import { Associations } from "@nozbe/watermelondb/Model";
 import {
-  action,
   children,
   date,
   readonly,
+  writer,
 } from "@nozbe/watermelondb/decorators";
 
 import TableName from "../TableName";
@@ -24,7 +24,7 @@ export default class Workout extends Model {
 
   @children(TableName.SETS) sets!: Query<Set>;
 
-  @action async destroy() {
+  @writer async destroy() {
     await this.sets.markAllAsDeleted();
     await this.markAsDeleted();
   }

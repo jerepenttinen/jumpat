@@ -2,7 +2,6 @@ import withObservables from "@nozbe/with-observables";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { TouchableOpacity } from "react-native";
 import { Card, Menu, IconButton, Text } from "react-native-paper";
 
 import Set from "~/data/models/Set";
@@ -52,7 +51,7 @@ function WorkoutCard({ workout, sets }: Props) {
             <Menu.Item
               leadingIcon="trash-can-outline"
               onPress={() => {
-                // deleteWorkout.mutate(workout.id);
+                workout.destroy();
               }}
               title={t("Workouts:delete")}
             />
@@ -61,9 +60,7 @@ function WorkoutCard({ workout, sets }: Props) {
       />
       <Card.Content>
         {sets.map((set) => (
-          <TouchableOpacity key={set.id}>
-            <FormattedSet set={set} />
-          </TouchableOpacity>
+          <FormattedSet set={set} key={set.id} />
         ))}
       </Card.Content>
     </Card>
