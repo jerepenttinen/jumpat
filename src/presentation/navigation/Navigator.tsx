@@ -3,6 +3,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 import { HeaderButtonProps } from "@react-navigation/native-stack/lib/typescript/src/types";
+import { useTranslation } from "react-i18next";
 import { Appbar } from "react-native-paper";
 
 import EditExercise, {
@@ -38,6 +39,8 @@ function CustomNavigationBar({
 }
 
 export default function Navigator() {
+  const { t } = useTranslation(["Workouts"]);
+
   return (
     <Stack.Navigator
       initialRouteName="Workouts"
@@ -48,7 +51,7 @@ export default function Navigator() {
       <Stack.Screen
         name="Workouts"
         component={WorkoutsScreen}
-        options={{ title: "Jumpat" }}
+        options={{ title: t("Workouts:title")! }}
       />
       <Stack.Screen
         name="EditWorkout"

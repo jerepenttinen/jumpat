@@ -1,7 +1,6 @@
 import withObservables from "@nozbe/with-observables";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import React from "react";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Surface, FAB } from "react-native-paper";
@@ -21,12 +20,6 @@ type Props = {
 
 function Workouts({ workouts }: Props) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
-
-  const { t } = useTranslation(["Workouts"]);
-
-  useEffect(() => {
-    navigation.setOptions({ title: t("Workouts:title")! });
-  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
