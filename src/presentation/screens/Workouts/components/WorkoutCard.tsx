@@ -63,7 +63,6 @@ function WorkoutCard({ workout, sets }: Props) {
         {sets.map((set) => (
           <TouchableOpacity key={set.id}>
             <FormattedSet set={set} />
-            {/* <FormatSet set={set} /> */}
           </TouchableOpacity>
         ))}
       </Card.Content>
