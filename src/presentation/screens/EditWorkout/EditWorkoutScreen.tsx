@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import withObservables, { ObservableifyProps } from "@nozbe/with-observables";
+import withObservables from "@nozbe/with-observables";
 import {
   NavigationProp,
   RouteProp,
@@ -7,22 +7,19 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback } from "react";
-import { FlatList, SafeAreaView } from "react-native";
-import { Appbar, IconButton, List, Surface } from "react-native-paper";
+import { SafeAreaView } from "react-native";
+import { Appbar } from "react-native-paper";
 import { compose } from "recompose";
 
 import CreateSetFAB from "./components/CreateSetFAB";
+import ExerciseList from "./components/ExerciseList";
 
 import { workouts } from "~/data/controllers/WorkoutsController";
 import Set from "~/data/models/Set";
 import Workout from "~/data/models/Workout";
 import { useAppLocale } from "~/presentation/locales/locale";
 import { StackParamList } from "~/presentation/navigation/Navigator";
-import FormatSet from "~/presentation/util/formatSet";
-
-type ScreenProps = NativeStackScreenProps<StackParamList, "EditWorkout">;
 
 export function EditWorkoutHeader() {
   return (
@@ -34,27 +31,6 @@ export function EditWorkoutHeader() {
         //TODO
         console.log("TODO");
       }}
-    />
-  );
-}
-
-function ExerciseListItem({ set }: { set: Set }) {
-  const navigation = useNavigation<NavigationProp<StackParamList>>();
-
-  return (
-    <List.Item
-      title={<FormatSet set={set} />}
-      right={(props) => (
-        <IconButton
-          {...props}
-          icon="pencil-outline"
-          onPress={() => {
-            navigation.navigate("EditExercise", {
-              setId: set.id,
-            });
-          }}
-        />
-      )}
     />
   );
 }
@@ -80,13 +56,7 @@ function EditWorkoutScreen({ workout, sets }: Props) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Surface elevation={0}>
-        <FlatList
-          data={sets}
-          renderItem={({ item }) => <ExerciseListItem set={item} />}
-          contentContainerStyle={{ paddingBottom: 100 }}
-        />
-      </Surface>
+      <ExerciseList sets={sets} />
       <CreateSetFAB
         workoutId={route.params.workoutId}
         action={(setId) => {
@@ -97,12 +67,11 @@ function EditWorkoutScreen({ workout, sets }: Props) {
   );
 }
 
-type InputProps = ObservableifyProps<Props & ScreenProps, "navigation">;
 const enhance = compose(
-  withObservables(["route"], ({ route }: InputProps) => ({
+  withObservables(["route"], ({ route }) => ({
     workout: workouts.findAndObserve(route.params.workoutId),
   })),
-  withObservables(["workout"], ({ workout }: { workout: Workout }) => ({
+  withObservables(["workout"], ({ workout }) => ({
     sets: workout.sets.observe(),
   })),
 );

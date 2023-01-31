@@ -34,8 +34,8 @@ function Workouts({ workouts }: Props) {
         <FlatList
           data={workouts}
           inverted
-          renderItem={({ item }) => (
-            <WorkoutCard key={item.id} workout={item} />
+          renderItem={({ item: workout }) => (
+            <WorkoutCard key={workout.id} workout={workout} />
           )}
         />
       </Surface>

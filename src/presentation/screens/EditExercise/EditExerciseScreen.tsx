@@ -1,12 +1,11 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import withObservables, { ObservableifyProps } from "@nozbe/with-observables";
+import withObservables from "@nozbe/with-observables";
 import { Picker } from "@react-native-picker/picker";
 import {
   NavigationProp,
   useFocusEffect,
   useNavigation,
 } from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Appbar, FAB, TextInput } from "react-native-paper";
@@ -18,8 +17,6 @@ import Exercise from "~/data/models/Exercise";
 import Repetition from "~/data/models/Repetition";
 import Set from "~/data/models/Set";
 import { StackParamList } from "~/presentation/navigation/Navigator";
-
-type ScreenProps = NativeStackScreenProps<StackParamList, "EditExercise">;
 
 export function EditExerciseHeader() {
   return (
@@ -86,12 +83,16 @@ function Weight({ set }: { set: Set }) {
       keyboardType="numeric"
       label="Paino"
       defaultValue={weightStr}
-      onEndEditing={(e) => {
-        handleSetWeight(e.nativeEvent.text);
+      onEndEditing={async (e) => {
+        await handleSetWeight(e.nativeEvent.text);
       }}
     />
   );
 }
+
+const EnhancedWeight = withObservables(["set"], ({ set }) => ({
+  set,
+}))(Weight);
 
 type Props = {
   set: Set;
@@ -111,7 +112,7 @@ function EditExercise({ set, repetitions, exercise }: Props) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 10 }}>
-        <Weight set={set} />
+        <EnhancedWeight set={set} />
         {repetitions.map((repetition) => (
           <EnhancedRepetitionListItem
             key={repetition.id}
@@ -130,12 +131,11 @@ function EditExercise({ set, repetitions, exercise }: Props) {
   );
 }
 
-type InputProps = ObservableifyProps<Props & ScreenProps, "set">;
 const enhance = compose(
-  withObservables(["route"], ({ route }: InputProps) => ({
+  withObservables(["route"], ({ route }) => ({
     set: sets.findAndObserve(route.params.setId),
   })),
-  withObservables(["set"], ({ set }: { set: Set }) => ({
+  withObservables(["set"], ({ set }) => ({
     repetitions: set.repetitions.observe(),
     exercise: set.exercise.observe(),
   })),

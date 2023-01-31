@@ -12,13 +12,16 @@ type Props = {
 };
 
 function FormattedSet({ set, repetitions, exercise }: Props) {
-  const reps = repetitions ? [...repetitions].reverse() : repetitions;
+  const out = `${exercise.name} ${set.weight} `;
 
-  const out = `${exercise.name} ${set.weight} ${reps
-    ?.map((rep) => rep.count)
-    .join(" ")}`;
-
-  return <Text>{out}</Text>;
+  return (
+    <>
+      <Text>{out}</Text>
+      {repetitions.map((repetition) => (
+        <EnhancedRep repetition={repetition} key={repetition.id} />
+      ))}
+    </>
+  );
 }
 
 const enhance = withObservables(["set"], ({ set }) => ({
@@ -28,3 +31,11 @@ const enhance = withObservables(["set"], ({ set }) => ({
 }));
 
 export default enhance(FormattedSet);
+
+function Rep({ repetition }: { repetition: Repetition }) {
+  return <Text>{repetition.count} </Text>;
+}
+
+const EnhancedRep = withObservables(["repetition"], ({ repetition }) => ({
+  repetition,
+}))(Rep);
