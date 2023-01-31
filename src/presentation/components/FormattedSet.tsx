@@ -1,4 +1,5 @@
 import withObservables from "@nozbe/with-observables";
+import { View } from "react-native";
 import { Text } from "react-native-paper";
 
 import Exercise from "~/data/models/Exercise";
@@ -15,7 +16,7 @@ function FormattedSet({ set, repetitions, exercise }: Props) {
   const out = `${exercise.name} ${set.weight} kg`;
 
   return (
-    <>
+    <View style={{ display: "flex", flexDirection: "row" }}>
       <Text>
         {out}
         {repetitions.length > 0 ? ": " : ""}
@@ -23,7 +24,7 @@ function FormattedSet({ set, repetitions, exercise }: Props) {
       {repetitions.map((repetition) => (
         <EnhancedRep repetition={repetition} key={repetition.id} />
       ))}
-    </>
+    </View>
   );
 }
 
