@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import withObservables, { ObservableifyProps } from "@nozbe/with-observables";
+import { Picker } from "@react-native-picker/picker";
 import {
   NavigationProp,
   useFocusEffect,
@@ -9,10 +10,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useMemo } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Appbar, FAB, TextInput } from "react-native-paper";
-import WheelPicker from "react-native-wheely";
 import { compose } from "recompose";
-import RepetitionsController from "~/data/controllers/RepetitionsController";
 
+import RepetitionsController from "~/data/controllers/RepetitionsController";
 import { sets } from "~/data/controllers/SetsController";
 import Exercise from "~/data/models/Exercise";
 import Repetition from "~/data/models/Repetition";
@@ -40,27 +40,29 @@ export function EditExerciseHeader() {
 }
 
 function RepetitionListItem({ repetition }: { repetition: Repetition }) {
-  // const changeRepetitionCount = useChangeRepetitionCount();
   const numbers = useMemo(
     () => Array.from(Array(31).keys()).map((n) => n.toString()),
     [],
   );
 
-  const handleChange = useCallback((index: number) => {
-    // changeRepetitionCount.mutate({
-    //   repetitionId: repetition.id,
-    //   newCount: index,
-    // });
-  }, []);
-
   return (
-    <WheelPicker
-      selectedIndex={repetition.count}
-      options={numbers}
-      onChange={handleChange}
-    />
+    <Picker
+      selectedValue={repetition.count.toString()}
+      onValueChange={(_, index) => repetition.updateCount(index)}
+    >
+      {numbers.map((number) => (
+        <Picker.Item key={number} label={number} value={number} />
+      ))}
+    </Picker>
   );
 }
+
+const EnhancedRepetitionListItem = withObservables(
+  ["repetition"],
+  ({ repetition }) => ({
+    repetition,
+  }),
+)(RepetitionListItem);
 
 function Weight({ set }: { set: Set }) {
   const weightStr = set.weight?.toString() ?? "";
@@ -110,9 +112,12 @@ function EditExercise({ set, repetitions, exercise }: Props) {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 10 }}>
         <Weight set={set} />
-        {/* {set.data.repetitions?.map((repetition) => (
-          <RepetitionListItem repetition={repetition} key={repetition.id} />
-        ))} */}
+        {repetitions.map((repetition) => (
+          <EnhancedRepetitionListItem
+            key={repetition.id}
+            repetition={repetition}
+          />
+        ))}
       </View>
       <FAB
         icon="plus"

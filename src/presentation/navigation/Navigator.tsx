@@ -7,7 +7,7 @@ import { Appbar } from "react-native-paper";
 
 import EditExercise, {
   EditExerciseHeader,
-} from "~/presentation/screens/EditExercise";
+} from "~/presentation/screens/EditExercise/EditExerciseScreen";
 import EditWorkoutScreen, {
   EditWorkoutHeader,
 } from "~/presentation/screens/EditWorkout/EditWorkoutScreen";
