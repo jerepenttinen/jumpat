@@ -43,7 +43,3 @@ function ExerciseListItem({ set }: { set: Set }) {
     />
   );
 }
-
-// const EnhancedExerciseListItem = withObservables(["set"], ({ set }) => ({
-//   set,
-// }))(ExerciseListItem);

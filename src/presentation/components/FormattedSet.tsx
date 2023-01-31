@@ -12,11 +12,14 @@ type Props = {
 };
 
 function FormattedSet({ set, repetitions, exercise }: Props) {
-  const out = `${exercise.name} ${set.weight} `;
+  const out = `${exercise.name} ${set.weight} kg`;
 
   return (
     <>
-      <Text>{out}</Text>
+      <Text>
+        {out}
+        {repetitions.length > 0 ? ": " : ""}
+      </Text>
       {repetitions.map((repetition) => (
         <EnhancedRep repetition={repetition} key={repetition.id} />
       ))}
