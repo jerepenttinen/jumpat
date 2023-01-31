@@ -11,6 +11,7 @@ export default class RepetitionsController {
     return await database.write(async () => {
       return await repetitions.create((repetition) => {
         repetition.set.id = setId;
+        repetition.count = 10;
       });
     });
   }
