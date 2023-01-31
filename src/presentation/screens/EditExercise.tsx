@@ -11,6 +11,7 @@ import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Appbar, FAB, TextInput } from "react-native-paper";
 import WheelPicker from "react-native-wheely";
 import { compose } from "recompose";
+import RepetitionsController from "~/data/controllers/RepetitionsController";
 
 import { sets } from "~/data/controllers/SetsController";
 import Exercise from "~/data/models/Exercise";
@@ -90,19 +91,6 @@ function Weight({ set }: { set: Set }) {
   );
 }
 
-function CreateRepetitionFAB({ setId }: { setId: number }) {
-  // const createRepetitionMutation = useCreateRepetition();
-  return (
-    <FAB
-      icon="plus"
-      style={styles.fab}
-      onPress={() => {
-        // createRepetitionMutation.mutate(setId);
-      }}
-    />
-  );
-}
-
 type Props = {
   set: Set;
   exercise: Exercise;
@@ -126,7 +114,13 @@ function EditExercise({ set, repetitions, exercise }: Props) {
           <RepetitionListItem repetition={repetition} key={repetition.id} />
         ))} */}
       </View>
-      {/* <CreateRepetitionFAB setId={set.data.id!} /> */}
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => {
+          RepetitionsController.save(set.id);
+        }}
+      />
     </SafeAreaView>
   );
 }

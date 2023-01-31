@@ -11,7 +11,7 @@ import EditExercise, {
 import EditWorkoutScreen, {
   EditWorkoutHeader,
 } from "~/presentation/screens/EditWorkout/EditWorkoutScreen";
-import Workouts from "~/presentation/screens/Workouts";
+import WorkoutsScreen from "~/presentation/screens/Workouts/WorkoutsScreen";
 
 export type StackParamList = {
   Workouts: undefined;
@@ -47,7 +47,7 @@ export default function Navigator() {
     >
       <Stack.Screen
         name="Workouts"
-        component={Workouts}
+        component={WorkoutsScreen}
         options={{ title: "Jumpat" }}
       />
       <Stack.Screen

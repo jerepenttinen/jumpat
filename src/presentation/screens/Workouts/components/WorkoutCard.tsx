@@ -1,27 +1,22 @@
 import withObservables from "@nozbe/with-observables";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React, { useCallback, useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { TouchableOpacity, StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
-import { Surface, Card, FAB, IconButton, Text, Menu } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { TouchableOpacity } from "react-native";
+import { Card, Menu, IconButton, Text } from "react-native-paper";
 
-import WorkoutsController, {
-  workouts,
-} from "~/data/controllers/WorkoutsController";
 import Set from "~/data/models/Set";
 import Workout from "~/data/models/Workout";
+import FormattedSet from "~/presentation/components/FormattedSet";
 import { useAppLocale } from "~/presentation/locales/locale";
 import { StackParamList } from "~/presentation/navigation/Navigator";
-import FormatSet from "~/presentation/util/formatSet";
 
-type WorkoutCardProps = {
+type Props = {
   workout: Workout;
   sets: Set[];
 };
 
-function WorkoutCard({ workout, sets }: WorkoutCardProps) {
+function WorkoutCard({ workout, sets }: Props) {
   const { t } = useTranslation(["Workouts"]);
   const { formatDate } = useAppLocale();
 
@@ -67,7 +62,8 @@ function WorkoutCard({ workout, sets }: WorkoutCardProps) {
       <Card.Content>
         {sets.map((set) => (
           <TouchableOpacity key={set.id}>
-            <FormatSet set={set} />
+            <FormattedSet set={set} />
+            {/* <FormatSet set={set} /> */}
           </TouchableOpacity>
         ))}
       </Card.Content>
@@ -75,57 +71,9 @@ function WorkoutCard({ workout, sets }: WorkoutCardProps) {
   );
 }
 
-const EnhancedWorkoutCard = withObservables(["workout"], ({ workout }) => ({
+const enhance = withObservables(["workout"], ({ workout }) => ({
   workout,
   sets: workout.sets,
-}))(WorkoutCard);
-
-type Props = {
-  workouts: Workout[];
-};
-
-function Workouts({ workouts }: Props) {
-  const navigation = useNavigation<NavigationProp<StackParamList>>();
-
-  const { t } = useTranslation(["Workouts"]);
-
-  useEffect(() => {
-    navigation.setOptions({ title: t("Workouts:title")! });
-  }, []);
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Surface elevation={0}>
-        <FlatList
-          data={workouts}
-          inverted
-          renderItem={({ item }) => (
-            <EnhancedWorkoutCard key={item.id} workout={item} />
-          )}
-        />
-      </Surface>
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={async () => {
-          const workout = await WorkoutsController.create();
-          navigation.navigate("EditWorkout", { workoutId: workout.id });
-        }}
-      />
-    </SafeAreaView>
-  );
-}
-
-const enhance = withObservables([], () => ({
-  workouts: workouts.query().observe(),
 }));
-export default enhance(Workouts);
 
-const styles = StyleSheet.create({
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-});
+export default enhance(WorkoutCard);
