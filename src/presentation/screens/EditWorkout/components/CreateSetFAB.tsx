@@ -1,5 +1,5 @@
 import withObservables from "@nozbe/with-observables";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import {
   Button,
@@ -11,9 +11,7 @@ import {
   Text,
 } from "react-native-paper";
 
-import ExercisesController, {
-  exercises,
-} from "~/data/controllers/ExercisesController";
+import ExercisesController from "~/data/controllers/ExercisesController";
 import SetsController from "~/data/controllers/SetsController";
 import { workouts } from "~/data/controllers/WorkoutsController";
 import Exercise from "~/data/models/Exercise";
@@ -31,15 +29,11 @@ function SearchResults({
   onSelect,
   searchQuery,
 }: SearchResultsProps) {
-  const filteredExercises = useMemo(() => {
-    return exercises.filter((exercise) => exercise.name === searchQuery);
-  }, [exercises, searchQuery]);
-
   return (
     <>
       {exercises.length > 0 ? (
         <FlatList
-          data={filteredExercises}
+          data={exercises}
           renderItem={({ item: exercise }) => (
             <TouchableOpacity
               onPress={() => {
@@ -66,10 +60,6 @@ function SearchResults({
   );
 }
 
-const EnhancedSearchResults = withObservables([], () => ({
-  exercises: exercises.query().observe(),
-}))(SearchResults);
-
 type SearchProps = {
   onSelect: OnSelectFunc;
 };
@@ -79,6 +69,16 @@ function Search({ onSelect }: SearchProps) {
   const onChangeSearch = (query: string | undefined) =>
     setSearchQuery(query ?? "");
 
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      ExercisesController.search(searchQuery).fetch().then(setExercises);
+    } else {
+      setExercises([]);
+    }
+  }, [searchQuery]);
+
   return (
     <>
       <Searchbar
@@ -87,7 +87,11 @@ function Search({ onSelect }: SearchProps) {
         value={searchQuery}
         style={{ marginBottom: 20 }}
       />
-      <EnhancedSearchResults onSelect={onSelect} searchQuery={searchQuery} />
+      <SearchResults
+        onSelect={onSelect}
+        searchQuery={searchQuery}
+        exercises={exercises}
+      />
     </>
   );
 }

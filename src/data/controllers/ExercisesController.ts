@@ -1,3 +1,5 @@
+import { Q } from "@nozbe/watermelondb";
+
 import { database } from "..";
 import TableName from "../TableName";
 import Exercise from "../models/Exercise";
@@ -13,5 +15,12 @@ export default class ExercisesController {
         exercise.name = name;
       });
     });
+  }
+
+  static search(name: string) {
+    console.log(name);
+    return exercises.query(
+      Q.where("name", Q.like(`%${Q.sanitizeLikeString(name)}%`)),
+    );
   }
 }
