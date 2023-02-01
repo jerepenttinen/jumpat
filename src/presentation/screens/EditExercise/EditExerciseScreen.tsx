@@ -89,7 +89,7 @@ function Weight({ set }: { set: Set }) {
   return (
     <TextInput
       keyboardType="numeric"
-      label="Paino"
+      label="Paino (kg)"
       defaultValue={weightStr}
       onEndEditing={async (e) => {
         await handleSetWeight(e.nativeEvent.text);
