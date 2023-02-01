@@ -2,9 +2,10 @@ import withObservables from "@nozbe/with-observables";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
 
+import { useAppLocale } from "../locales/locale";
+
 import Repetition from "~/data/models/Repetition";
 import Workout from "~/data/models/Workout";
-import { useAppLocale } from "../locales/locale";
 
 type Props = {
   repetitions: Repetition[];

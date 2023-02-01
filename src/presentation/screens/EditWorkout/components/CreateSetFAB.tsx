@@ -82,6 +82,7 @@ function Search({ onSelect }: SearchProps) {
   return (
     <>
       <Searchbar
+        autoFocus
         placeholder="Liike"
         onChangeText={onChangeSearch}
         value={searchQuery}
