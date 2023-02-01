@@ -1,5 +1,6 @@
 import withObservables from "@nozbe/with-observables";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import {
   Button,
@@ -29,6 +30,8 @@ function SearchResults({
   onSelect,
   searchQuery,
 }: SearchResultsProps) {
+  const { t } = useTranslation(["EditWorkout:CreateSetFAB"]);
+
   return (
     <>
       {exercises.length > 0 ? (
@@ -52,7 +55,10 @@ function SearchResults({
               onSelect(await ExercisesController.save(searchQuery));
             }}
           >
-            <Text>Luo "{searchQuery}"</Text>
+            <Text>
+              {t("EditWorkout:CreateSetFAB:createExerciseButton")} "
+              {searchQuery}"
+            </Text>
           </Button>
         )
       )}
@@ -79,11 +85,13 @@ function Search({ onSelect }: SearchProps) {
     }
   }, [searchQuery]);
 
+  const { t } = useTranslation(["EditWorkout:CreateSetFAB"]);
+
   return (
     <>
       <Searchbar
         autoFocus
-        placeholder="Liike"
+        placeholder={t("EditWorkout:CreateSetFAB:searchBar")}
         onChangeText={onChangeSearch}
         value={searchQuery}
         style={{ marginBottom: 20 }}

@@ -7,6 +7,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import {
   Appbar,
@@ -86,10 +87,12 @@ function Weight({ set }: { set: Set }) {
     set.updateWeight(newWeight);
   }, []);
 
+  const { t } = useTranslation(["EditExercise"]);
+
   return (
     <TextInput
       keyboardType="numeric"
-      label="Paino (kg)"
+      label={t("EditExercise:weightLabel")}
       defaultValue={weightStr}
       onEndEditing={async (e) => {
         await handleSetWeight(e.nativeEvent.text);
@@ -111,6 +114,8 @@ type Props = {
 function EditExercise({ set, repetitions, exercise }: Props) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
   const [lastSet, setLastSet] = useState<Set | null>();
+
+  const { t } = useTranslation(["EditExercise"]);
 
   useFocusEffect(
     useCallback(() => {
@@ -143,13 +148,13 @@ function EditExercise({ set, repetitions, exercise }: Props) {
           {lastSet ? (
             <View style={{ marginBottom: 20 }}>
               <Text variant="titleMedium" style={{ marginBottom: 10 }}>
-                Viime kerralla
+                {t("EditExercise:lastTime")}
               </Text>
               <ExerciseListItem set={lastSet} />
             </View>
           ) : null}
           <Button mode="contained-tonal">
-            <Text>Katso historia</Text>
+            <Text>{t("EditExercise:history")}</Text>
           </Button>
         </View>
       </ScrollView>
