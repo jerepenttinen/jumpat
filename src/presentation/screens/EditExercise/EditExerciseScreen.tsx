@@ -7,7 +7,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import {
   Appbar,
   Button,
@@ -130,7 +130,7 @@ function EditExercise({ set, repetitions, exercise }: Props) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ padding: 10 }}>
+      <ScrollView style={{ padding: 10 }}>
         <EnhancedWeight set={set} />
         {repetitions.map((repetition) => (
           <EnhancedRepetitionListItem
@@ -152,7 +152,7 @@ function EditExercise({ set, repetitions, exercise }: Props) {
             <Text>Katso historia</Text>
           </Button>
         </View>
-      </View>
+      </ScrollView>
       <FAB
         icon="plus"
         style={styles.fab}
