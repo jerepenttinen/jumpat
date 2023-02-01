@@ -8,7 +8,7 @@ import {
 } from "@react-navigation/native";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Appbar, FAB, TextInput } from "react-native-paper";
+import { Appbar, Button, FAB, Text, TextInput } from "react-native-paper";
 import { compose } from "recompose";
 
 import RepetitionsController from "~/data/controllers/RepetitionsController";
@@ -16,6 +16,7 @@ import SetsController, { sets } from "~/data/controllers/SetsController";
 import Exercise from "~/data/models/Exercise";
 import Repetition from "~/data/models/Repetition";
 import Set from "~/data/models/Set";
+import ExerciseListItem from "~/presentation/components/ExerciseListItem";
 import FormattedSet from "~/presentation/components/FormattedSet";
 import { StackParamList } from "~/presentation/navigation/Navigator";
 
@@ -131,7 +132,15 @@ function EditExercise({ set, repetitions, exercise }: Props) {
             repetition={repetition}
           />
         ))}
-        {lastSet ? <FormattedSet set={lastSet} /> : null}
+        <View style={{ marginTop: 50 }}>
+          <Text variant="titleMedium" style={{ marginBottom: 10 }}>
+            Viime kerralla
+          </Text>
+          {lastSet ? <ExerciseListItem set={lastSet} /> : null}
+          <Button mode="contained-tonal" style={{ marginTop: 20 }}>
+            <Text>Katso historia</Text>
+          </Button>
+        </View>
       </View>
       <FAB
         icon="plus"
