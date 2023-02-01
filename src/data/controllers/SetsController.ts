@@ -1,3 +1,5 @@
+import { Q } from "@nozbe/watermelondb";
+
 import { database } from "..";
 import TableName from "../TableName";
 import Exercise from "../models/Exercise";
@@ -21,5 +23,27 @@ export default class SetsController {
         set.workout.set(workout);
       });
     });
+  }
+
+  static async getLastTime(set: Set) {
+    const workout = await set.workout.fetch();
+    const exercise = await set.exercise.fetch();
+
+    return await sets
+      .query(
+        Q.and(
+          Q.where("weight", Q.eq(set.weight)),
+          Q.where("workout_id", Q.notEq(workout.id)),
+          Q.where("exercise_id", Q.eq(exercise.id)),
+        ),
+        Q.on(
+          TableName.WORKOUTS,
+          Q.where("created_at", Q.lt(workout.createdAt.valueOf())),
+        ),
+        // TODO: Order by workouts.created_at
+        // Q.sortBy("created_at", Q.desc),
+        // Q.take(1),
+      )
+      .fetch();
   }
 }

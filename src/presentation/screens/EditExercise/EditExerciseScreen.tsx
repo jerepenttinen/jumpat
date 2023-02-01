@@ -6,16 +6,17 @@ import {
   useFocusEffect,
   useNavigation,
 } from "@react-navigation/native";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Appbar, FAB, TextInput } from "react-native-paper";
 import { compose } from "recompose";
 
 import RepetitionsController from "~/data/controllers/RepetitionsController";
-import { sets } from "~/data/controllers/SetsController";
+import SetsController, { sets } from "~/data/controllers/SetsController";
 import Exercise from "~/data/models/Exercise";
 import Repetition from "~/data/models/Repetition";
 import Set from "~/data/models/Set";
+import FormattedSet from "~/presentation/components/FormattedSet";
 import { StackParamList } from "~/presentation/navigation/Navigator";
 
 export function EditExerciseHeader() {
@@ -102,12 +103,23 @@ type Props = {
 
 function EditExercise({ set, repetitions, exercise }: Props) {
   const navigation = useNavigation<NavigationProp<StackParamList>>();
+  const [lastSet, setLastSet] = useState<Set | null>();
 
   useFocusEffect(
     useCallback(() => {
       navigation.setOptions({ title: exercise.name ?? "Muokkaa" });
     }, [set]),
   );
+
+  useEffect(() => {
+    SetsController.getLastTime(set).then((res) => {
+      if (res.length > 0) {
+        setLastSet(res[res.length - 1]);
+      } else {
+        setLastSet(null);
+      }
+    });
+  }, [set]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -119,6 +131,7 @@ function EditExercise({ set, repetitions, exercise }: Props) {
             repetition={repetition}
           />
         ))}
+        {lastSet ? <FormattedSet set={lastSet} /> : null}
       </View>
       <FAB
         icon="plus"
