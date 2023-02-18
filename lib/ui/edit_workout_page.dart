@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
+import 'package:jumpat/ui/routes/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 
 class EditWorkoutPage extends StatefulWidget {
   const EditWorkoutPage({required this.workout, super.key});
@@ -39,6 +42,15 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         ],
       ),
       body: _buildMovementsList(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final movement =
+              await getIt<IsarService>().createMovement(widget.workout);
+
+          context.router.push(EditMovementRoute(movement: movement));
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -51,10 +63,54 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
           itemCount: movements.length,
           itemBuilder: (context, index) {
             final movement = movements[index];
-            return Text(movement.weight.toString());
+            // return Text(movement.weight.toString());
+            return _buildMovementsListItem(movement);
           },
         );
       },
+    );
+  }
+
+  Slidable _buildMovementsListItem(Movement movement) {
+    return Slidable(
+      key: const ValueKey(0),
+      startActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.25,
+        children: [
+          SlidableAction(
+            label: 'Edit',
+            backgroundColor: Colors.teal,
+            icon: Icons.delete,
+            onPressed: (context) {
+              context.router.push(EditMovementRoute(movement: movement));
+            },
+          )
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.25,
+        dismissible: DismissiblePane(
+          onDismissed: () {
+            getIt<IsarService>().deleteMovement(movement);
+          },
+        ),
+        children: [
+          SlidableAction(
+            label: 'Delete',
+            backgroundColor: Colors.red,
+            icon: Icons.delete,
+            onPressed: (context) {
+              getIt<IsarService>().deleteMovement(movement);
+            },
+          )
+        ],
+      ),
+      child: ListTile(
+        title: const Text('Liike'),
+        subtitle: Text(movement.weight.toString()),
+      ),
     );
   }
 }

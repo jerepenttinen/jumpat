@@ -16,6 +16,11 @@ class IsarService {
     await isar.writeTxn(() async => await isar.workouts.delete(workout.id));
   }
 
+  Future<void> deleteMovement(Movement movement) async {
+    final isar = await db;
+    await isar.writeTxn(() async => await isar.movements.delete(movement.id));
+  }
+
   Future<Workout> saveWorkout(Workout workout) async {
     final isar = await db;
     // int id;
@@ -25,9 +30,29 @@ class IsarService {
     });
   }
 
-  Future<void> saveMovement(Movement movement) async {
+  Future<Movement> saveMovement(Movement movement) async {
     final isar = await db;
-    await isar.writeTxn(() async => await isar.movements.put(movement));
+    return await isar.writeTxn(() async {
+      final id = await isar.movements.put(movement);
+      final joku = (await isar.movements.get(id))!;
+      await joku.workout.save();
+      return joku;
+    });
+  }
+
+  Future<Movement> createMovement(Workout workout) async {
+    final isar = await db;
+    return await isar.writeTxn(() async {
+      final movement = Movement()
+        ..sets = []
+        ..weight = 0
+        ..workout.value = workout;
+      workout.movements.add(movement);
+      final id = await isar.movements.put(movement);
+      await workout.movements.save();
+
+      return (await isar.movements.get(id))!;
+    });
   }
 
   Future<List<Movement>> getAllMovements() async {

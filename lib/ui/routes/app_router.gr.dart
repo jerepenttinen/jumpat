@@ -33,6 +33,16 @@ class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    EditMovementRoute.name: (routeData) {
+      final args = routeData.argsAs<EditMovementRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: EditMovementPage(
+          movement: args.movement,
+          key: args.key,
+        ),
+      );
+    },
   };
 
   @override
@@ -44,6 +54,10 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           EditWorkoutRoute.name,
           path: '/edit-workout-page',
+        ),
+        RouteConfig(
+          EditMovementRoute.name,
+          path: '/edit-movement-page',
         ),
       ];
 }
@@ -91,5 +105,39 @@ class EditWorkoutRouteArgs {
   @override
   String toString() {
     return 'EditWorkoutRouteArgs{workout: $workout, key: $key}';
+  }
+}
+
+/// generated route for
+/// [EditMovementPage]
+class EditMovementRoute extends PageRouteInfo<EditMovementRouteArgs> {
+  EditMovementRoute({
+    required Movement movement,
+    Key? key,
+  }) : super(
+          EditMovementRoute.name,
+          path: '/edit-movement-page',
+          args: EditMovementRouteArgs(
+            movement: movement,
+            key: key,
+          ),
+        );
+
+  static const String name = 'EditMovementRoute';
+}
+
+class EditMovementRouteArgs {
+  const EditMovementRouteArgs({
+    required this.movement,
+    this.key,
+  });
+
+  final Movement movement;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'EditMovementRouteArgs{movement: $movement, key: $key}';
   }
 }
