@@ -37,7 +37,7 @@ class IsarService {
 
   Stream<List<Workout>> watchWorkouts() async* {
     final isar = await db;
-    yield* isar.workouts.where().watch(fireImmediately: true);
+    yield* isar.workouts.where().sortByDateDesc().watch(fireImmediately: true);
   }
 
   Stream<List<Movement>> watchMovements(Workout workout) async* {
