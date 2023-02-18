@@ -1,16 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
-import 'package:jumpat/state/workouts_actor/workouts_actor_bloc.dart';
-import 'package:jumpat/state/workouts_watcher/workouts_watcher_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:jumpat/ui/edit_workout_page.dart';
+import 'package:jumpat/ui/routes/app_router.dart';
+import 'package:jumpat/ui/widgets/workout_card.dart';
 
-class WorkoutsPage extends HookWidget implements AutoRouteWrapper {
+class WorkoutsPage extends StatefulWidget {
   const WorkoutsPage({super.key});
 
+  @override
+  State<WorkoutsPage> createState() => _WorkoutsPageState();
+}
+
+class _WorkoutsPageState extends State<WorkoutsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,90 +23,65 @@ class WorkoutsPage extends HookWidget implements AutoRouteWrapper {
         title: const Text('Jumpat'),
       ),
       body: _buildWorkoutsList(context),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          final workout = await getIt<IsarService>().saveWorkout(
+            Workout()..date = DateTime.now(),
+          );
+          // ignore: use_build_context_synchronously
+          context.router.push(EditWorkoutRoute(workout: workout));
+        },
+      ),
     );
   }
 
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<WorkoutsWatcherBloc>(
-          create: (context) => getIt<WorkoutsWatcherBloc>()
-            ..add(const WorkoutsWatcherEvent.watchWorkouts()),
-          child: this,
-        ),
-        BlocProvider<WorkoutsActorBloc>(
-          create: (context) => getIt<WorkoutsActorBloc>(),
-          child: this,
-        ),
-      ],
-      child: this,
-    );
-  }
-
-  BlocBuilder<WorkoutsWatcherBloc, WorkoutsWatcherState> _buildWorkoutsList(
-    BuildContext context,
-  ) {
-    return BlocBuilder<WorkoutsWatcherBloc, WorkoutsWatcherState>(
-      builder: (context, state) {
-        return state.map(
-          initial: (_) => Container(),
-          loaded: (state) {
-            return ListView.builder(
-              itemCount: state.workouts.length,
-              itemBuilder: (context, index) {
-                final workout = state.workouts[index];
-                return _buildWorkoutsListItem(context, workout);
-              },
-            );
+  StreamBuilder<List<Workout>> _buildWorkoutsList(BuildContext context) {
+    return StreamBuilder<List<Workout>>(
+      stream: getIt<IsarService>().watchWorkouts(),
+      builder: (context, snapshot) {
+        final workouts = snapshot.data ?? [];
+        return ListView.builder(
+          itemCount: workouts.length,
+          itemBuilder: (context, index) {
+            final workout = workouts[index];
+            return WorkoutCard(workout: workout);
           },
         );
       },
     );
   }
 
-  BlocBuilder<WorkoutsActorBloc, WorkoutsActorState> _buildWorkoutsListItem(
-    BuildContext context,
-    Workout workout,
-  ) {
-    return BlocBuilder<WorkoutsActorBloc, WorkoutsActorState>(
-      builder: (context, state) {
-        return state.map(
-          initial: (_) {
-            return Slidable(
-              key: const ValueKey(0),
-              endActionPane: ActionPane(
-                motion: const DrawerMotion(),
-                extentRatio: 0.25,
-                dismissible: DismissiblePane(
-                  onDismissed: () {
-                    // dao.deleteTodo(itemTodo);
-                  },
-                ),
-                children: [
-                  SlidableAction(
-                    label: 'Delete',
-                    backgroundColor: Colors.red,
-                    icon: Icons.delete,
-                    onPressed: (context) {
-                      // dao.deleteTodo(itemTodo);
-                    },
-                  )
-                ],
-              ),
-              child: CheckboxListTile(
-                title: Text(workout.date.toIso8601String()),
-                // subtitle: Text(itemTodo.dueDate?.toString() ?? 'No date'),
-                value: false,
-                onChanged: (newValue) {
-                  // dao.updateTodo(itemTodo.copyWith(done: newValue ?? false));
-                },
-              ),
-            );
+  Widget _buildWorkoutsListItem(Workout workout) {
+    return Slidable(
+      key: const ValueKey(0),
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.25,
+        dismissible: DismissiblePane(
+          onDismissed: () {
+            getIt<IsarService>().deleteWorkout(workout);
           },
-          deleteSuccess: (DeleteSuccess value) => Container(),
-        );
-      },
+        ),
+        children: [
+          SlidableAction(
+            label: 'Delete',
+            backgroundColor: Colors.red,
+            icon: Icons.delete,
+            onPressed: (context) {
+              getIt<IsarService>().deleteWorkout(workout);
+            },
+          )
+        ],
+      ),
+      child: CheckboxListTile(
+        title: Text(workout.date.toIso8601String()),
+        // subtitle: Text(itemTodo.dueDate?.toString() ?? 'No date'),
+        value: false,
+        onChanged: (newValue) {
+          // dao.updateTodo(itemTodo.copyWith(done: newValue ?? false));
+        },
+      ),
     );
   }
 }

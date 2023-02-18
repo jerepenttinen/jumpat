@@ -17,31 +17,79 @@ class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    WorkoutsPageRoute.name: (routeData) {
+    WorkoutsRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: WrappedRoute(child: const WorkoutsPage()),
+        child: const WorkoutsPage(),
       );
-    }
+    },
+    EditWorkoutRoute.name: (routeData) {
+      final args = routeData.argsAs<EditWorkoutRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: EditWorkoutPage(
+          workout: args.workout,
+          key: args.key,
+        ),
+      );
+    },
   };
 
   @override
   List<RouteConfig> get routes => [
         RouteConfig(
-          WorkoutsPageRoute.name,
+          WorkoutsRoute.name,
           path: '/',
-        )
+        ),
+        RouteConfig(
+          EditWorkoutRoute.name,
+          path: '/edit-workout-page',
+        ),
       ];
 }
 
 /// generated route for
 /// [WorkoutsPage]
-class WorkoutsPageRoute extends PageRouteInfo<void> {
-  const WorkoutsPageRoute()
+class WorkoutsRoute extends PageRouteInfo<void> {
+  const WorkoutsRoute()
       : super(
-          WorkoutsPageRoute.name,
+          WorkoutsRoute.name,
           path: '/',
         );
 
-  static const String name = 'WorkoutsPageRoute';
+  static const String name = 'WorkoutsRoute';
+}
+
+/// generated route for
+/// [EditWorkoutPage]
+class EditWorkoutRoute extends PageRouteInfo<EditWorkoutRouteArgs> {
+  EditWorkoutRoute({
+    required Workout workout,
+    Key? key,
+  }) : super(
+          EditWorkoutRoute.name,
+          path: '/edit-workout-page',
+          args: EditWorkoutRouteArgs(
+            workout: workout,
+            key: key,
+          ),
+        );
+
+  static const String name = 'EditWorkoutRoute';
+}
+
+class EditWorkoutRouteArgs {
+  const EditWorkoutRouteArgs({
+    required this.workout,
+    this.key,
+  });
+
+  final Workout workout;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'EditWorkoutRouteArgs{workout: $workout, key: $key}';
+  }
 }

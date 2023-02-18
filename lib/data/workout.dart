@@ -4,14 +4,27 @@ part 'workout.g.dart';
 
 @collection
 class Workout {
-  Id? id;
+  Id id = Isar.autoIncrement;
   late DateTime date;
-  late List<Movement> movements;
+  final movements = IsarLinks<Movement>();
 }
 
-@embedded
+@collection
 class Movement {
-  late String name;
+  Id id = Isar.autoIncrement;
   late double weight;
   late List<int> sets;
+
+  @Backlink(to: 'movements')
+  final workout = IsarLink<Workout>();
+
+  @Backlink(to: 'movements')
+  final exercise = IsarLink<Exercise>();
+}
+
+@collection
+class Exercise {
+  Id id = Isar.autoIncrement;
+  late String name;
+  final movements = IsarLinks<Movement>();
 }
