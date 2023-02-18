@@ -40,6 +40,14 @@ class IsarService {
     yield* isar.workouts.where().watch(fireImmediately: true);
   }
 
+  Stream<List<Movement>> watchMovements(Workout workout) async* {
+    final isar = await db;
+    yield* isar.movements
+        .filter()
+        .workout((w) => w.idEqualTo(workout.id))
+        .watch(fireImmediately: true);
+  }
+
   Future<Isar> openDb() async {
     const dbName = 'jumpat';
     if (Isar.instanceNames.isEmpty) {
