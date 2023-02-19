@@ -92,10 +92,10 @@ class _EditMovementPageState extends State<EditMovementPage> {
       key: const ValueKey(0),
       startActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.25,
+        extentRatio: 0.3,
         children: [
           SlidableAction(
-            label: 'Edit',
+            label: 'Muokkaa',
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) async {
@@ -114,7 +114,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
       ),
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.25,
+        extentRatio: 0.3,
         dismissible: DismissiblePane(
           onDismissed: () async {
             widget.movement.sets = [...sets]..removeAt(index);
@@ -123,7 +123,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
         ),
         children: [
           SlidableAction(
-            label: 'Delete',
+            label: 'Poista',
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {

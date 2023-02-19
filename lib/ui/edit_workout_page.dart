@@ -82,10 +82,10 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
       key: const ValueKey(0),
       startActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.25,
+        extentRatio: 0.3,
         children: [
           SlidableAction(
-            label: 'Edit',
+            label: 'Muokkaa',
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) {
@@ -96,7 +96,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
       ),
       endActionPane: ActionPane(
         motion: const DrawerMotion(),
-        extentRatio: 0.25,
+        extentRatio: 0.3,
         dismissible: DismissiblePane(
           onDismissed: () async {
             await getIt<IsarService>().deleteMovement(movement);
@@ -104,7 +104,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         ),
         children: [
           SlidableAction(
-            label: 'Delete',
+            label: 'Poista',
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
