@@ -50,37 +50,4 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
       },
     );
   }
-
-  Widget _buildWorkoutsListItem(Workout workout) {
-    return Slidable(
-      key: const ValueKey(0),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.25,
-        dismissible: DismissiblePane(
-          onDismissed: () {
-            getIt<IsarService>().deleteWorkout(workout);
-          },
-        ),
-        children: [
-          SlidableAction(
-            label: 'Delete',
-            backgroundColor: Colors.red,
-            icon: Icons.delete,
-            onPressed: (context) {
-              getIt<IsarService>().deleteWorkout(workout);
-            },
-          )
-        ],
-      ),
-      child: CheckboxListTile(
-        title: Text(workout.date.toIso8601String()),
-        // subtitle: Text(itemTodo.dueDate?.toString() ?? 'No date'),
-        value: false,
-        onChanged: (newValue) {
-          // dao.updateTodo(itemTodo.copyWith(done: newValue ?? false));
-        },
-      ),
-    );
-  }
 }

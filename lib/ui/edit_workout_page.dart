@@ -98,8 +98,8 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         motion: const DrawerMotion(),
         extentRatio: 0.25,
         dismissible: DismissiblePane(
-          onDismissed: () {
-            getIt<IsarService>().deleteMovement(movement);
+          onDismissed: () async {
+            await getIt<IsarService>().deleteMovement(movement);
           },
         ),
         children: [
@@ -107,8 +107,8 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             label: 'Delete',
             backgroundColor: Colors.red,
             icon: Icons.delete,
-            onPressed: (context) {
-              getIt<IsarService>().deleteMovement(movement);
+            onPressed: (context) async {
+              await getIt<IsarService>().deleteMovement(movement);
             },
           )
         ],
