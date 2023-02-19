@@ -70,7 +70,6 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
           itemCount: movements.length,
           itemBuilder: (context, index) {
             final movement = movements[index];
-            // return Text(movement.weight.toString());
             return _buildMovementsListItem(movement);
           },
         );
@@ -116,7 +115,8 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
       ),
       child: ListTile(
         title: Text(movement.exercise.value?.name ?? 'Tuntematon'),
-        subtitle: Text(movement.weight.toString()),
+        subtitle:
+            Text('${movement.weight.toString()}kg ${movement.sets.toString()}'),
       ),
     );
   }
