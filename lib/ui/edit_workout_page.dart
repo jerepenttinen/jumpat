@@ -5,6 +5,7 @@ import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 
 class EditWorkoutPage extends StatefulWidget {
   const EditWorkoutPage({required this.workout, super.key});
@@ -44,8 +45,14 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
       body: _buildMovementsList(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final movement =
-              await getIt<IsarService>().createMovement(widget.workout);
+          final exercise = await selectExerciseDialog(context);
+
+          if (exercise == null) {
+            return;
+          }
+
+          final movement = await getIt<IsarService>()
+              .createMovement(widget.workout, exercise);
 
           context.router.push(EditMovementRoute(movement: movement));
         },

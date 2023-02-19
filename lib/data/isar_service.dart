@@ -40,16 +40,21 @@ class IsarService {
     });
   }
 
-  Future<Movement> createMovement(Workout workout) async {
+  Future<Movement> createMovement(Workout workout, Exercise exercise) async {
     final isar = await db;
     return await isar.writeTxn(() async {
       final movement = Movement()
         ..sets = []
         ..weight = 0
-        ..workout.value = workout;
+        ..workout.value = workout
+        ..exercise.value = exercise;
+
       workout.movements.add(movement);
+      exercise.movements.add(movement);
+
       final id = await isar.movements.put(movement);
       await workout.movements.save();
+      await exercise.movements.save();
 
       return (await isar.movements.get(id))!;
     });
@@ -71,6 +76,32 @@ class IsarService {
         .filter()
         .workout((w) => w.idEqualTo(workout.id))
         .watch(fireImmediately: true);
+  }
+
+  Future<List<Exercise>> searchExercises(String term) async {
+    final isar = await db;
+    return isar.exercises
+        .filter()
+        .nameContains(term, caseSensitive: false)
+        .findAll();
+  }
+
+  Future<Exercise> createExercise(String name) async {
+    final isar = await db;
+    return await isar.writeTxn(() async {
+      final exercise = Exercise()..name = name;
+      final id = await isar.exercises.put(exercise);
+
+      return (await isar.exercises.get(id))!;
+    });
+  }
+
+  Future<bool> existsExercise(String name) async {
+    final isar = await db;
+    return await isar.exercises
+        .filter()
+        .nameEqualTo(name, caseSensitive: false)
+        .isNotEmpty();
   }
 
   Future<Isar> openDb() async {
