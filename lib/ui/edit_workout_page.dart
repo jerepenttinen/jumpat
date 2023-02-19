@@ -86,7 +86,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         children: [
           SlidableAction(
             label: 'Edit',
-            backgroundColor: Colors.teal,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) {
               context.router.push(EditMovementRoute(movement: movement));
@@ -105,7 +105,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         children: [
           SlidableAction(
             label: 'Delete',
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
               await getIt<IsarService>().deleteMovement(movement);

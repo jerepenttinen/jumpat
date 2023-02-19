@@ -96,7 +96,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
         children: [
           SlidableAction(
             label: 'Edit',
-            backgroundColor: Colors.teal,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) async {
               final count = await chooseRepCountDialog(context, repCount);
@@ -124,7 +124,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
         children: [
           SlidableAction(
             label: 'Delete',
-            backgroundColor: Colors.red,
+            backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
               widget.movement.sets = [...sets]..removeAt(index);
