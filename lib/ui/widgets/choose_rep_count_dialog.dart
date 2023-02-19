@@ -37,7 +37,7 @@ class _ChooseRepCountState extends State<ChooseRepCount> {
           onPressed: () {
             Navigator.of(context).pop(_currentRepCount);
           },
-          child: const Text('Lisää'),
+          child: const Text('Tallenna'),
         )
       ],
     );

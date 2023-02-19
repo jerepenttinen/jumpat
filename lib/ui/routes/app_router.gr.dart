@@ -43,6 +43,16 @@ class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    ExerciseHistoryRoute.name: (routeData) {
+      final args = routeData.argsAs<ExerciseHistoryRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: ExerciseHistoryPage(
+          exercise: args.exercise,
+          key: args.key,
+        ),
+      );
+    },
   };
 
   @override
@@ -58,6 +68,10 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           EditMovementRoute.name,
           path: '/edit-movement-page',
+        ),
+        RouteConfig(
+          ExerciseHistoryRoute.name,
+          path: '/exercise-history-page',
         ),
       ];
 }
@@ -139,5 +153,39 @@ class EditMovementRouteArgs {
   @override
   String toString() {
     return 'EditMovementRouteArgs{movement: $movement, key: $key}';
+  }
+}
+
+/// generated route for
+/// [ExerciseHistoryPage]
+class ExerciseHistoryRoute extends PageRouteInfo<ExerciseHistoryRouteArgs> {
+  ExerciseHistoryRoute({
+    required Exercise exercise,
+    Key? key,
+  }) : super(
+          ExerciseHistoryRoute.name,
+          path: '/exercise-history-page',
+          args: ExerciseHistoryRouteArgs(
+            exercise: exercise,
+            key: key,
+          ),
+        );
+
+  static const String name = 'ExerciseHistoryRoute';
+}
+
+class ExerciseHistoryRouteArgs {
+  const ExerciseHistoryRouteArgs({
+    required this.exercise,
+    this.key,
+  });
+
+  final Exercise exercise;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ExerciseHistoryRouteArgs{exercise: $exercise, key: $key}';
   }
 }

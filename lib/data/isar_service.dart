@@ -92,6 +92,14 @@ class IsarService {
     yield* isar.movements.watchObject(movement.id, fireImmediately: true);
   }
 
+  Stream<List<Movement>> watchExerciseMovements(Exercise exercise) async* {
+    final isar = await db;
+    yield* isar.movements
+        .filter()
+        .exercise((q) => q.idEqualTo(exercise.id))
+        .watch(fireImmediately: true);
+  }
+
   Future<List<Exercise>> searchExercises(String term) async {
     final isar = await db;
     return isar.exercises

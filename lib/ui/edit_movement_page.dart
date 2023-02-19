@@ -24,6 +24,18 @@ class _EditMovementPageState extends State<EditMovementPage> {
         title: Text(widget.movement.exercise.value?.name ?? 'Tuntematon'),
         actions: [
           IconButton(
+            onPressed: widget.movement.exercise.value != null
+                ? () {
+                    context.router.push(
+                      ExerciseHistoryRoute(
+                        exercise: widget.movement.exercise.value!,
+                      ),
+                    );
+                  }
+                : null,
+            icon: const Icon(Icons.history),
+          ),
+          IconButton(
             onPressed: () async {
               final exercise = await selectExerciseDialog(context);
 
@@ -39,7 +51,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
               await getIt<IsarService>().saveMovement(widget.movement);
             },
             icon: const Icon(Icons.edit),
-          )
+          ),
         ],
       ),
       body: _buildSetsList(context),
@@ -91,8 +103,9 @@ class _EditMovementPageState extends State<EditMovementPage> {
               if (count == null) {
                 return;
               }
-
-              widget.movement.sets = [...sets]..insert(index, count);
+              final newSets = [...sets];
+              newSets[index] = count;
+              widget.movement.sets = newSets;
 
               await getIt<IsarService>().saveMovement(widget.movement);
             },

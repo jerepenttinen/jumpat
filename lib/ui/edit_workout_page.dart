@@ -39,7 +39,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
               }
             },
             icon: const Icon(Icons.calendar_today),
-          )
+          ),
         ],
       ),
       body: _buildMovementsList(context),
