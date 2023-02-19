@@ -19,8 +19,8 @@ class _EditMovementPageState extends State<EditMovementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          // title: Text(widget.workout.date.toIso8601String()),
-          ),
+        title: Text(widget.movement.exercise.value?.name ?? 'Tuntematon'),
+      ),
       body: _buildSetsList(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

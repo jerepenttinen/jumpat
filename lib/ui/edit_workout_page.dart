@@ -115,7 +115,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         ],
       ),
       child: ListTile(
-        title: const Text('Liike'),
+        title: Text(movement.exercise.value?.name ?? 'Tuntematon'),
         subtitle: Text(movement.weight.toString()),
       ),
     );

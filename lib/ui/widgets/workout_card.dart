@@ -48,10 +48,11 @@ class WorkoutCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: workout.movements
                   .map(
                     (e) => Text(
-                      '${e.weight.toString()} kg ${e.sets.toString()}',
+                      '${e.exercise.value?.name ?? 'Tuntematon'} ${e.weight.toString()} kg ${e.sets.toString()}',
                     ),
                   )
                   .toList(),
