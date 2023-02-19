@@ -45,6 +45,7 @@ class _SelectExerciseState extends State<SelectExercise> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
           decoration: const InputDecoration(hintText: 'Liikkeen nimi'),
