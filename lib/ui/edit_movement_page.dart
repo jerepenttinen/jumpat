@@ -5,6 +5,7 @@ import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 
 class EditMovementPage extends StatefulWidget {
@@ -44,28 +45,37 @@ class _EditMovementPageState extends State<EditMovementPage> {
       body: _buildSetsList(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // final workout = await getIt<IsarService>().saveWorkout(
-          //   Workout()..date = DateTime.now(),
-          // );
+          final count = await chooseRepCountDialog(context, 10);
+          if (count == null) {
+            return;
+          }
 
-          // context.router.push(EditMovementRoute(workout: workout));
+          widget.movement.sets = [...widget.movement.sets, count];
+
+          await getIt<IsarService>().saveMovement(widget.movement);
         },
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  ListView _buildSetsList(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.movement.sets.length,
-      itemBuilder: (context, index) {
-        final set = widget.movement.sets[index];
-        return _buildSetsListItem(set, index);
+  Widget _buildSetsList(BuildContext context) {
+    return StreamBuilder(
+      stream: getIt<IsarService>().watchMovement(widget.movement),
+      builder: (context, snapshot) {
+        final sets = snapshot.data?.sets ?? [];
+        return ListView.builder(
+          itemCount: sets.length,
+          itemBuilder: (context, index) {
+            return _buildSetsListItem(sets, index);
+          },
+        );
       },
     );
   }
 
-  Slidable _buildSetsListItem(int set, int index) {
+  Slidable _buildSetsListItem(List<int> sets, int index) {
+    final repCount = sets[index];
     return Slidable(
       key: const ValueKey(0),
       startActionPane: ActionPane(
@@ -76,8 +86,15 @@ class _EditMovementPageState extends State<EditMovementPage> {
             label: 'Edit',
             backgroundColor: Colors.teal,
             icon: Icons.delete,
-            onPressed: (context) {
-              // getIt<IsarService>().deleteWorkout(workout);
+            onPressed: (context) async {
+              final count = await chooseRepCountDialog(context, repCount);
+              if (count == null) {
+                return;
+              }
+
+              widget.movement.sets = [...sets]..insert(index, count);
+
+              await getIt<IsarService>().saveMovement(widget.movement);
             },
           )
         ],
@@ -86,8 +103,9 @@ class _EditMovementPageState extends State<EditMovementPage> {
         motion: const DrawerMotion(),
         extentRatio: 0.25,
         dismissible: DismissiblePane(
-          onDismissed: () {
-            // getIt<IsarService>().deleteMovement(movement);
+          onDismissed: () async {
+            widget.movement.sets = [...sets]..removeAt(index);
+            await getIt<IsarService>().saveMovement(widget.movement);
           },
         ),
         children: [
@@ -95,14 +113,15 @@ class _EditMovementPageState extends State<EditMovementPage> {
             label: 'Delete',
             backgroundColor: Colors.red,
             icon: Icons.delete,
-            onPressed: (context) {
-              // getIt<IsarService>().deleteMovement(movement);
+            onPressed: (context) async {
+              widget.movement.sets = [...sets]..removeAt(index);
+              await getIt<IsarService>().saveMovement(widget.movement);
             },
           )
         ],
       ),
       child: ListTile(
-        title: Text(set.toString()),
+        title: Text(repCount.toString()),
       ),
     );
   }

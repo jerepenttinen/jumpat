@@ -50,6 +50,7 @@ dependencies:
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
   rxdart: ^0.27.7
+  numberpicker: ^2.1.1
 
 dev_dependencies:
   flutter_test:
