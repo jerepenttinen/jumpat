@@ -32,11 +32,20 @@ class IsarService {
 
   Future<Movement> saveMovement(Movement movement) async {
     final isar = await db;
+    final exercise = movement.exercise.value;
+    final workout = movement.workout.value;
+
     return await isar.writeTxn(() async {
+      exercise?.movements.add(movement);
+      workout?.movements.add(movement);
+
       final id = await isar.movements.put(movement);
-      final joku = (await isar.movements.get(id))!;
-      await joku.workout.save();
-      return joku;
+      final m = (await isar.movements.get(id))!;
+
+      await exercise?.movements.save();
+      await workout?.movements.save();
+
+      return m;
     });
   }
 

@@ -5,6 +5,7 @@ import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 
 class EditMovementPage extends StatefulWidget {
   const EditMovementPage({required this.movement, super.key});
@@ -20,6 +21,25 @@ class _EditMovementPageState extends State<EditMovementPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.movement.exercise.value?.name ?? 'Tuntematon'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final exercise = await selectExerciseDialog(context);
+
+              if (exercise == null) {
+                return;
+              }
+
+              setState(() {
+                widget.movement.exercise.value = exercise;
+              });
+
+              exercise.movements.add(widget.movement);
+              await getIt<IsarService>().saveMovement(widget.movement);
+            },
+            icon: const Icon(Icons.edit),
+          )
+        ],
       ),
       body: _buildSetsList(context),
       floatingActionButton: FloatingActionButton(
