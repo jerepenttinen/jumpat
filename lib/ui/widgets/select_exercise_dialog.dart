@@ -48,6 +48,7 @@ class _SelectExerciseState extends State<SelectExercise> {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
+          autofocus: true,
           decoration: const InputDecoration(hintText: 'Liikkeen nimi'),
           onChanged: (value) {
             search(value);
