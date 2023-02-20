@@ -24,6 +24,7 @@ class SelectExercise extends StatefulWidget {
 
 class _SelectExerciseState extends State<SelectExercise> {
   final _searchTerm = BehaviorSubject<String>();
+
   void search(String term) => _searchTerm.add(term);
 
   late final Stream<List<Exercise>> _exercises = _searchTerm
@@ -31,6 +32,7 @@ class _SelectExerciseState extends State<SelectExercise> {
       .switchMap((value) async* {
     yield await getIt<IsarService>().searchExercises(value);
   });
+
   Stream<List<Exercise>> get exercises => _exercises;
 
   late final Stream<bool> _canCreate =
@@ -40,6 +42,7 @@ class _SelectExerciseState extends State<SelectExercise> {
           !await getIt<IsarService>().existsExercise(value));
     },
   );
+
   Stream<bool> get canCreate => _canCreate;
 
   @override
@@ -58,9 +61,15 @@ class _SelectExerciseState extends State<SelectExercise> {
           stream: exercises,
           builder: (context, snapshot) {
             final data = snapshot.data ?? [];
-            return Column(
-              children:
-                  data.map((e) => _createExerciseListItem(context, e)).toList(),
+            return Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: data
+                      .map((e) => _createExerciseListItem(context, e))
+                      .toList(),
+                ),
+              ),
             );
           },
         ),
@@ -71,7 +80,8 @@ class _SelectExerciseState extends State<SelectExercise> {
 
             if (canCreate) {
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
                     getIt<IsarService>()

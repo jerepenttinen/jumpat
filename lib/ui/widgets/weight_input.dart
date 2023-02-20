@@ -9,6 +9,7 @@ class WeightInput extends StatefulWidget {
     required this.onWeightChanged,
     super.key,
   });
+
   final double initial;
   final Future Function(double) onWeightChanged;
 
@@ -47,9 +48,10 @@ class _WeightInputState extends State<WeightInput> {
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: const InputDecoration(labelText: 'Paino'),
       controller: controller,
+      onTap: () => controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
-          RegExp(r'^\d+\.?\d{0,1}'),
+          RegExp(r'^\d+\.?\d?'),
         )
       ],
     );
