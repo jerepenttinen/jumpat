@@ -7,6 +7,7 @@ import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
+import 'package:jumpat/ui/widgets/weight_input.dart';
 
 class EditMovementPage extends StatefulWidget {
   const EditMovementPage({required this.movement, super.key});
@@ -54,7 +55,21 @@ class _EditMovementPageState extends State<EditMovementPage> {
           ),
         ],
       ),
-      body: _buildSetsList(context),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: WeightInput(
+              initial: widget.movement.weight,
+              onWeightChanged: (weight) async {
+                await getIt<IsarService>()
+                    .saveMovement(widget.movement..weight = weight);
+              },
+            ),
+          ),
+          _buildSetsList(context),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final count = await chooseRepCountDialog(context, 10);
@@ -77,6 +92,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
       builder: (context, snapshot) {
         final sets = snapshot.data?.sets ?? [];
         return ListView.builder(
+          shrinkWrap: true,
           itemCount: sets.length,
           itemBuilder: (context, index) {
             return _buildSetsListItem(sets, index);
