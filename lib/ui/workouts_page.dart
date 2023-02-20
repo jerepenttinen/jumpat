@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/workout_card.dart';
 

@@ -4,6 +4,7 @@ import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
+import 'package:jumpat/ui/widgets/confirm_delete.dart';
 
 enum CardMenuItem { edit, delete }
 
@@ -23,13 +24,17 @@ class WorkoutCard extends StatelessWidget {
             title: Text(workout.date.toIso8601String()),
             trailing: PopupMenuButton<CardMenuItem>(
               icon: const Icon(Icons.more_vert),
-              onSelected: (value) {
+              onSelected: (value) async {
                 switch (value) {
                   case CardMenuItem.edit:
                     context.router.push(EditWorkoutRoute(workout: workout));
                     break;
                   case CardMenuItem.delete:
-                    getIt<IsarService>().deleteWorkout(workout);
+                    confirmDelete(context).then((value) {
+                      if (value) {
+                        getIt<IsarService>().deleteWorkout(workout);
+                      }
+                    });
                     break;
                 }
               },
@@ -46,23 +51,24 @@ class WorkoutCard extends StatelessWidget {
             ),
           ),
           Container(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: StreamBuilder(
-                stream: getIt<IsarService>().watchMovements(workout),
-                builder: (context, snapshot) {
-                  final movements = snapshot.data ?? [];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: movements
-                        .map(
-                          (e) => Text(
-                            '${e.exercise.value?.name ?? 'Tuntematon'} ${e.weight.toString()} kg ${e.sets.toString()}',
-                          ),
-                        )
-                        .toList(),
-                  );
-                },
-              )),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: StreamBuilder(
+              stream: getIt<IsarService>().watchMovements(workout),
+              builder: (context, snapshot) {
+                final movements = snapshot.data ?? [];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: movements
+                      .map(
+                        (e) => Text(
+                          '${e.exercise.value?.name ?? 'Tuntematon'} ${e.weight.toString()} kg ${e.sets.toString()}',
+                        ),
+                      )
+                      .toList(),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

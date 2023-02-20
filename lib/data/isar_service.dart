@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:rxdart/transformers.dart';
 
 @injectable
 class IsarService {

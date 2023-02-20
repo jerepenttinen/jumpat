@@ -45,6 +45,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
       body: _buildMovementsList(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          final router = context.router;
           final exercise = await selectExerciseDialog(context);
 
           if (exercise == null) {
@@ -54,7 +55,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
           final movement = await getIt<IsarService>()
               .createMovement(widget.workout, exercise);
 
-          context.router.push(EditMovementRoute(movement: movement));
+          router.push(EditMovementRoute(movement: movement));
         },
         child: const Icon(Icons.add),
       ),
