@@ -34,7 +34,7 @@ class ExerciseHistoryPage extends StatelessWidget {
         final movement = movements[index];
         return ListTile(
           title: Text(
-            '${movement.sets.toString()} = ${movement.sets.fold(0, (previousValue, element) => previousValue + element)}',
+            '${movement.weight}kg ${movement.sets.toString()} = ${movement.sets.fold(0, (previousValue, element) => previousValue + element)}',
           ),
           subtitle: movement.workout.value != null
               ? Text(movement.workout.value!.date.toIso8601String())
