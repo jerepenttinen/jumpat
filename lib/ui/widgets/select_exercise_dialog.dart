@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/workout.dart';
-import 'package:jumpat/injection.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
 
