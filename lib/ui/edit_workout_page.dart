@@ -79,7 +79,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
 
   Slidable _buildMovementsListItem(Movement movement) {
     return Slidable(
-      key: const ValueKey(0),
+      key: UniqueKey(),
       startActionPane: ActionPane(
         motion: const DrawerMotion(),
         extentRatio: 0.3,

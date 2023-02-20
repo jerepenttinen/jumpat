@@ -105,7 +105,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
   Slidable _buildSetsListItem(List<int> sets, int index) {
     final repCount = sets[index];
     return Slidable(
-      key: const ValueKey(0),
+      key: UniqueKey(),
       startActionPane: ActionPane(
         motion: const DrawerMotion(),
         extentRatio: 0.3,

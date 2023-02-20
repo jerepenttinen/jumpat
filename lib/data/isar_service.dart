@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:isar/isar.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/transformers.dart';
 
 @injectable
 class IsarService {
@@ -94,10 +95,21 @@ class IsarService {
 
   Stream<List<Movement>> watchExerciseMovements(Exercise exercise) async* {
     final isar = await db;
-    yield* isar.movements
+    yield* isar.workouts
+        .where()
+        .anyId()
         .filter()
-        .exercise((q) => q.idEqualTo(exercise.id))
-        .watch(fireImmediately: true);
+        .movements((m) => m.exercise((e) => e.idEqualTo(exercise.id)))
+        .sortByDateDesc()
+        .watch(fireImmediately: true)
+        .map(
+          (w) => w
+              .expand(
+                (w) => w.movements
+                    .where((m) => m.exercise.value?.id == exercise.id),
+              )
+              .toList(),
+        );
   }
 
   Future<List<Exercise>> searchExercises(String term) async {
