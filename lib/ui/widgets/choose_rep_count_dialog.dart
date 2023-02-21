@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<int?> chooseRepCountDialog(BuildContext context, int last) async {
   return await showDialog<int>(
@@ -22,8 +23,9 @@ class _ChooseRepCountState extends State<ChooseRepCount> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text('Toistojen määrä'),
+      title: Text(t.repetitionCount),
       content: NumberPicker(
         value: _currentRepCount,
         minValue: 0,
@@ -37,7 +39,7 @@ class _ChooseRepCountState extends State<ChooseRepCount> {
           onPressed: () {
             Navigator.of(context).pop(_currentRepCount);
           },
-          child: const Text('Tallenna'),
+          child: Text(t.save),
         )
       ],
     );

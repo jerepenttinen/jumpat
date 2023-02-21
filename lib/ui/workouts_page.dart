@@ -5,6 +5,7 @@ import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/workout_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WorkoutsPage extends ConsumerWidget {
   const WorkoutsPage({super.key});
@@ -13,7 +14,7 @@ class WorkoutsPage extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jumpat'),
+        title: Text(AppLocalizations.of(context)!.name),
       ),
       body: const WorkoutsList(),
       floatingActionButton: FloatingActionButton(

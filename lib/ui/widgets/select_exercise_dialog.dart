@@ -4,13 +4,15 @@ import 'package:jumpat/data/workout.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<Exercise?> selectExerciseDialog(BuildContext context) async {
+  final t = AppLocalizations.of(context)!;
   return await showDialog<Exercise>(
     context: context,
-    builder: (context) => const AlertDialog(
-      title: Text('Liike'),
-      content: SelectExercise(),
+    builder: (context) => AlertDialog(
+      title: Text(t.exercise),
+      content: const SelectExercise(),
     ),
   );
 }
@@ -38,12 +40,14 @@ class SelectExercise extends ConsumerWidget {
       },
     );
 
+    final t = AppLocalizations.of(context)!;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
           autofocus: true,
-          decoration: const InputDecoration(hintText: 'Liikkeen nimi'),
+          decoration: InputDecoration(hintText: t.exerciseNameHint),
           onChanged: (value) {
             search(value);
           },
@@ -79,7 +83,13 @@ class SelectExercise extends ConsumerWidget {
                         .read(createExerciseProvider(searchTerm.value).future)
                         .then((exercise) => Navigator.pop(context, exercise));
                   },
-                  child: const Text('Luo'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      t.createExerciseButton(searchTerm.value),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               );
             } else {

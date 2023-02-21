@@ -7,6 +7,7 @@ import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditWorkoutPage extends HookConsumerWidget {
   const EditWorkoutPage({required this.workout, super.key});
@@ -15,9 +16,10 @@ class EditWorkoutPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final workoutState = useState<Workout>(workout);
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(workoutState.value.date.toIso8601String()),
+        title: Text(t.workoutDate(workoutState.value.date)),
         actions: [
           IconButton(
             onPressed: () async {
@@ -90,6 +92,8 @@ class MovementsListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context)!;
+
     return Slidable(
       key: UniqueKey(),
       startActionPane: ActionPane(
@@ -97,7 +101,7 @@ class MovementsListItem extends ConsumerWidget {
         extentRatio: 0.3,
         children: [
           SlidableAction(
-            label: 'Muokkaa',
+            label: t.edit,
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) {
@@ -116,7 +120,7 @@ class MovementsListItem extends ConsumerWidget {
         ),
         children: [
           SlidableAction(
-            label: 'Poista',
+            label: t.delete,
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {

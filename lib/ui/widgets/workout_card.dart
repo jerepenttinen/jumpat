@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jumpat/data/isar_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
@@ -17,13 +17,14 @@ class WorkoutCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final movementsAsync = ref.watch(watchMovementsProvider(workout));
+    final t = AppLocalizations.of(context)!;
     return Card(
       elevation: 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
-            title: Text(workout.date.toIso8601String()),
+            title: Text(t.workoutDate(workout.date)),
             trailing: PopupMenuButton<CardMenuItem>(
               icon: const Icon(Icons.more_vert),
               onSelected: (value) async {
@@ -41,13 +42,13 @@ class WorkoutCard extends ConsumerWidget {
                 }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: CardMenuItem.edit,
-                  child: Text('Muokkaa'),
+                  child: Text(t.edit),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: CardMenuItem.delete,
-                  child: Text('Poista'),
+                  child: Text(t.delete),
                 ),
               ],
             ),
@@ -61,7 +62,7 @@ class WorkoutCard extends ConsumerWidget {
                   children: movements
                       .map(
                         (e) => Text(
-                          '${e.exercise.value?.name ?? 'Tuntematon'} ${e.weight.toString()} kg ${e.sets.toString()}',
+                          '${e.exercise.value?.name ?? 'Tuntematon'} ${e.weight.toString()}kg ${e.sets.toString()}',
                         ),
                       )
                       .toList(),

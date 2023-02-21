@@ -1,0 +1,14 @@
+{
+  "name": "Jumpat",
+  "edit": "Muokkaa",
+  "delete": "Poista",
+  "cancel": "Peruuta",
+  "save": "Tallenna",
+  "exercise": "Liike",
+  "exerciseNameHint": "Liikkeen nimi",
+  "createExerciseButton": "Luo liike\n\"{exercise}\"",
+  "confirmationTitle": "Poista",
+  "confirmationContent": "Tätä toimintoa ei voida peruuttaa",
+  "workoutDate": "{date}",
+  "repetitionCount": "Toistojen määrä"
+}

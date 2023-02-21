@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/widgets/weight_input.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditMovementPage extends HookConsumerWidget {
   const EditMovementPage({required this.movement, super.key});
@@ -124,6 +125,8 @@ class SetsListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context)!;
+
     return Slidable(
       key: UniqueKey(),
       startActionPane: ActionPane(
@@ -131,7 +134,7 @@ class SetsListItem extends ConsumerWidget {
         extentRatio: 0.3,
         children: [
           SlidableAction(
-            label: 'Muokkaa',
+            label: t.edit,
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) async {
@@ -159,7 +162,7 @@ class SetsListItem extends ConsumerWidget {
         ),
         children: [
           SlidableAction(
-            label: 'Poista',
+            label: t.delete,
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
