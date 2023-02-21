@@ -18,7 +18,13 @@ class MyApp extends StatelessWidget {
       onGenerateTitle: (context) => AppLocalizations.of(context)!.name,
       theme: ThemeData(
         primarySwatch: Colors.teal,
+        brightness: Brightness.light,
       ),
+      darkTheme: ThemeData(
+        primarySwatch: Colors.teal,
+        brightness: Brightness.dark,
+      ),
+      themeMode: ThemeMode.system,
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

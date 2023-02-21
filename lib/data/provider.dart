@@ -3,7 +3,7 @@ import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'provider.g.dart';
 
