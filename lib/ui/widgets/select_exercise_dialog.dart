@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jumpat/data/isar_service.dart';
+import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 Future<Exercise?> selectExerciseDialog(BuildContext context) async {
   return await showDialog<Exercise>(
@@ -14,38 +15,29 @@ Future<Exercise?> selectExerciseDialog(BuildContext context) async {
   );
 }
 
-class SelectExercise extends StatefulWidget {
+class SelectExercise extends ConsumerWidget {
   const SelectExercise({super.key});
 
   @override
-  State<SelectExercise> createState() => _SelectExerciseState();
-}
+  Widget build(BuildContext context, ref) {
+    final searchTerm = BehaviorSubject<String>();
 
-class _SelectExerciseState extends State<SelectExercise> {
-  final _searchTerm = BehaviorSubject<String>();
+    void search(String term) => searchTerm.add(term);
 
-  void search(String term) => _searchTerm.add(term);
+    final Stream<List<Exercise>> exercises = searchTerm
+        .debounceTime(const Duration(milliseconds: 300))
+        .switchMap((value) async* {
+      yield await ref.read(searchExercisesProvider(value).future);
+    });
 
-  late final Stream<List<Exercise>> _exercises = _searchTerm
-      .debounceTime(const Duration(milliseconds: 300))
-      .switchMap((value) async* {
-    yield await getIt<IsarService>().searchExercises(value);
-  });
+    final Stream<bool> canCreate =
+        searchTerm.debounceTime(const Duration(milliseconds: 300)).switchMap(
+      (value) async* {
+        yield (value.length > 2 &&
+            !await ref.read(existsExerciseProvider(value).future));
+      },
+    );
 
-  Stream<List<Exercise>> get exercises => _exercises;
-
-  late final Stream<bool> _canCreate =
-      _searchTerm.debounceTime(const Duration(milliseconds: 300)).switchMap(
-    (value) async* {
-      yield (value.length > 2 &&
-          !await getIt<IsarService>().existsExercise(value));
-    },
-  );
-
-  Stream<bool> get canCreate => _canCreate;
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -83,8 +75,8 @@ class _SelectExerciseState extends State<SelectExercise> {
                     const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    getIt<IsarService>()
-                        .createExercise(_searchTerm.value)
+                    ref
+                        .read(createExerciseProvider(searchTerm.value).future)
                         .then((exercise) => Navigator.pop(context, exercise));
                   },
                   child: const Text('Luo'),
