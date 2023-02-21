@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rxdart/subjects.dart';
-import 'package:rxdart/transformers.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WeightInput extends StatefulWidget {
   const WeightInput({
@@ -25,6 +25,8 @@ class _WeightInputState extends State<WeightInput> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     final autofocus = widget.initial.compareTo(0) == 0;
     controller.addListener(
       () {
@@ -55,7 +57,7 @@ class _WeightInputState extends State<WeightInput> {
     return TextField(
       autofocus: autofocus,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      decoration: const InputDecoration(labelText: 'Paino'),
+      decoration: InputDecoration(labelText: t.weightHint),
       controller: controller,
       onTap: () => controller.selection = TextSelection(
         baseOffset: 0,

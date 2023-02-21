@@ -33,5 +33,6 @@
   },
   "repetitionCount": "Repetition count",
   "unknownExercise": "Unknown",
-  "exerciseHistory": "History: {exercise}"
+  "exerciseHistory": "History: {exercise}",
+  "weightHint": "Weight"
 }
