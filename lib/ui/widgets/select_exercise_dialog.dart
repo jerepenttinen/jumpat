@@ -46,6 +46,8 @@ class SelectExercise extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           autofocus: true,
           decoration: InputDecoration(hintText: t.exerciseNameHint),
           onChanged: (value) {
