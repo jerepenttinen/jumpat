@@ -25,11 +25,19 @@ class _WeightInputState extends State<WeightInput> {
 
   @override
   Widget build(BuildContext context) {
+    final autofocus = widget.initial.compareTo(0) == 0;
     controller.addListener(
       () {
         input.add(controller.text);
       },
     );
+
+    if (autofocus) {
+      controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: controller.value.text.length,
+      );
+    }
 
     input.debounceTime(const Duration(milliseconds: 500)).switchMap(
       (value) async* {
@@ -45,10 +53,14 @@ class _WeightInputState extends State<WeightInput> {
     );
 
     return TextField(
+      autofocus: autofocus,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: const InputDecoration(labelText: 'Paino'),
       controller: controller,
-      onTap: () => controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length),
+      onTap: () => controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: controller.value.text.length,
+      ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
           RegExp(r'^\d+\.?\d?'),
