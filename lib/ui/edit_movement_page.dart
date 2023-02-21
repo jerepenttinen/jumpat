@@ -18,9 +18,12 @@ class EditMovementPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final movementState = useState<Movement>(movement);
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(movementState.value.exercise.value?.name ?? 'Tuntematon'),
+        title:
+            Text(movementState.value.exercise.value?.name ?? t.unknownExercise),
         actions: [
           IconButton(
             onPressed: movementState.value.exercise.value != null

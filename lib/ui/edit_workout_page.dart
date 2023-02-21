@@ -130,7 +130,7 @@ class MovementsListItem extends ConsumerWidget {
         ],
       ),
       child: ListTile(
-        title: Text(movement.exercise.value?.name ?? 'Tuntematon'),
+        title: Text(movement.exercise.value?.name ?? t.unknownExercise),
         subtitle:
             Text('${movement.weight.toString()}kg ${movement.sets.toString()}'),
       ),

@@ -10,5 +10,7 @@
   "confirmationTitle": "Poista",
   "confirmationContent": "Tätä toimintoa ei voida peruuttaa",
   "workoutDate": "{date}",
-  "repetitionCount": "Toistojen määrä"
+  "repetitionCount": "Toistojen määrä",
+  "unknownExercise": "Tuntematon",
+  "exerciseHistory": "Historia: {exercise}"
 }

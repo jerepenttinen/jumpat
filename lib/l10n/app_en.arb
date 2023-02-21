@@ -31,5 +31,7 @@
       }
     }
   },
-  "repetitionCount": "Repetition count"
+  "repetitionCount": "Repetition count",
+  "unknownExercise": "Unknown",
+  "exerciseHistory": "History: {exercise}"
 }

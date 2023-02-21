@@ -62,7 +62,7 @@ class WorkoutCard extends ConsumerWidget {
                   children: movements
                       .map(
                         (e) => Text(
-                          '${e.exercise.value?.name ?? 'Tuntematon'} ${e.weight.toString()}kg ${e.sets.toString()}',
+                          '${e.exercise.value?.name ?? t.unknownExercise} ${e.weight.toString()}kg ${e.sets.toString()}',
                         ),
                       )
                       .toList(),
