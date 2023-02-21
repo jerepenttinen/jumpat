@@ -92,6 +92,12 @@ final watchExerciseMovementsProvider =
   },
 );
 
+final watchWorkoutProvider =
+    StreamProvider.autoDispose.family<Workout?, Workout>((ref, workout) async* {
+  final isar = await ref.watch(isarInstanceProvider.future);
+  yield* isar.workouts.watchObject(workout.id, fireImmediately: true);
+});
+
 @riverpod
 Future<List<Exercise>> searchExercises(
   SearchExercisesRef ref,

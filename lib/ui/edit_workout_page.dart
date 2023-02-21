@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/workout.dart';
@@ -9,80 +8,83 @@ import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EditWorkoutPage extends HookConsumerWidget {
+class EditWorkoutPage extends ConsumerWidget {
   const EditWorkoutPage({required this.workout, super.key});
   final Workout workout;
 
   @override
   Widget build(BuildContext context, ref) {
-    final workoutState = useState<Workout>(workout);
     final t = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t.workoutDate(workoutState.value.date)),
-        actions: [
-          IconButton(
+    final workoutAsync = ref.watch(watchWorkoutProvider(workout));
+    return workoutAsync.map(
+      data: (workoutData) {
+        final workout = workoutData.value!;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(t.workoutDate(workout.date)),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  final newDate = await showDatePicker(
+                    context: context,
+                    initialDate: workout.date,
+                    firstDate: DateTime(2010),
+                    lastDate: DateTime(2050),
+                  );
+
+                  if (newDate != null) {
+                    workout.date = newDate;
+                    await ref
+                        .read(saveWorkoutProvider(workout: workout).future);
+                  }
+                },
+                icon: const Icon(Icons.calendar_today),
+              ),
+            ],
+          ),
+          body: ref.watch(watchMovementsProvider(workout)).maybeMap(
+                data: (movements) => MovementsList(movements: movements.value),
+                orElse: () =>
+                    MovementsList(movements: workout.movements.toList()),
+              ),
+          floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              final newDate = await showDatePicker(
-                context: context,
-                initialDate: workoutState.value.date,
-                firstDate: DateTime(2010),
-                lastDate: DateTime(2050),
+              final router = context.router;
+              final exercise = await selectExerciseDialog(context);
+
+              if (exercise == null) {
+                return;
+              }
+
+              final movement = await ref.read(
+                createMovementProvider(workout, exercise).future,
               );
 
-              if (newDate != null) {
-                workoutState.value.date = newDate;
-                workoutState.notifyListeners();
-                await ref.read(
-                  saveWorkoutProvider(workout: workoutState.value).future,
-                );
-              }
+              router.push(EditMovementRoute(movement: movement));
             },
-            icon: const Icon(Icons.calendar_today),
+            child: const Icon(Icons.add),
           ),
-        ],
-      ),
-      body: MovementsList(workout: workoutState.value),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final router = context.router;
-          final exercise = await selectExerciseDialog(context);
-
-          if (exercise == null) {
-            return;
-          }
-
-          final movement = await ref.read(
-            createMovementProvider(workoutState.value, exercise).future,
-          );
-
-          router.push(EditMovementRoute(movement: movement));
-        },
-        child: const Icon(Icons.add),
-      ),
+        );
+      },
+      error: (error) => Text('$error'),
+      loading: (loading) => const CircularProgressIndicator(),
     );
   }
 }
 
 class MovementsList extends ConsumerWidget {
-  const MovementsList({required this.workout, super.key});
-  final Workout workout;
+  const MovementsList({required this.movements, super.key});
+  final List<Movement> movements;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workoutsAsync = ref.watch(watchMovementsProvider(workout));
-    return workoutsAsync.when(
-      data: (movements) {
-        return ListView.builder(
-          itemCount: movements.length,
-          itemBuilder: (context, index) {
-            final movement = movements[index];
-            return MovementsListItem(movement: movement);
-          },
-        );
+    return ListView.builder(
+      itemCount: movements.length,
+      itemBuilder: (context, index) {
+        final movement = movements[index];
+        return MovementsListItem(movement: movement);
       },
-      error: (err, stack) => Text('$err'),
-      loading: () => const CircularProgressIndicator(),
     );
   }
 }

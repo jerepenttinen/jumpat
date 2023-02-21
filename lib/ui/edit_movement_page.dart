@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
@@ -11,14 +10,14 @@ import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/widgets/weight_input.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EditMovementPage extends HookConsumerWidget {
+class EditMovementPage extends ConsumerWidget {
   const EditMovementPage({required this.movement, super.key});
   final Movement movement;
 
   @override
   Widget build(BuildContext context, ref) {
-    final movementState = useState<Movement>(movement);
     final t = AppLocalizations.of(context)!;
+    final movementAsync = ref.watch(watchMovementProvider(movement));
 
     return GestureDetector(
       onTap: () {
@@ -27,73 +26,77 @@ class EditMovementPage extends HookConsumerWidget {
           currentFocus.unfocus();
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            movementState.value.exercise.value?.name ?? t.unknownExercise,
-          ),
-          actions: [
-            IconButton(
-              onPressed: movementState.value.exercise.value != null
-                  ? () {
-                      context.router.push(
-                        ExerciseHistoryRoute(
-                          exercise: movementState.value.exercise.value!,
-                        ),
-                      );
-                    }
-                  : null,
-              icon: const Icon(Icons.history),
-            ),
-            IconButton(
-              onPressed: () async {
-                final exercise = await selectExerciseDialog(context);
+      child: movementAsync.maybeMap(
+        orElse: () => null,
+        data: (movementData) {
+          final movement = movementData.value!;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                movement.exercise.value?.name ?? t.unknownExercise,
+              ),
+              actions: [
+                IconButton(
+                  onPressed: movement.exercise.value != null
+                      ? () {
+                          context.router.push(
+                            ExerciseHistoryRoute(
+                              exercise: movement.exercise.value!,
+                            ),
+                          );
+                        }
+                      : null,
+                  icon: const Icon(Icons.history),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final exercise = await selectExerciseDialog(context);
 
-                if (exercise == null) {
+                    if (exercise == null) {
+                      return;
+                    }
+
+                    movement.exercise.value = exercise;
+
+                    exercise.movements.add(movement);
+                    await ref.read(saveMovementProvider(movement).future);
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+              ],
+            ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: WeightInput(
+                    initial: movement.weight,
+                    onWeightChanged: (weight) async {
+                      await ref.read(
+                        saveMovementProvider(movement..weight = weight).future,
+                      );
+                    },
+                  ),
+                ),
+                SetsList(movement: movement),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                FocusScope.of(context).requestFocus(FocusNode());
+                final count = await chooseRepCountDialog(context, 10);
+                if (count == null) {
                   return;
                 }
 
-                movementState.value.exercise.value = exercise;
+                movement.sets = [...movement.sets, count];
 
-                exercise.movements.add(movementState.value);
-                await ref
-                    .read(saveMovementProvider(movementState.value).future);
+                await ref.read(saveMovementProvider(movement).future);
               },
-              icon: const Icon(Icons.edit),
+              child: const Icon(Icons.add),
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: WeightInput(
-                initial: movementState.value.weight,
-                onWeightChanged: (weight) async {
-                  await ref.read(
-                    saveMovementProvider(movementState.value..weight = weight)
-                        .future,
-                  );
-                },
-              ),
-            ),
-            SetsList(movement: movementState.value),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            FocusScope.of(context).requestFocus(FocusNode());
-            final count = await chooseRepCountDialog(context, 10);
-            if (count == null) {
-              return;
-            }
-
-            movementState.value.sets = [...movementState.value.sets, count];
-
-            await ref.read(saveMovementProvider(movementState.value).future);
-          },
-          child: const Icon(Icons.add),
-        ),
+          );
+        },
       ),
     );
   }
@@ -107,19 +110,21 @@ class SetsList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final movementAsync = ref.watch(watchMovementProvider(movement));
     return movementAsync.when(
-      data: (movement) {
-        final sets = movement?.sets ?? [];
-
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: sets.length,
-          itemBuilder: (context, index) {
-            return SetsListItem(movement: movement!, sets: sets, index: index);
-          },
-        );
-      },
+      data: (movement) => _createList(movement),
       error: (err, stack) => Text('$err'),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => _createList(movement),
+    );
+  }
+
+  Widget _createList(Movement? movement) {
+    final sets = movement?.sets ?? [];
+
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: sets.length,
+      itemBuilder: (context, index) {
+        return SetsListItem(movement: movement!, sets: sets, index: index);
+      },
     );
   }
 }
