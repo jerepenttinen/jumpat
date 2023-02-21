@@ -32,6 +32,7 @@ class EditWorkoutPage extends HookConsumerWidget {
 
               if (newDate != null) {
                 workoutState.value.date = newDate;
+                workoutState.notifyListeners();
                 await ref.read(
                   saveWorkoutProvider(workout: workoutState.value).future,
                 );
