@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
@@ -18,16 +20,35 @@ class WeightInput extends StatefulWidget {
 }
 
 class _WeightInputState extends State<WeightInput> {
-  late final controller =
-      TextEditingController(text: widget.initial.toString());
-
   final input = BehaviorSubject<String>();
+
+  late final StreamSubscription<double> listener =
+      input.debounceTime(const Duration(milliseconds: 500)).switchMap(
+    (value) async* {
+      final d = double.tryParse(value);
+      if (d != null) {
+        yield d;
+      }
+    },
+  ).listen((event) async {
+    await widget.onWeightChanged(event);
+  });
+
+  @override
+  void dispose() {
+    listener.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
-
+    final controller = TextEditingController(text: widget.initial.toString());
     final autofocus = widget.initial.compareTo(0) == 0;
+
+    // trigger listener
+    listener;
+
     controller.addListener(
       () {
         input.add(controller.text);
@@ -40,19 +61,6 @@ class _WeightInputState extends State<WeightInput> {
         extentOffset: controller.value.text.length,
       );
     }
-
-    input.debounceTime(const Duration(milliseconds: 500)).switchMap(
-      (value) async* {
-        final d = double.tryParse(value);
-        if (d != null) {
-          yield d;
-        }
-      },
-    ).listen(
-      (event) async {
-        await widget.onWeightChanged(event);
-      },
-    );
 
     return TextField(
       autofocus: autofocus,
