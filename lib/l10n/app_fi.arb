@@ -20,5 +20,6 @@
   "lightOption": "Vaalea",
   "darkOption": "Tumma",
   "localeSetting": "Kieli",
-  "finnish": "suomi"
+  "finnish": "suomi",
+  "defaultRepCount": "Oletus toistojen määrä"
 }

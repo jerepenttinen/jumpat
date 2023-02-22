@@ -41,5 +41,6 @@
   "lightOption": "Light",
   "darkOption": "Dark",
   "localeSetting": "Language",
-  "finnish": "Finnish"
+  "finnish": "Finnish",
+  "defaultRepCount": "Default repetition count"
 }
