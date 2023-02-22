@@ -15,7 +15,10 @@
   "exerciseHistory": "Historia: {exercise}",
   "weightHint": "Paino",
   "settingsTitle": "Asetukset",
+  "themeSetting": "Teema",
   "systemOption": "Järjestelmä",
   "lightOption": "Vaalea",
-  "darkOption": "Tumma"
+  "darkOption": "Tumma",
+  "localeSetting": "Kieli",
+  "finnish": "suomi"
 }

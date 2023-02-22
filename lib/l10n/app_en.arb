@@ -36,7 +36,10 @@
   "exerciseHistory": "History: {exercise}",
   "weightHint": "Weight",
   "settingsTitle": "Settings",
+  "themeSetting": "Theme",
   "systemOption": "System",
   "lightOption": "Light",
-  "darkOption": "Dark"
+  "darkOption": "Dark",
+  "localeSetting": "Language",
+  "finnish": "Finnish"
 }
