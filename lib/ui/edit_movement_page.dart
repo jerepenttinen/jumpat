@@ -1,109 +1,151 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:jumpat/data/isar_service.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/workout.dart';
-import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/widgets/weight_input.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EditMovementPage extends StatefulWidget {
+class EditMovementPage extends ConsumerWidget {
   const EditMovementPage({required this.movement, super.key});
   final Movement movement;
 
   @override
-  State<EditMovementPage> createState() => _EditMovementPageState();
-}
+  Widget build(BuildContext context, ref) {
+    final t = AppLocalizations.of(context)!;
+    final movementAsync = ref.watch(watchMovementProvider(movement));
 
-class _EditMovementPageState extends State<EditMovementPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.movement.exercise.value?.name ?? 'Tuntematon'),
-        actions: [
-          IconButton(
-            onPressed: widget.movement.exercise.value != null
-                ? () {
-                    context.router.push(
-                      ExerciseHistoryRoute(
-                        exercise: widget.movement.exercise.value!,
-                      ),
-                    );
-                  }
-                : null,
-            icon: const Icon(Icons.history),
-          ),
-          IconButton(
-            onPressed: () async {
-              final exercise = await selectExerciseDialog(context);
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: movementAsync.maybeMap(
+        orElse: () => null,
+        data: (movementData) {
+          final movement = movementData.value!;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                movement.exercise.value?.name ?? t.unknownExercise,
+              ),
+              actions: [
+                IconButton(
+                  onPressed: movement.exercise.value != null
+                      ? () {
+                          context.router.push(
+                            ExerciseHistoryRoute(
+                              exercise: movement.exercise.value!,
+                            ),
+                          );
+                        }
+                      : null,
+                  icon: const Icon(Icons.history),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final exercise = await selectExerciseDialog(context);
 
-              if (exercise == null) {
-                return;
-              }
+                    if (exercise == null) {
+                      return;
+                    }
 
-              setState(() {
-                widget.movement.exercise.value = exercise;
-              });
+                    movement.exercise.value = exercise;
 
-              exercise.movements.add(widget.movement);
-              await getIt<IsarService>().saveMovement(widget.movement);
-            },
-            icon: const Icon(Icons.edit),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: WeightInput(
-              initial: widget.movement.weight,
-              onWeightChanged: (weight) async {
-                await getIt<IsarService>()
-                    .saveMovement(widget.movement..weight = weight);
-              },
+                    exercise.movements.add(movement);
+                    await ref.read(saveMovementProvider(movement).future);
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+              ],
             ),
-          ),
-          _buildSetsList(context),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final count = await chooseRepCountDialog(context, 10);
-          if (count == null) {
-            return;
-          }
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: WeightInput(
+                    initial: movement.weight,
+                    onWeightChanged: (weight) async {
+                      await ref.read(
+                        saveMovementProvider(movement..weight = weight).future,
+                      );
+                    },
+                  ),
+                ),
+                SetsList(movement: movement),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                FocusScope.of(context).requestFocus(FocusNode());
+                final count = await chooseRepCountDialog(context, 10);
+                if (count == null) {
+                  return;
+                }
 
-          widget.movement.sets = [...widget.movement.sets, count];
+                movement.sets = [...movement.sets, count];
 
-          await getIt<IsarService>().saveMovement(widget.movement);
+                await ref.read(saveMovementProvider(movement).future);
+              },
+              child: const Icon(Icons.add),
+            ),
+          );
         },
-        child: const Icon(Icons.add),
       ),
     );
   }
+}
 
-  Widget _buildSetsList(BuildContext context) {
-    return StreamBuilder(
-      stream: getIt<IsarService>().watchMovement(widget.movement),
-      builder: (context, snapshot) {
-        final sets = snapshot.data?.sets ?? [];
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: sets.length,
-          itemBuilder: (context, index) {
-            return _buildSetsListItem(sets, index);
-          },
-        );
+class SetsList extends ConsumerWidget {
+  const SetsList({required this.movement, super.key});
+  final Movement movement;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final movementAsync = ref.watch(watchMovementProvider(movement));
+    return movementAsync.when(
+      data: (movement) => _createList(movement),
+      error: (err, stack) => Text('$err'),
+      loading: () => _createList(movement),
+    );
+  }
+
+  Widget _createList(Movement? movement) {
+    final sets = movement?.sets ?? [];
+
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: sets.length,
+      itemBuilder: (context, index) {
+        return SetsListItem(movement: movement!, sets: sets, index: index);
       },
     );
   }
+}
 
-  Slidable _buildSetsListItem(List<int> sets, int index) {
-    final repCount = sets[index];
+class SetsListItem extends ConsumerWidget {
+  SetsListItem({
+    required this.movement,
+    required this.sets,
+    required this.index,
+    super.key,
+  });
+  final Movement movement;
+  final List<int> sets;
+  final int index;
+
+  late final repCount = sets[index];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context)!;
+
     return Slidable(
       key: UniqueKey(),
       startActionPane: ActionPane(
@@ -111,7 +153,7 @@ class _EditMovementPageState extends State<EditMovementPage> {
         extentRatio: 0.3,
         children: [
           SlidableAction(
-            label: 'Muokkaa',
+            label: t.edit,
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) async {
@@ -121,9 +163,9 @@ class _EditMovementPageState extends State<EditMovementPage> {
               }
               final newSets = [...sets];
               newSets[index] = count;
-              widget.movement.sets = newSets;
+              movement.sets = newSets;
 
-              await getIt<IsarService>().saveMovement(widget.movement);
+              await ref.read(saveMovementProvider(movement).future);
             },
           )
         ],
@@ -133,18 +175,18 @@ class _EditMovementPageState extends State<EditMovementPage> {
         extentRatio: 0.3,
         dismissible: DismissiblePane(
           onDismissed: () async {
-            widget.movement.sets = [...sets]..removeAt(index);
-            await getIt<IsarService>().saveMovement(widget.movement);
+            movement.sets = [...sets]..removeAt(index);
+            await ref.read(saveMovementProvider(movement).future);
           },
         ),
         children: [
           SlidableAction(
-            label: 'Poista',
+            label: t.delete,
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
-              widget.movement.sets = [...sets]..removeAt(index);
-              await getIt<IsarService>().saveMovement(widget.movement);
+              movement.sets = [...sets]..removeAt(index);
+              await ref.read(saveMovementProvider(movement).future);
             },
           )
         ],

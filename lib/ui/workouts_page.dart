@@ -1,44 +1,53 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:jumpat/data/isar_service.dart';
+import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/workout.dart';
-import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/workout_card.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class WorkoutsPage extends StatefulWidget {
+class WorkoutsPage extends ConsumerWidget {
   const WorkoutsPage({super.key});
 
   @override
-  State<WorkoutsPage> createState() => _WorkoutsPageState();
-}
-
-class _WorkoutsPageState extends State<WorkoutsPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jumpat'),
+        title: Text(AppLocalizations.of(context)!.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.router.push(const SettingsRoute());
+            },
+            icon: const Icon(Icons.settings),
+          )
+        ],
       ),
-      body: _buildWorkoutsList(context),
+      body: const WorkoutsList(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
-          final workout = await getIt<IsarService>().saveWorkout(
-            Workout()..date = DateTime.now(),
+          final router = context.router;
+          final workout = await ref.read(
+            saveWorkoutProvider(workout: Workout()..date = DateTime.now())
+                .future,
           );
-          // ignore: use_build_context_synchronously
-          context.router.push(EditWorkoutRoute(workout: workout));
+          router.push(EditWorkoutRoute(workout: workout));
         },
       ),
     );
   }
+}
 
-  StreamBuilder<List<Workout>> _buildWorkoutsList(BuildContext context) {
-    return StreamBuilder<List<Workout>>(
-      stream: getIt<IsarService>().watchWorkouts(),
-      builder: (context, snapshot) {
-        final workouts = snapshot.data ?? [];
+class WorkoutsList extends ConsumerWidget {
+  const WorkoutsList({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final workoutsAsync = ref.watch(watchWorkoutsProvider);
+    return workoutsAsync.when(
+      data: (workouts) {
         return ListView.builder(
           itemCount: workouts.length,
           itemBuilder: (context, index) {
@@ -47,6 +56,8 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           },
         );
       },
+      error: (err, stack) => Text('$err'),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }

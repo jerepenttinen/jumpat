@@ -1,0 +1,45 @@
+{
+  "name": "Workouts",
+  "@name": {
+    "description": "Name of this application"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Text shown for edit buttons"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Text shown for delete buttons"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Text shown for cancel buttons"
+  },
+  "save": "Save",
+  "exercise": "Exercise",
+  "exerciseNameHint": "Exercise name",
+  "createExerciseButton": "Create exercise\n\"{exercise}\"",
+  "confirmationTitle": "Delete",
+  "confirmationContent": "This operation cannot be undone.",
+  "workoutDate": "{date}",
+  "@workoutDate": {
+    "description": "Formatting for workout date",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMEEEEd"
+      }
+    }
+  },
+  "repetitionCount": "Repetition count",
+  "unknownExercise": "Unknown",
+  "exerciseHistory": "History: {exercise}",
+  "weightHint": "Weight",
+  "settingsTitle": "Settings",
+  "themeSetting": "Theme",
+  "systemOption": "System",
+  "lightOption": "Light",
+  "darkOption": "Dark",
+  "localeSetting": "Language",
+  "finnish": "Finnish"
+}

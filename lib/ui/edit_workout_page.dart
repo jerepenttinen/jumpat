@@ -1,84 +1,102 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:jumpat/data/isar_service.dart';
+import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/workout.dart';
-import 'package:jumpat/injection.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EditWorkoutPage extends StatefulWidget {
+class EditWorkoutPage extends ConsumerWidget {
   const EditWorkoutPage({required this.workout, super.key});
   final Workout workout;
 
   @override
-  State<EditWorkoutPage> createState() => _EditWorkoutPageState();
-}
+  Widget build(BuildContext context, ref) {
+    final t = AppLocalizations.of(context)!;
+    final workoutAsync = ref.watch(watchWorkoutProvider(workout));
+    return workoutAsync.map(
+      data: (workoutData) {
+        final workout = workoutData.value!;
 
-class _EditWorkoutPageState extends State<EditWorkoutPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.workout.date.toIso8601String()),
-        actions: [
-          IconButton(
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(t.workoutDate(workout.date)),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  final newDate = await showDatePicker(
+                    context: context,
+                    initialDate: workout.date,
+                    firstDate: DateTime(2010),
+                    lastDate: DateTime(2050),
+                  );
+
+                  if (newDate != null) {
+                    workout.date = newDate;
+                    await ref
+                        .read(saveWorkoutProvider(workout: workout).future);
+                  }
+                },
+                icon: const Icon(Icons.calendar_today),
+              ),
+            ],
+          ),
+          body: ref.watch(watchMovementsProvider(workout)).maybeMap(
+                data: (movements) => MovementsList(movements: movements.value),
+                orElse: () =>
+                    MovementsList(movements: workout.movements.toList()),
+              ),
+          floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              final newDate = await showDatePicker(
-                context: context,
-                initialDate: widget.workout.date,
-                firstDate: DateTime(2010),
-                lastDate: DateTime(2050),
+              final router = context.router;
+              final exercise = await selectExerciseDialog(context);
+
+              if (exercise == null) {
+                return;
+              }
+
+              final movement = await ref.read(
+                createMovementProvider(workout, exercise).future,
               );
 
-              if (newDate != null) {
-                setState(() {
-                  widget.workout.date = newDate;
-                });
-                getIt<IsarService>().saveWorkout(widget.workout);
-              }
+              router.push(EditMovementRoute(movement: movement));
             },
-            icon: const Icon(Icons.calendar_today),
+            child: const Icon(Icons.add),
           ),
-        ],
-      ),
-      body: _buildMovementsList(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final router = context.router;
-          final exercise = await selectExerciseDialog(context);
-
-          if (exercise == null) {
-            return;
-          }
-
-          final movement = await getIt<IsarService>()
-              .createMovement(widget.workout, exercise);
-
-          router.push(EditMovementRoute(movement: movement));
-        },
-        child: const Icon(Icons.add),
-      ),
+        );
+      },
+      error: (error) => Text('$error'),
+      loading: (loading) => const CircularProgressIndicator(),
     );
   }
+}
 
-  StreamBuilder<List<Movement>> _buildMovementsList(BuildContext context) {
-    return StreamBuilder<List<Movement>>(
-      stream: getIt<IsarService>().watchMovements(widget.workout),
-      builder: (context, snapshot) {
-        final movements = snapshot.data ?? [];
-        return ListView.builder(
-          itemCount: movements.length,
-          itemBuilder: (context, index) {
-            final movement = movements[index];
-            return _buildMovementsListItem(movement);
-          },
-        );
+class MovementsList extends ConsumerWidget {
+  const MovementsList({required this.movements, super.key});
+  final List<Movement> movements;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListView.builder(
+      itemCount: movements.length,
+      itemBuilder: (context, index) {
+        final movement = movements[index];
+        return MovementsListItem(movement: movement);
       },
     );
   }
+}
 
-  Slidable _buildMovementsListItem(Movement movement) {
+class MovementsListItem extends ConsumerWidget {
+  const MovementsListItem({required this.movement, super.key});
+  final Movement movement;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context)!;
+
     return Slidable(
       key: UniqueKey(),
       startActionPane: ActionPane(
@@ -86,7 +104,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         extentRatio: 0.3,
         children: [
           SlidableAction(
-            label: 'Muokkaa',
+            label: t.edit,
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) {
@@ -100,22 +118,22 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
         extentRatio: 0.3,
         dismissible: DismissiblePane(
           onDismissed: () async {
-            await getIt<IsarService>().deleteMovement(movement);
+            await ref.read(deleteMovementProvider(movement).future);
           },
         ),
         children: [
           SlidableAction(
-            label: 'Poista',
+            label: t.delete,
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
-              await getIt<IsarService>().deleteMovement(movement);
+              await ref.read(deleteMovementProvider(movement).future);
             },
           )
         ],
       ),
       child: ListTile(
-        title: Text(movement.exercise.value?.name ?? 'Tuntematon'),
+        title: Text(movement.exercise.value?.name ?? t.unknownExercise),
         subtitle:
             Text('${movement.weight.toString()}kg ${movement.sets.toString()}'),
       ),
