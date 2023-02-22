@@ -110,7 +110,7 @@ class DefaultRepCount extends HookConsumerWidget {
           style: Theme.of(context).textTheme.bodySmall,
         ),
         NumberPicker(
-          itemWidth: 150,
+          itemWidth: MediaQuery.of(context).size.width,
           minValue: 0,
           maxValue: 30,
           value: defaultRepCount,
