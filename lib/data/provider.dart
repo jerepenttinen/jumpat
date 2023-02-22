@@ -95,6 +95,7 @@ final watchExerciseMovementsProvider =
 final watchWorkoutProvider =
     StreamProvider.autoDispose.family<Workout?, Workout>((ref, workout) async* {
   final isar = await ref.watch(isarInstanceProvider.future);
+  yield* Stream.value(workout);
   yield* isar.workouts.watchObject(workout.id, fireImmediately: true);
 });
 

@@ -62,6 +62,7 @@ class IsarService {
   }
 
   Stream<List<Movement>> watchMovements(Workout workout) async* {
+    yield* Stream.value(workout.movements.toList());
     yield* isar.movements
         .filter()
         .workout((w) => w.idEqualTo(workout.id))
@@ -69,6 +70,7 @@ class IsarService {
   }
 
   Stream<Movement?> watchMovement(Movement movement) async* {
+    yield* Stream.value(movement);
     yield* isar.movements.watchObject(movement.id, fireImmediately: true);
   }
 
