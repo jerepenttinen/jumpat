@@ -13,5 +13,9 @@
   "repetitionCount": "Toistojen määrä",
   "unknownExercise": "Tuntematon",
   "exerciseHistory": "Historia: {exercise}",
-  "weightHint": "Paino"
+  "weightHint": "Paino",
+  "settingsTitle": "Asetukset",
+  "systemOption": "Järjestelmä",
+  "lightOption": "Vaalea",
+  "darkOption": "Tumma"
 }

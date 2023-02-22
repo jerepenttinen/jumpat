@@ -15,6 +15,14 @@ class WorkoutsPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.router.push(const SettingsRoute());
+            },
+            icon: const Icon(Icons.settings),
+          )
+        ],
       ),
       body: const WorkoutsList(),
       floatingActionButton: FloatingActionButton(

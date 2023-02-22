@@ -53,6 +53,12 @@ class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    SettingsRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const SettingsPage(),
+      );
+    },
   };
 
   @override
@@ -72,6 +78,10 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           ExerciseHistoryRoute.name,
           path: '/exercise-history-page',
+        ),
+        RouteConfig(
+          SettingsRoute.name,
+          path: '/settings-page',
         ),
       ];
 }
@@ -188,4 +198,16 @@ class ExerciseHistoryRouteArgs {
   String toString() {
     return 'ExerciseHistoryRouteArgs{exercise: $exercise, key: $key}';
   }
+}
+
+/// generated route for
+/// [SettingsPage]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute()
+      : super(
+          SettingsRoute.name,
+          path: '/settings-page',
+        );
+
+  static const String name = 'SettingsRoute';
 }

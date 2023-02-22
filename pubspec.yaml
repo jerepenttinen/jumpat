@@ -47,6 +47,7 @@ dependencies:
   riverpod_annotation: ^1.2.1
   flutter_localizations:
     sdk: flutter
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:
