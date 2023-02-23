@@ -66,6 +66,18 @@ Future<Movement> createMovement(
   return isarService.createMovement(workout, exercise);
 }
 
+@riverpod
+Future<int> saveExercise(SaveExerciseRef ref, Exercise exercise) async {
+  final isar = await ref.watch(isarInstanceProvider.future);
+  return await isar.writeTxn(() async => await isar.exercises.put(exercise));
+}
+
+final watchExercisesProvider =
+    StreamProvider.autoDispose<List<Exercise>>((ref) async* {
+  final isar = await ref.watch(isarInstanceProvider.future);
+  yield* isar.exercises.where().watch(fireImmediately: true);
+});
+
 final watchWorkoutsProvider =
     StreamProvider.autoDispose<List<Workout>>((ref) async* {
   final isarService = await ref.watch(isarServiceProvider.future);

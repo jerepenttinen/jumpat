@@ -8,6 +8,7 @@
   "exercise": "Liike",
   "exerciseNameHint": "Liikkeen nimi",
   "createExerciseButton": "Luo liike\n\"{exercise}\"",
+  "changeExerciseNameTitle": "Muuta liikkeen nimeä",
   "confirmationTitle": "Poista",
   "confirmationContent": "Tätä toimintoa ei voida peruuttaa",
   "workoutDate": "{date}",

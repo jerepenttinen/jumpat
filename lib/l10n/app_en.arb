@@ -20,6 +20,7 @@
   "exercise": "Exercise",
   "exerciseNameHint": "Exercise name",
   "createExerciseButton": "Create exercise\n\"{exercise}\"",
+  "changeExerciseNameTitle": "Change exercise name",
   "confirmationTitle": "Delete",
   "confirmationContent": "This operation cannot be undone.",
   "workoutDate": "{date}",

@@ -46,6 +46,7 @@ class WorkoutsPage extends ConsumerWidget {
               leading: const Icon(Icons.fitness_center),
               onTap: () {
                 Navigator.pop(context);
+                context.router.push(const ExercisesRoute());
               },
             ),
           ],
