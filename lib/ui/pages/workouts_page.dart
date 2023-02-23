@@ -12,17 +12,10 @@ class WorkoutsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final t = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.name),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.router.push(const SettingsRoute());
-            },
-            icon: const Icon(Icons.settings),
-          )
-        ],
       ),
       body: const WorkoutsList(),
       floatingActionButton: FloatingActionButton(
@@ -35,6 +28,29 @@ class WorkoutsPage extends ConsumerWidget {
           );
           router.push(EditWorkoutRoute(workout: workout));
         },
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            ListTile(
+              title: Text(t.settingsTitle),
+              leading: const Icon(Icons.settings),
+              onTap: () {
+                Navigator.pop(context);
+                context.router.push(const SettingsRoute());
+              },
+            ),
+            ListTile(
+              title: Text(t.exercises),
+              leading: const Icon(Icons.fitness_center),
+              onTap: () {
+                Navigator.pop(context);
+                context.router.push(const ExercisesRoute());
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

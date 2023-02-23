@@ -408,6 +408,76 @@ class CreateMovementFamily extends Family<AsyncValue<Movement>> {
   String? get name => r'createMovementProvider';
 }
 
+String _$saveExerciseHash() => r'5242da1743b88a9f97a35fb68c5016e3056b6df1';
+
+/// See also [saveExercise].
+class SaveExerciseProvider extends AutoDisposeFutureProvider<int> {
+  SaveExerciseProvider(
+    this.exercise,
+  ) : super(
+          (ref) => saveExercise(
+            ref,
+            exercise,
+          ),
+          from: saveExerciseProvider,
+          name: r'saveExerciseProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$saveExerciseHash,
+        );
+
+  final Exercise exercise;
+
+  @override
+  bool operator ==(Object other) {
+    return other is SaveExerciseProvider && other.exercise == exercise;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, exercise.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+typedef SaveExerciseRef = AutoDisposeFutureProviderRef<int>;
+
+/// See also [saveExercise].
+final saveExerciseProvider = SaveExerciseFamily();
+
+class SaveExerciseFamily extends Family<AsyncValue<int>> {
+  SaveExerciseFamily();
+
+  SaveExerciseProvider call(
+    Exercise exercise,
+  ) {
+    return SaveExerciseProvider(
+      exercise,
+    );
+  }
+
+  @override
+  AutoDisposeFutureProvider<int> getProviderOverride(
+    covariant SaveExerciseProvider provider,
+  ) {
+    return call(
+      provider.exercise,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'saveExerciseProvider';
+}
+
 String _$searchExercisesHash() => r'141e5b46afb76778db6474e052b555a096f3b90a';
 
 /// See also [searchExercises].

@@ -54,6 +54,24 @@ class Settings {
   void setLocale(SupportedLocale l) {
     sharedPreferences.setInt('locale', l.index);
   }
+
+  int getDefaultRepCount() {
+    final repCount = sharedPreferences.getInt('defaultRepCount');
+    if (repCount == null) {
+      return 10;
+    }
+
+    if (repCount > 30 || repCount < 0) {
+      setDefaultRepCount(10);
+      return 10;
+    }
+
+    return repCount;
+  }
+
+  void setDefaultRepCount(int repCount) {
+    sharedPreferences.setInt('defaultRepCount', repCount);
+  }
 }
 
 enum SupportedLocale { system, finnish }
@@ -91,5 +109,23 @@ class LocaleNotifier extends StateNotifier<Locale> {
   void setLocale(SupportedLocale locale) {
     ref.read(settingsProvider).setLocale(locale);
     state = ref.read(settingsProvider).getLocale();
+  }
+}
+
+final defaultRepCountProvider =
+    StateNotifierProvider<DefaultRepCountNotifier, int>(
+  (ref) => DefaultRepCountNotifier(ref: ref),
+);
+
+class DefaultRepCountNotifier extends StateNotifier<int> {
+  DefaultRepCountNotifier({required this.ref}) : super(10) {
+    state = ref.read(settingsProvider).getDefaultRepCount();
+  }
+
+  final Ref ref;
+
+  void setDefaultRepCount(int repCount) {
+    ref.read(settingsProvider).setDefaultRepCount(repCount);
+    state = ref.read(settingsProvider).getDefaultRepCount();
   }
 }

@@ -4,9 +4,11 @@
   "delete": "Poista",
   "cancel": "Peruuta",
   "save": "Tallenna",
+  "exercises": "Liikkeet",
   "exercise": "Liike",
   "exerciseNameHint": "Liikkeen nimi",
   "createExerciseButton": "Luo liike\n\"{exercise}\"",
+  "changeExerciseNameTitle": "Muuta liikkeen nimeä",
   "confirmationTitle": "Poista",
   "confirmationContent": "Tätä toimintoa ei voida peruuttaa",
   "workoutDate": "{date}",
@@ -20,5 +22,6 @@
   "lightOption": "Vaalea",
   "darkOption": "Tumma",
   "localeSetting": "Kieli",
-  "finnish": "suomi"
+  "finnish": "suomi",
+  "defaultRepCount": "Oletus toistojen määrä"
 }

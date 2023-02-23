@@ -55,25 +55,39 @@ class WorkoutCard extends ConsumerWidget {
           ),
           Container(
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            child: movementsAsync.when(
+            child: movementsAsync.maybeWhen(
               data: (movements) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                return ListBody(
                   children: movements
                       .map(
-                        (e) => Text(
-                          '${e.exercise.value?.name ?? t.unknownExercise} ${e.weight.toString()}kg ${e.sets.toString()}',
-                        ),
+                        (movement) =>
+                            WorkoutCardMovementLine(movement: movement),
                       )
                       .toList(),
                 );
               },
-              error: (err, stack) => Text('$err'),
-              loading: () => const CircularProgressIndicator(),
+              orElse: () => const SizedBox(),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class WorkoutCardMovementLine extends ConsumerWidget {
+  const WorkoutCardMovementLine({required this.movement, super.key});
+  final Movement movement;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final exerciseAsync =
+        ref.watch(watchExerciseProvider(movement.exercise.value!));
+    return exerciseAsync.maybeWhen(
+      data: (exercise) => Text(
+        '${exercise.name} ${movement.weight.toString()}kg ${movement.sets.toString()}',
+      ),
+      orElse: () => const SizedBox(),
     );
   }
 }

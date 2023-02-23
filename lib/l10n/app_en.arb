@@ -16,9 +16,11 @@
     "description": "Text shown for cancel buttons"
   },
   "save": "Save",
+  "exercises": "Exercises",
   "exercise": "Exercise",
   "exerciseNameHint": "Exercise name",
   "createExerciseButton": "Create exercise\n\"{exercise}\"",
+  "changeExerciseNameTitle": "Change exercise name",
   "confirmationTitle": "Delete",
   "confirmationContent": "This operation cannot be undone.",
   "workoutDate": "{date}",
@@ -41,5 +43,6 @@
   "lightOption": "Light",
   "darkOption": "Dark",
   "localeSetting": "Language",
-  "finnish": "Finnish"
+  "finnish": "Finnish",
+  "defaultRepCount": "Default repetition count"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
+import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/data/workout.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
@@ -84,7 +85,13 @@ class EditMovementPage extends ConsumerWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
-                final count = await chooseRepCountDialog(context, 10);
+
+                final defaultRepCount = movement.sets.isNotEmpty
+                    ? movement.sets.last
+                    : ref.read(defaultRepCountProvider);
+
+                final count =
+                    await chooseRepCountDialog(context, defaultRepCount);
                 if (count == null) {
                   return;
                 }

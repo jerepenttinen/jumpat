@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jumpat/data/settings_provider.dart';
-import 'package:jumpat/main.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -21,6 +21,7 @@ class SettingsPage extends ConsumerWidget {
           children: const [
             ThemeSelect(),
             LocaleSelect(),
+            DefaultRepCount(),
           ],
         ),
       ),
@@ -90,6 +91,36 @@ class LocaleSelect extends HookConsumerWidget {
           ref.read(localeProvider.notifier).setLocale(value);
         }
       },
+    );
+  }
+}
+
+class DefaultRepCount extends HookConsumerWidget {
+  const DefaultRepCount({super.key});
+
+  @override
+  Widget build(context, ref) {
+    final defaultRepCount = ref.watch(defaultRepCountProvider);
+    final t = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.defaultRepCount,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        NumberPicker(
+          itemWidth: MediaQuery.of(context).size.width,
+          minValue: 0,
+          maxValue: 30,
+          value: defaultRepCount,
+          onChanged: (repCount) {
+            ref
+                .read(defaultRepCountProvider.notifier)
+                .setDefaultRepCount(repCount);
+          },
+        ),
+      ],
     );
   }
 }
