@@ -4,6 +4,7 @@
   "delete": "Poista",
   "cancel": "Peruuta",
   "save": "Tallenna",
+  "exercises": "Liikkeet",
   "exercise": "Liike",
   "exerciseNameHint": "Liikkeen nimi",
   "createExerciseButton": "Luo liike\n\"{exercise}\"",

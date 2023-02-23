@@ -16,6 +16,7 @@
     "description": "Text shown for cancel buttons"
   },
   "save": "Save",
+  "exercises": "Exercises",
   "exercise": "Exercise",
   "exerciseNameHint": "Exercise name",
   "createExerciseButton": "Create exercise\n\"{exercise}\"",
