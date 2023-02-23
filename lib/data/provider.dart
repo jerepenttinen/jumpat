@@ -78,6 +78,14 @@ final watchExercisesProvider =
   yield* isar.exercises.where().watch(fireImmediately: true);
 });
 
+final watchExerciseProvider = StreamProvider.autoDispose
+    .family<Exercise, Exercise>((ref, Exercise exercise) async* {
+  final isar = await ref.watch(isarInstanceProvider.future);
+  yield* isar.exercises
+      .watchObject(exercise.id, fireImmediately: true)
+      .map((exercise) => exercise!);
+});
+
 final watchWorkoutsProvider =
     StreamProvider.autoDispose<List<Workout>>((ref) async* {
   final isarService = await ref.watch(isarServiceProvider.future);
