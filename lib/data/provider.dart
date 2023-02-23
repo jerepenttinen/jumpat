@@ -75,7 +75,7 @@ Future<int> saveExercise(SaveExerciseRef ref, Exercise exercise) async {
 final watchExercisesProvider =
     StreamProvider.autoDispose<List<Exercise>>((ref) async* {
   final isar = await ref.watch(isarInstanceProvider.future);
-  yield* isar.exercises.where().watch(fireImmediately: true);
+  yield* isar.exercises.where().sortByName().watch(fireImmediately: true);
 });
 
 final watchExerciseProvider = StreamProvider.autoDispose
