@@ -16,6 +16,11 @@
     "description": "Text shown for cancel buttons"
   },
   "save": "Save",
+  "templateDialogTitle": "Create new template",
+  "asTemplate": "Use as template",
+  "templateNameHint": "Template name",
+  "templateColor": "Template color",
+  "create": "Create",
   "exercises": "Exercises",
   "exercise": "Exercise",
   "exerciseNameHint": "Exercise name",

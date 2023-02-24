@@ -117,14 +117,27 @@ class IsarService {
         .isNotEmpty();
   }
 
-  Future<Template> createTemplate(String name, Color color) async {
+  Future<Template> createTemplate(
+    Workout workout,
+    String name,
+    Color color,
+  ) async {
+    final exercises = workout.movements.map((e) => e.exercise.value!).toList();
+
     return await isar.writeTxn(() async {
       final template = Template()
         ..name = name
-        ..color = color.value;
-      final id = await isar.templates.put(template);
+        ..color = color.value
+        ..exercises.addAll(exercises);
 
-      return (await isar.templates.get(id))!;
+      await isar.templates.put(template);
+      await template.exercises.save();
+
+      await workout.template.reset();
+      workout.template.value = template;
+      await workout.template.save();
+
+      return template;
     });
   }
 }

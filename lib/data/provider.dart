@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:isar/isar.dart';
 import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/tables.dart';
@@ -112,6 +114,20 @@ final watchExerciseMovementsProvider =
   },
 );
 
+final watchWorkoutTemplateProvider =
+    StreamProvider.autoDispose.family<Template?, Workout>(
+  (ref, workout) async* {
+    final isarInstance = await ref.watch(isarInstanceProvider.future);
+    // deranged
+    yield* isarInstance.templates
+        .filter()
+        .workouts((w) => w.idEqualTo(workout.id))
+        .limit(1)
+        .watch(fireImmediately: true)
+        .map((template) => template.isEmpty ? null : template[0]);
+  },
+);
+
 final watchWorkoutProvider =
     StreamProvider.autoDispose.family<Workout?, Workout>((ref, workout) async* {
   final isar = await ref.watch(isarInstanceProvider.future);
@@ -138,4 +154,15 @@ Future<Exercise> createExercise(CreateExerciseRef ref, String name) async {
 Future<bool> existsExercise(ExistsExerciseRef ref, String name) async {
   final isarService = await ref.watch(isarServiceProvider.future);
   return isarService.existsExercise(name);
+}
+
+@riverpod
+Future<Template> createTemplate(
+  CreateTemplateRef ref,
+  Workout workout,
+  String name,
+  Color color,
+) async {
+  final isarService = await ref.watch(isarServiceProvider.future);
+  return isarService.createTemplate(workout, name, color);
 }

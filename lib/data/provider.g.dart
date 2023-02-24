@@ -688,3 +688,90 @@ class ExistsExerciseFamily extends Family<AsyncValue<bool>> {
   @override
   String? get name => r'existsExerciseProvider';
 }
+
+String _$createTemplateHash() => r'20d40583289d83582790db5a96e57be612b8a0eb';
+
+/// See also [createTemplate].
+class CreateTemplateProvider extends AutoDisposeFutureProvider<Template> {
+  CreateTemplateProvider(
+    this.workout,
+    this.name,
+    this.color,
+  ) : super(
+          (ref) => createTemplate(
+            ref,
+            workout,
+            name,
+            color,
+          ),
+          from: createTemplateProvider,
+          name: r'createTemplateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$createTemplateHash,
+        );
+
+  final Workout workout;
+  final String name;
+  final Color color;
+
+  @override
+  bool operator ==(Object other) {
+    return other is CreateTemplateProvider &&
+        other.workout == workout &&
+        other.name == name &&
+        other.color == color;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, workout.hashCode);
+    hash = _SystemHash.combine(hash, name.hashCode);
+    hash = _SystemHash.combine(hash, color.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+typedef CreateTemplateRef = AutoDisposeFutureProviderRef<Template>;
+
+/// See also [createTemplate].
+final createTemplateProvider = CreateTemplateFamily();
+
+class CreateTemplateFamily extends Family<AsyncValue<Template>> {
+  CreateTemplateFamily();
+
+  CreateTemplateProvider call(
+    Workout workout,
+    String name,
+    Color color,
+  ) {
+    return CreateTemplateProvider(
+      workout,
+      name,
+      color,
+    );
+  }
+
+  @override
+  AutoDisposeFutureProvider<Template> getProviderOverride(
+    covariant CreateTemplateProvider provider,
+  ) {
+    return call(
+      provider.workout,
+      provider.name,
+      provider.color,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'createTemplateProvider';
+}

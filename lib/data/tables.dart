@@ -7,6 +7,7 @@ class Workout {
   Id id = Isar.autoIncrement;
   late DateTime date;
   final movements = IsarLinks<Movement>();
+  final template = IsarLink<Template>();
 }
 
 @collection
@@ -34,5 +35,8 @@ class Template {
   Id id = Isar.autoIncrement;
   late String name;
   late int color;
-  final movements = IsarLinks<Movement>();
+  final exercises = IsarLinks<Exercise>();
+
+  @Backlink(to: 'template')
+  final workouts = IsarLinks<Workout>();
 }
