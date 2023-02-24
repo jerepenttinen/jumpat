@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:isar/isar.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 
 class IsarService {
   final Isar isar;
@@ -113,5 +115,16 @@ class IsarService {
         .filter()
         .nameEqualTo(name, caseSensitive: false)
         .isNotEmpty();
+  }
+
+  Future<Template> createTemplate(String name, Color color) async {
+    return await isar.writeTxn(() async {
+      final template = Template()
+        ..name = name
+        ..color = color.value;
+      final id = await isar.templates.put(template);
+
+      return (await isar.templates.get(id))!;
+    });
   }
 }

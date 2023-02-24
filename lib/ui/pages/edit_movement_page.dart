@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/settings_provider.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';

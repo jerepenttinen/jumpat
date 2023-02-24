@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jumpat/data/provider.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

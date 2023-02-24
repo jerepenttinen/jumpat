@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 
-part 'workout.g.dart';
+part 'tables.g.dart';
 
 @collection
 class Workout {
@@ -26,5 +26,13 @@ class Movement {
 class Exercise {
   Id id = Isar.autoIncrement;
   late String name;
+  final movements = IsarLinks<Movement>();
+}
+
+@collection
+class Template {
+  Id id = Isar.autoIncrement;
+  late String name;
+  late int color;
   final movements = IsarLinks<Movement>();
 }
