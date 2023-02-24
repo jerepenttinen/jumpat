@@ -34,11 +34,11 @@ class WorkoutsPage extends ConsumerWidget {
           padding: EdgeInsets.zero,
           children: [
             ListTile(
-              title: Text(t.settingsTitle),
-              leading: const Icon(Icons.settings),
+              title: Text(t.templates),
+              leading: const Icon(Icons.list_alt),
               onTap: () {
                 Navigator.pop(context);
-                context.router.push(const SettingsRoute());
+                context.router.push(const TemplatesRoute());
               },
             ),
             ListTile(
@@ -47,6 +47,14 @@ class WorkoutsPage extends ConsumerWidget {
               onTap: () {
                 Navigator.pop(context);
                 context.router.push(const ExercisesRoute());
+              },
+            ),
+            ListTile(
+              title: Text(t.settingsTitle),
+              leading: const Icon(Icons.settings),
+              onTap: () {
+                Navigator.pop(context);
+                context.router.push(const SettingsRoute());
               },
             ),
           ],

@@ -65,6 +65,12 @@ class _$AppRouter extends RootStackRouter {
         child: const ExercisesPage(),
       );
     },
+    TemplatesRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const TemplatesPage(),
+      );
+    },
   };
 
   @override
@@ -92,6 +98,10 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           ExercisesRoute.name,
           path: '/exercises-page',
+        ),
+        RouteConfig(
+          TemplatesRoute.name,
+          path: '/templates-page',
         ),
       ];
 }
@@ -232,4 +242,16 @@ class ExercisesRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ExercisesRoute';
+}
+
+/// generated route for
+/// [TemplatesPage]
+class TemplatesRoute extends PageRouteInfo<void> {
+  const TemplatesRoute()
+      : super(
+          TemplatesRoute.name,
+          path: '/templates-page',
+        );
+
+  static const String name = 'TemplatesRoute';
 }

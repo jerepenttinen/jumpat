@@ -6,6 +6,7 @@ import 'package:jumpat/ui/pages/exercise_history_page.dart';
 import 'package:jumpat/ui/pages/exercises_page.dart';
 import 'package:jumpat/ui/pages/settings_page.dart';
 import 'package:jumpat/ui/pages/workouts_page.dart';
+import 'package:jumpat/ui/pages/templates_page.dart';
 import 'package:jumpat/data/tables.dart';
 
 part 'app_router.gr.dart';
@@ -19,6 +20,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: ExerciseHistoryPage),
     AutoRoute(page: SettingsPage),
     AutoRoute(page: ExercisesPage),
+    AutoRoute(page: TemplatesPage),
   ],
 )
 class AppRouter extends _$AppRouter {}

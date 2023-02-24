@@ -16,6 +16,7 @@
     "description": "Text shown for cancel buttons"
   },
   "save": "Save",
+  "templates": "Templates",
   "templateDialogTitle": "Create new template",
   "asTemplate": "Use as template",
   "templateNameHint": "Template name",

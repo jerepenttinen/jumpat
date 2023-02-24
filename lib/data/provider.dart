@@ -135,6 +135,15 @@ final watchWorkoutProvider =
   yield* isar.workouts.watchObject(workout.id, fireImmediately: true);
 });
 
+final watchTemplatesProvider =
+    StreamProvider.autoDispose<List<Template>>((ref) async* {
+  final isarInstance = await ref.watch(isarInstanceProvider.future);
+  yield* isarInstance.templates
+      .where()
+      .sortByName()
+      .watch(fireImmediately: true);
+});
+
 @riverpod
 Future<List<Exercise>> searchExercises(
   SearchExercisesRef ref,
