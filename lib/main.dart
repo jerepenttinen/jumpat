@@ -27,21 +27,16 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final themeMode = ref.watch(themeModeProvider);
     final providedLocale = ref.watch(localeProvider);
 
     return MaterialApp.router(
       locale: providedLocale,
       onGenerateTitle: (context) => AppLocalizations.of(context)!.name,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        brightness: Brightness.light,
-      ),
       darkTheme: ThemeData(
-        primarySwatch: Colors.teal,
+        useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      themeMode: themeMode,
+      themeMode: ThemeMode.dark,
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

@@ -34,7 +34,7 @@ class TemplatesList extends ConsumerWidget {
             title: Text(template.name),
             leading: CircleColor(
               color: Color(template.color),
-              circleSize: 32,
+              circleSize: Theme.of(context).iconTheme.size ?? 24,
             ),
           );
         },

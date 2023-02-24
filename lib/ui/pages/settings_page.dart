@@ -19,46 +19,11 @@ class SettingsPage extends ConsumerWidget {
         child: Wrap(
           runSpacing: 20,
           children: const [
-            ThemeSelect(),
             LocaleSelect(),
             DefaultRepCount(),
           ],
         ),
       ),
-    );
-  }
-}
-
-class ThemeSelect extends HookConsumerWidget {
-  const ThemeSelect({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
-    final t = AppLocalizations.of(context)!;
-
-    return DropdownButtonFormField<ThemeMode>(
-      decoration: InputDecoration(labelText: t.themeSetting),
-      value: themeMode,
-      items: [
-        DropdownMenuItem<ThemeMode>(
-          value: ThemeMode.system,
-          child: Text(t.systemOption),
-        ),
-        DropdownMenuItem<ThemeMode>(
-          value: ThemeMode.light,
-          child: Text(t.lightOption),
-        ),
-        DropdownMenuItem<ThemeMode>(
-          value: ThemeMode.dark,
-          child: Text(t.darkOption),
-        ),
-      ],
-      onChanged: (value) {
-        if (value != null) {
-          ref.read(themeModeProvider.notifier).setThemeMode(value);
-        }
-      },
     );
   }
 }
