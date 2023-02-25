@@ -62,6 +62,7 @@ class CreateTemplateDialog extends HookConsumerWidget {
             autofocus: true,
             controller: controller,
             decoration: InputDecoration(hintText: t.templateNameHint),
+            textCapitalization: TextCapitalization.sentences,
           ),
           Flexible(
             child: MaterialColorPicker(
