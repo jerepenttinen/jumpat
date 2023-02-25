@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
@@ -18,16 +19,33 @@ class WorkoutsPage extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.name),
       ),
       body: const WorkoutsList(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
         child: const Icon(Icons.add),
-        onPressed: () async {
-          final router = context.router;
-          final workout = await ref.read(
-            saveWorkoutProvider(workout: Workout()..date = DateTime.now())
-                .future,
-          );
-          router.push(EditWorkoutRoute(workout: workout));
-        },
+        type: ExpandableFabType.up,
+        childrenOffset: const Offset(8, 8),
+        distance: 60,
+        children: [
+          FloatingActionButton.small(
+            heroTag: 'useTemplate',
+            tooltip: t.useTemplate,
+            onPressed: null,
+            child: const Icon(Icons.control_point_duplicate_rounded),
+          ),
+          FloatingActionButton.small(
+            heroTag: 'newWorkout',
+            tooltip: t.newWorkout,
+            child: const Icon(Icons.add),
+            onPressed: () async {
+              final router = context.router;
+              final workout = await ref.read(
+                saveWorkoutProvider(workout: Workout()..date = DateTime.now())
+                    .future,
+              );
+              router.push(EditWorkoutRoute(workout: workout));
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(

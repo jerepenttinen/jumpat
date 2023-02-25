@@ -39,6 +39,16 @@
       }
     }
   },
+  "workoutDateShort": "{date}",
+  "@workoutDateShort": {
+    "description": "Formatting for short workout date",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMEd"
+      }
+    }
+  },
   "repetitionCount": "Repetition count",
   "unknownExercise": "Unknown",
   "exerciseHistory": "History: {exercise}",
@@ -50,5 +60,7 @@
   "darkOption": "Dark",
   "localeSetting": "Language",
   "finnish": "Finnish",
-  "defaultRepCount": "Default repetition count"
+  "defaultRepCount": "Default repetition count",
+  "newWorkout": "New workout",
+  "useTemplate": "Use template"
 }

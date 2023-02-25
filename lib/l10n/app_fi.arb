@@ -18,6 +18,7 @@
   "confirmationTitle": "Poista",
   "confirmationContent": "Tätä toimintoa ei voida peruuttaa",
   "workoutDate": "{date}",
+  "workoutDateShort": "{date}",
   "repetitionCount": "Toistojen määrä",
   "unknownExercise": "Tuntematon",
   "exerciseHistory": "Historia: {exercise}",
@@ -29,5 +30,7 @@
   "darkOption": "Tumma",
   "localeSetting": "Kieli",
   "finnish": "suomi",
-  "defaultRepCount": "Oletus toistojen määrä"
+  "defaultRepCount": "Oletus toistojen määrä",
+  "newWorkout": "Uusi jumppa",
+  "useTemplate": "Käytä mallia"
 }

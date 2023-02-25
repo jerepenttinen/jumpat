@@ -22,7 +22,7 @@ class EditWorkoutPage extends ConsumerWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(t.workoutDate(workout.date)),
+            title: Text(t.workoutDateShort(workout.date)),
             actions: [
               IconButton(
                 onPressed: () async {
