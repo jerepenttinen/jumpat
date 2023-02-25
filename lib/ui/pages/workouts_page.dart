@@ -27,6 +27,8 @@ class WorkoutsPage extends ConsumerWidget {
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
+        openButtonHeroTag: UniqueKey(),
+        closeButtonHeroTag: UniqueKey(),
         key: fabKey,
         child: const Icon(Icons.add),
         type: ExpandableFabType.up,
@@ -37,7 +39,7 @@ class WorkoutsPage extends ConsumerWidget {
         ),
         children: [
           FloatingActionButton.small(
-            heroTag: 'useTemplate',
+            heroTag: UniqueKey(),
             tooltip: t.useTemplate,
             onPressed: () async {
               fabKey.currentState?.toggle();
@@ -75,7 +77,7 @@ class WorkoutsPage extends ConsumerWidget {
             child: const Icon(Icons.control_point_duplicate_rounded),
           ),
           FloatingActionButton.small(
-            heroTag: 'newWorkout',
+            heroTag: UniqueKey(),
             tooltip: t.newWorkout,
             child: const Icon(Icons.add),
             onPressed: () async {

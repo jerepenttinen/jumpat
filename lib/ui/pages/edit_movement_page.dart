@@ -83,6 +83,7 @@ class EditMovementPage extends ConsumerWidget {
               ],
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: UniqueKey(),
               onPressed: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
 

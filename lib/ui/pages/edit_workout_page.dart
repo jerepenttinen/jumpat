@@ -49,6 +49,7 @@ class EditWorkoutPage extends ConsumerWidget {
                     MovementsList(movements: workout.movements.toList()),
               ),
           floatingActionButton: FloatingActionButton(
+            heroTag: UniqueKey(),
             onPressed: () async {
               final exercise = await selectExerciseDialog(context);
 
