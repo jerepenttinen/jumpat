@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jumpat/data/provider.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/confirm_delete.dart';
+import 'package:jumpat/ui/widgets/create_template_dialog.dart';
 
-enum CardMenuItem { edit, delete }
+enum CardMenuItem { edit, asTemplate, delete }
 
 class WorkoutCard extends ConsumerWidget {
   const WorkoutCard({required this.workout, super.key});
@@ -17,14 +18,28 @@ class WorkoutCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final movementsAsync = ref.watch(watchMovementsProvider(workout));
+    final templateAsync = ref.watch(watchWorkoutTemplateProvider(workout));
     final t = AppLocalizations.of(context)!;
     return Card(
       elevation: 1,
+      shape: templateAsync.maybeWhen(
+        data: (template) => template == null
+            ? null
+            : RoundedRectangleBorder(
+                side: BorderSide(color: Color(template.color), width: 2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+        orElse: () => null,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
             title: Text(t.workoutDate(workout.date)),
+            subtitle: templateAsync.maybeWhen(
+              data: (template) => template == null ? null : Text(template.name),
+              orElse: () => null,
+            ),
             trailing: PopupMenuButton<CardMenuItem>(
               icon: const Icon(Icons.more_vert),
               onSelected: (value) async {
@@ -39,12 +54,19 @@ class WorkoutCard extends ConsumerWidget {
                       }
                     });
                     break;
+                  case CardMenuItem.asTemplate:
+                    await showCreateTemplateDialog(context, workout);
+                    break;
                 }
               },
               itemBuilder: (context) => [
                 PopupMenuItem(
                   value: CardMenuItem.edit,
                   child: Text(t.edit),
+                ),
+                PopupMenuItem(
+                  value: CardMenuItem.asTemplate,
+                  child: Text(t.asTemplate),
                 ),
                 PopupMenuItem(
                   value: CardMenuItem.delete,

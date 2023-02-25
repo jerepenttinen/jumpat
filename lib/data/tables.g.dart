@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'workout.dart';
+part of 'tables.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -35,6 +35,12 @@ const WorkoutSchema = CollectionSchema(
       name: r'movements',
       target: r'Movement',
       single: false,
+    ),
+    r'template': LinkSchema(
+      id: 217722955489900210,
+      name: r'template',
+      target: r'Template',
+      single: true,
     )
   },
   embeddedSchemas: {},
@@ -93,13 +99,14 @@ Id _workoutGetId(Workout object) {
 }
 
 List<IsarLinkBase<dynamic>> _workoutGetLinks(Workout object) {
-  return [object.movements];
+  return [object.movements, object.template];
 }
 
 void _workoutAttach(IsarCollection<dynamic> col, Id id, Workout object) {
   object.id = id;
   object.movements
       .attach(col, col.isar.collection<Movement>(), r'movements', id);
+  object.template.attach(col, col.isar.collection<Template>(), r'template', id);
 }
 
 extension WorkoutQueryWhereSort on QueryBuilder<Workout, Workout, QWhere> {
@@ -344,6 +351,19 @@ extension WorkoutQueryLinks
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
           r'movements', lower, includeLower, upper, includeUpper);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> template(
+      FilterQuery<Template> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'template');
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> templateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'template', 0, true, 0, true);
     });
   }
 }
@@ -1449,6 +1469,659 @@ extension ExerciseQueryProperty
   }
 
   QueryBuilder<Exercise, String, QQueryOperations> nameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'name');
+    });
+  }
+}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+
+extension GetTemplateCollection on Isar {
+  IsarCollection<Template> get templates => this.collection();
+}
+
+const TemplateSchema = CollectionSchema(
+  name: r'Template',
+  id: -3302284955558213743,
+  properties: {
+    r'color': PropertySchema(
+      id: 0,
+      name: r'color',
+      type: IsarType.long,
+    ),
+    r'name': PropertySchema(
+      id: 1,
+      name: r'name',
+      type: IsarType.string,
+    )
+  },
+  estimateSize: _templateEstimateSize,
+  serialize: _templateSerialize,
+  deserialize: _templateDeserialize,
+  deserializeProp: _templateDeserializeProp,
+  idName: r'id',
+  indexes: {},
+  links: {
+    r'exercises': LinkSchema(
+      id: -1328601616544267259,
+      name: r'exercises',
+      target: r'Exercise',
+      single: false,
+    ),
+    r'workouts': LinkSchema(
+      id: 4338805401684974314,
+      name: r'workouts',
+      target: r'Workout',
+      single: false,
+      linkName: r'template',
+    )
+  },
+  embeddedSchemas: {},
+  getId: _templateGetId,
+  getLinks: _templateGetLinks,
+  attach: _templateAttach,
+  version: '3.0.5',
+);
+
+int _templateEstimateSize(
+  Template object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.name.length * 3;
+  return bytesCount;
+}
+
+void _templateSerialize(
+  Template object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.color);
+  writer.writeString(offsets[1], object.name);
+}
+
+Template _templateDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = Template();
+  object.color = reader.readLong(offsets[0]);
+  object.id = id;
+  object.name = reader.readString(offsets[1]);
+  return object;
+}
+
+P _templateDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
+      return (reader.readString(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+Id _templateGetId(Template object) {
+  return object.id;
+}
+
+List<IsarLinkBase<dynamic>> _templateGetLinks(Template object) {
+  return [object.exercises, object.workouts];
+}
+
+void _templateAttach(IsarCollection<dynamic> col, Id id, Template object) {
+  object.id = id;
+  object.exercises
+      .attach(col, col.isar.collection<Exercise>(), r'exercises', id);
+  object.workouts.attach(col, col.isar.collection<Workout>(), r'workouts', id);
+}
+
+extension TemplateQueryWhereSort on QueryBuilder<Template, Template, QWhere> {
+  QueryBuilder<Template, Template, QAfterWhere> anyId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+}
+
+extension TemplateQueryWhere on QueryBuilder<Template, Template, QWhereClause> {
+  QueryBuilder<Template, Template, QAfterWhereClause> idEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: id,
+        upper: id,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterWhereClause> idNotEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterWhereClause> idGreaterThan(Id id,
+      {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: id, includeLower: include),
+      );
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterWhereClause> idLessThan(Id id,
+      {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: id, includeUpper: include),
+      );
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterWhereClause> idBetween(
+    Id lowerId,
+    Id upperId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: lowerId,
+        includeLower: includeLower,
+        upper: upperId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension TemplateQueryFilter
+    on QueryBuilder<Template, Template, QFilterCondition> {
+  QueryBuilder<Template, Template, QAfterFilterCondition> colorEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> colorGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> colorLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> colorBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'color',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> idEqualTo(Id value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> idGreaterThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> idLessThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> idBetween(
+    Id lower,
+    Id upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'name',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'name',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> nameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+}
+
+extension TemplateQueryObject
+    on QueryBuilder<Template, Template, QFilterCondition> {}
+
+extension TemplateQueryLinks
+    on QueryBuilder<Template, Template, QFilterCondition> {
+  QueryBuilder<Template, Template, QAfterFilterCondition> exercises(
+      FilterQuery<Exercise> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'exercises');
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      exercisesLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exercises', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> exercisesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exercises', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      exercisesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exercises', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      exercisesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exercises', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      exercisesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'exercises', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      exercisesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'exercises', lower, includeLower, upper, includeUpper);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> workouts(
+      FilterQuery<Workout> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'workouts');
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> workoutsLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'workouts', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> workoutsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'workouts', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> workoutsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'workouts', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      workoutsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'workouts', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition>
+      workoutsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'workouts', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterFilterCondition> workoutsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'workouts', lower, includeLower, upper, includeUpper);
+    });
+  }
+}
+
+extension TemplateQuerySortBy on QueryBuilder<Template, Template, QSortBy> {
+  QueryBuilder<Template, Template, QAfterSortBy> sortByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> sortByColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> sortByName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> sortByNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+}
+
+extension TemplateQuerySortThenBy
+    on QueryBuilder<Template, Template, QSortThenBy> {
+  QueryBuilder<Template, Template, QAfterSortBy> thenByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> thenByColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> thenById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> thenByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> thenByName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Template, Template, QAfterSortBy> thenByNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+}
+
+extension TemplateQueryWhereDistinct
+    on QueryBuilder<Template, Template, QDistinct> {
+  QueryBuilder<Template, Template, QDistinct> distinctByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'color');
+    });
+  }
+
+  QueryBuilder<Template, Template, QDistinct> distinctByName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+}
+
+extension TemplateQueryProperty
+    on QueryBuilder<Template, Template, QQueryProperty> {
+  QueryBuilder<Template, int, QQueryOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Template, int, QQueryOperations> colorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'color');
+    });
+  }
+
+  QueryBuilder<Template, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
     });

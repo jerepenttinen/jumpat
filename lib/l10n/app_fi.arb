@@ -4,6 +4,14 @@
   "delete": "Poista",
   "cancel": "Peruuta",
   "save": "Tallenna",
+  "templateDialogTitle": "Luo uusi malli",
+  "chooseTemplateDialogTitle": "Valitse malli",
+  "templates": "Mallit",
+  "asTemplate": "Käytä mallina",
+  "templateNameHint": "Mallin nimi",
+  "templateColor": "Mallin väri",
+  "noTemplatesFound": "Ei valmiita malleja",
+  "create": "Luo",
   "exercises": "Liikkeet",
   "exercise": "Liike",
   "exerciseNameHint": "Liikkeen nimi",
@@ -12,6 +20,7 @@
   "confirmationTitle": "Poista",
   "confirmationContent": "Tätä toimintoa ei voida peruuttaa",
   "workoutDate": "{date}",
+  "workoutDateShort": "{date}",
   "repetitionCount": "Toistojen määrä",
   "unknownExercise": "Tuntematon",
   "exerciseHistory": "Historia: {exercise}",
@@ -23,5 +32,7 @@
   "darkOption": "Tumma",
   "localeSetting": "Kieli",
   "finnish": "suomi",
-  "defaultRepCount": "Oletus toistojen määrä"
+  "defaultRepCount": "Oletus toistojen määrä",
+  "newWorkout": "Uusi jumppa",
+  "useTemplate": "Käytä mallia"
 }

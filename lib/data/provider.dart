@@ -1,6 +1,8 @@
+import 'dart:ui';
+
 import 'package:isar/isar.dart';
 import 'package:jumpat/data/isar_service.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,7 +15,7 @@ Future<Isar> isarInstance(FutureProviderRef ref) async {
   if (Isar.instanceNames.isEmpty) {
     final dir = await getApplicationDocumentsDirectory();
     return Isar.open(
-      [WorkoutSchema, MovementSchema, ExerciseSchema],
+      [WorkoutSchema, MovementSchema, ExerciseSchema, TemplateSchema],
       inspector: true,
       name: dbName,
       directory: dir.path,
@@ -112,11 +114,34 @@ final watchExerciseMovementsProvider =
   },
 );
 
+final watchWorkoutTemplateProvider =
+    StreamProvider.autoDispose.family<Template?, Workout>(
+  (ref, workout) async* {
+    final isarInstance = await ref.watch(isarInstanceProvider.future);
+    // deranged
+    yield* isarInstance.templates
+        .filter()
+        .workouts((w) => w.idEqualTo(workout.id))
+        .limit(1)
+        .watch(fireImmediately: true)
+        .map((template) => template.isEmpty ? null : template[0]);
+  },
+);
+
 final watchWorkoutProvider =
     StreamProvider.autoDispose.family<Workout?, Workout>((ref, workout) async* {
   final isar = await ref.watch(isarInstanceProvider.future);
   yield* Stream.value(workout);
   yield* isar.workouts.watchObject(workout.id, fireImmediately: true);
+});
+
+final watchTemplatesProvider =
+    StreamProvider.autoDispose<List<Template>>((ref) async* {
+  final isarInstance = await ref.watch(isarInstanceProvider.future);
+  yield* isarInstance.templates
+      .where()
+      .sortByName()
+      .watch(fireImmediately: true);
 });
 
 @riverpod
@@ -138,4 +163,23 @@ Future<Exercise> createExercise(CreateExerciseRef ref, String name) async {
 Future<bool> existsExercise(ExistsExerciseRef ref, String name) async {
   final isarService = await ref.watch(isarServiceProvider.future);
   return isarService.existsExercise(name);
+}
+
+@riverpod
+Future<Template> createTemplate(
+  CreateTemplateRef ref,
+  Workout workout,
+  String name,
+  Color color,
+) async {
+  final isarService = await ref.watch(isarServiceProvider.future);
+  return isarService.createTemplate(workout, name, color);
+}
+
+@riverpod
+Future<bool> existsAnyTemplates(
+  ExistsAnyTemplatesRef ref,
+) async {
+  final isarInstance = await ref.watch(isarInstanceProvider.future);
+  return (await isarInstance.templates.count()) > 0;
 }

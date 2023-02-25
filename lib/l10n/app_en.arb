@@ -16,6 +16,14 @@
     "description": "Text shown for cancel buttons"
   },
   "save": "Save",
+  "templates": "Templates",
+  "templateDialogTitle": "Create new template",
+  "chooseTemplateDialogTitle": "Choose template",
+  "asTemplate": "Use as template",
+  "templateNameHint": "Template name",
+  "templateColor": "Template color",
+  "noTemplatesFound": "No templates found",
+  "create": "Create",
   "exercises": "Exercises",
   "exercise": "Exercise",
   "exerciseNameHint": "Exercise name",
@@ -33,6 +41,16 @@
       }
     }
   },
+  "workoutDateShort": "{date}",
+  "@workoutDateShort": {
+    "description": "Formatting for short workout date",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMEd"
+      }
+    }
+  },
   "repetitionCount": "Repetition count",
   "unknownExercise": "Unknown",
   "exerciseHistory": "History: {exercise}",
@@ -44,5 +62,7 @@
   "darkOption": "Dark",
   "localeSetting": "Language",
   "finnish": "Finnish",
-  "defaultRepCount": "Default repetition count"
+  "defaultRepCount": "Default repetition count",
+  "newWorkout": "New workout",
+  "useTemplate": "Use template"
 }

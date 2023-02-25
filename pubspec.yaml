@@ -48,6 +48,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   shared_preferences: ^2.0.17
+  flutter_material_color_picker: ^1.1.0+2
+  flutter_expandable_fab: ^1.7.0
 
 dev_dependencies:
   flutter_test:

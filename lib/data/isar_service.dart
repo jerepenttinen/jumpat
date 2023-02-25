@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:isar/isar.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 
 class IsarService {
   final Isar isar;
@@ -16,6 +18,7 @@ class IsarService {
   Future<Workout> saveWorkout(Workout workout) async {
     return await isar.writeTxn(() async {
       final id = await isar.workouts.put(workout);
+      await workout.template.save();
       return Future.value(await isar.workouts.get(id));
     });
   }
@@ -113,5 +116,29 @@ class IsarService {
         .filter()
         .nameEqualTo(name, caseSensitive: false)
         .isNotEmpty();
+  }
+
+  Future<Template> createTemplate(
+    Workout workout,
+    String name,
+    Color color,
+  ) async {
+    final exercises = workout.movements.map((e) => e.exercise.value!).toList();
+
+    return await isar.writeTxn(() async {
+      final template = Template()
+        ..name = name
+        ..color = color.value
+        ..exercises.addAll(exercises);
+
+      await isar.templates.put(template);
+      await template.exercises.save();
+
+      await workout.template.reset();
+      workout.template.value = template;
+      await workout.template.save();
+
+      return template;
+    });
   }
 }

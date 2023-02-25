@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:jumpat/data/provider.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
@@ -22,7 +22,7 @@ class EditWorkoutPage extends ConsumerWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(t.workoutDate(workout.date)),
+            title: Text(t.workoutDateShort(workout.date)),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -49,8 +49,8 @@ class EditWorkoutPage extends ConsumerWidget {
                     MovementsList(movements: workout.movements.toList()),
               ),
           floatingActionButton: FloatingActionButton(
+            heroTag: UniqueKey(),
             onPressed: () async {
-              final router = context.router;
               final exercise = await selectExerciseDialog(context);
 
               if (exercise == null) {
@@ -61,14 +61,16 @@ class EditWorkoutPage extends ConsumerWidget {
                 createMovementProvider(workout, exercise).future,
               );
 
-              router.push(EditMovementRoute(movement: movement));
+              if (context.mounted) {
+                context.router.push(EditMovementRoute(movement: movement));
+              }
             },
             child: const Icon(Icons.add),
           ),
         );
       },
       error: (error) => Text('$error'),
-      loading: (loading) => const CircularProgressIndicator(),
+      loading: (loading) => const Center(child: CircularProgressIndicator()),
     );
   }
 }

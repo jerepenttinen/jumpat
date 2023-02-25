@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jumpat/data/provider.dart';
-import 'package:jumpat/data/workout.dart';
+import 'package:jumpat/data/tables.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -53,6 +53,18 @@ class SelectExercise extends ConsumerWidget {
           onChanged: (value) {
             search(value);
           },
+          onSubmitted: (value) async {
+            final exercises =
+                await ref.read(SearchExercisesProvider(value).future);
+            final exercise = exercises.isEmpty
+                ? await ref
+                    .read(createExerciseProvider(searchTerm.value).future)
+                : exercises.first;
+
+            if (context.mounted) {
+              Navigator.of(context).pop(exercise);
+            }
+          },
         ),
         StreamBuilder(
           stream: exercises,
@@ -80,10 +92,13 @@ class SelectExercise extends ConsumerWidget {
                 padding:
                     const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(createExerciseProvider(searchTerm.value).future)
-                        .then((exercise) => Navigator.pop(context, exercise));
+                  onPressed: () async {
+                    final exercise = await ref
+                        .read(createExerciseProvider(searchTerm.value).future);
+
+                    if (context.mounted) {
+                      Navigator.of(context).pop(exercise);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -107,7 +122,7 @@ class SelectExercise extends ConsumerWidget {
     return ListTile(
       title: Text(exercise.name),
       onTap: () {
-        Navigator.pop(context, exercise);
+        Navigator.of(context).pop(exercise);
       },
     );
   }

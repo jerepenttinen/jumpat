@@ -16,24 +16,6 @@ class Settings {
   Settings({required this.sharedPreferences});
   final SharedPreferences sharedPreferences;
 
-  ThemeMode getThemeMode() {
-    final mode = sharedPreferences.getInt('themeMode');
-    if (mode == null) {
-      return ThemeMode.system;
-    }
-
-    if (mode >= ThemeMode.values.length || mode < 0) {
-      setThemeMode(themeMode: ThemeMode.system);
-      return ThemeMode.system;
-    }
-
-    return ThemeMode.values[mode];
-  }
-
-  void setThemeMode({required ThemeMode themeMode}) {
-    sharedPreferences.setInt('themeMode', themeMode.index);
-  }
-
   Locale getLocale() {
     final l = sharedPreferences.getInt('locale');
     if (l == null) {
@@ -77,23 +59,6 @@ class Settings {
 enum SupportedLocale { system, finnish }
 
 Locale get getSystemLocale => Locale(Platform.localeName);
-
-final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>(
-  (ref) => ThemeModeNotifier(ref: ref),
-);
-
-class ThemeModeNotifier extends StateNotifier<ThemeMode> {
-  ThemeModeNotifier({required this.ref}) : super(ThemeMode.system) {
-    state = ref.read(settingsProvider).getThemeMode();
-  }
-
-  final Ref ref;
-
-  void setThemeMode(ThemeMode themeMode) {
-    ref.read(settingsProvider).setThemeMode(themeMode: themeMode);
-    state = ref.read(settingsProvider).getThemeMode();
-  }
-}
 
 final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>(
   (ref) => LocaleNotifier(ref: ref),
