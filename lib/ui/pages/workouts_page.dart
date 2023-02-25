@@ -91,35 +91,37 @@ class WorkoutsPage extends ConsumerWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              title: Text(t.templates),
-              leading: const Icon(Icons.list_alt),
-              onTap: () {
-                Navigator.pop(context);
-                context.router.push(const TemplatesRoute());
-              },
-            ),
-            ListTile(
-              title: Text(t.exercises),
-              leading: const Icon(Icons.fitness_center),
-              onTap: () {
-                Navigator.pop(context);
-                context.router.push(const ExercisesRoute());
-              },
-            ),
-            ListTile(
-              title: Text(t.settingsTitle),
-              leading: const Icon(Icons.settings),
-              onTap: () {
-                Navigator.pop(context);
-                context.router.push(const SettingsRoute());
-              },
-            ),
-          ],
+      drawer: SafeArea(
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                title: Text(t.templates),
+                leading: const Icon(Icons.list_alt),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.router.push(const TemplatesRoute());
+                },
+              ),
+              ListTile(
+                title: Text(t.exercises),
+                leading: const Icon(Icons.fitness_center),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.router.push(const ExercisesRoute());
+                },
+              ),
+              ListTile(
+                title: Text(t.settingsTitle),
+                leading: const Icon(Icons.settings),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.router.push(const SettingsRoute());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
