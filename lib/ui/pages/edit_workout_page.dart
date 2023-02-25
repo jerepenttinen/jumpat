@@ -50,7 +50,6 @@ class EditWorkoutPage extends ConsumerWidget {
               ),
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              final router = context.router;
               final exercise = await selectExerciseDialog(context);
 
               if (exercise == null) {
@@ -61,7 +60,9 @@ class EditWorkoutPage extends ConsumerWidget {
                 createMovementProvider(workout, exercise).future,
               );
 
-              router.push(EditMovementRoute(movement: movement));
+              if (context.mounted) {
+                context.router.push(EditMovementRoute(movement: movement));
+              }
             },
             child: const Icon(Icons.add),
           ),

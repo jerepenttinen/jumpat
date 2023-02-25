@@ -92,10 +92,13 @@ class SelectExercise extends ConsumerWidget {
                 padding:
                     const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(createExerciseProvider(searchTerm.value).future)
-                        .then((exercise) => Navigator.pop(context, exercise));
+                  onPressed: () async {
+                    final exercise = await ref
+                        .read(createExerciseProvider(searchTerm.value).future);
+
+                    if (context.mounted) {
+                      Navigator.of(context).pop(exercise);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -119,7 +122,7 @@ class SelectExercise extends ConsumerWidget {
     return ListTile(
       title: Text(exercise.name),
       onTap: () {
-        Navigator.pop(context, exercise);
+        Navigator.of(context).pop(exercise);
       },
     );
   }
