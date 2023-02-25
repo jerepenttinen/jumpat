@@ -41,7 +41,7 @@ class ChooseTemplateDialog extends ConsumerWidget {
           ),
         ),
         error: (error, stackTrace) => Text('$error'),
-        loading: () => const CircularProgressIndicator(),
+        loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );
   }

@@ -69,7 +69,7 @@ class EditWorkoutPage extends ConsumerWidget {
         );
       },
       error: (error) => Text('$error'),
-      loading: (loading) => const CircularProgressIndicator(),
+      loading: (loading) => const Center(child: CircularProgressIndicator()),
     );
   }
 }

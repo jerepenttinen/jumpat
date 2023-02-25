@@ -127,7 +127,7 @@ class WorkoutsList extends ConsumerWidget {
         );
       },
       error: (err, stack) => Text('$err'),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
