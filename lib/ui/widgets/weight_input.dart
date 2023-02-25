@@ -1,59 +1,48 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class WeightInput extends StatefulWidget {
+class WeightInput extends HookWidget {
   const WeightInput({
     required this.initial,
     required this.onWeightChanged,
     super.key,
   });
-
   final double initial;
   final Future Function(double) onWeightChanged;
 
-  @override
-  State<WeightInput> createState() => _WeightInputState();
-}
-
-class _WeightInputState extends State<WeightInput> {
-  final input = BehaviorSubject<String>();
-
-  late final StreamSubscription<double> listener =
-      input.debounceTime(const Duration(milliseconds: 500)).switchMap(
-    (value) async* {
-      final d = double.tryParse(value);
-      if (d != null) {
-        yield d;
-      }
-    },
-  ).listen((event) async {
-    await widget.onWeightChanged(event);
-  });
-
-  @override
-  void dispose() {
-    listener.cancel();
-    super.dispose();
+  void selectAll(TextEditingController controller) {
+    controller.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: controller.value.text.length,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: widget.initial.toString());
-    final autofocus = widget.initial.compareTo(0) == 0;
+    final focusNode = useFocusNode();
+    final controller = useTextEditingController(text: initial.toString());
 
-    // trigger listener
-    listener;
-
-    controller.addListener(
+    useEffect(
       () {
-        input.add(controller.text);
+        focusNode.addListener(() async {
+          if (focusNode.hasPrimaryFocus) {
+            selectAll(controller);
+          } else {
+            final d = double.tryParse(controller.text);
+            if (d != null) {
+              await onWeightChanged(d);
+            }
+          }
+        });
+        return;
       },
+      [controller, focusNode],
     );
+
+    final t = AppLocalizations.of(context)!;
+    final autofocus = initial.compareTo(0) == 0;
 
     if (autofocus) {
       controller.selection = TextSelection(
@@ -64,13 +53,10 @@ class _WeightInputState extends State<WeightInput> {
 
     return TextField(
       autofocus: autofocus,
+      focusNode: focusNode,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(labelText: t.weightHint),
       controller: controller,
-      onTap: () => controller.selection = TextSelection(
-        baseOffset: 0,
-        extentOffset: controller.value.text.length,
-      ),
       inputFormatters: [
         FilteringTextInputFormatter.allow(
           RegExp(r'^\d+\.?\d?'),
