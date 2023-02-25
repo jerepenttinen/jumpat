@@ -27,7 +27,7 @@ class WorkoutCard extends ConsumerWidget {
             ? null
             : RoundedRectangleBorder(
                 side: BorderSide(color: Color(template.color), width: 2),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(12),
               ),
         orElse: () => null,
       ),
