@@ -41,7 +41,10 @@ class IsarService {
     });
   }
 
-  Future<Movement> createMovement(Workout workout, Exercise exercise) async {
+  Future<Movement> createMovement({
+    required Workout workout,
+    required Exercise exercise,
+  }) async {
     return await isar.writeTxn(() async {
       final movement = Movement()
         ..sets = []
@@ -118,11 +121,11 @@ class IsarService {
         .isNotEmpty();
   }
 
-  Future<Template> createTemplate(
-    Workout workout,
-    String name,
-    Color color,
-  ) async {
+  Future<Template> createTemplate({
+    required Workout workout,
+    required String name,
+    required Color color,
+  }) async {
     final exercises = workout.movements.map((e) => e.exercise.value!).toList();
 
     return await isar.writeTxn(() async {
@@ -140,5 +143,45 @@ class IsarService {
 
       return template;
     });
+  }
+
+  Future<Exercise> saveExercise(Exercise exercise) async {
+    return await isar.writeTxn(() async {
+      await isar.exercises.put(exercise);
+      return exercise;
+    });
+  }
+
+  Stream<List<Exercise>> watchExercises() async* {
+    yield* isar.exercises.where().sortByName().watch(fireImmediately: true);
+  }
+
+  Stream<List<Template>> watchTemplates() async* {
+    yield* isar.templates.where().sortByName().watch(fireImmediately: true);
+  }
+
+  Stream<Exercise> watchExercise(Exercise exercise) async* {
+    yield* isar.exercises
+        .watchObject(exercise.id, fireImmediately: true)
+        .map((e) => e!);
+  }
+
+  Stream<Workout> watchWorkout(Workout workout) async* {
+    yield* isar.workouts
+        .watchObject(workout.id, fireImmediately: true)
+        .map((w) => w!);
+  }
+
+  Stream<Template?> watchWorkoutTemplate(Workout workout) async* {
+    yield* isar.templates
+        .filter()
+        .workouts((w) => w.idEqualTo(workout.id))
+        .limit(1)
+        .watch(fireImmediately: true)
+        .map((template) => template.isEmpty ? null : template.first);
+  }
+
+  Future<bool> existsAnyTemplates() async {
+    return await isar.templates.count() > 0;
   }
 }
