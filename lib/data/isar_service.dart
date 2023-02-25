@@ -18,6 +18,7 @@ class IsarService {
   Future<Workout> saveWorkout(Workout workout) async {
     return await isar.writeTxn(() async {
       final id = await isar.workouts.put(workout);
+      await workout.template.save();
       return Future.value(await isar.workouts.get(id));
     });
   }

@@ -4,6 +4,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
+import 'package:jumpat/ui/widgets/choose_template_dialog.dart';
 import 'package:jumpat/ui/widgets/workout_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ class WorkoutsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final t = AppLocalizations.of(context)!;
+    final fabKey = GlobalKey<ExpandableFabState>();
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.name),
@@ -21,15 +23,39 @@ class WorkoutsPage extends ConsumerWidget {
       body: const WorkoutsList(),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
+        key: fabKey,
         child: const Icon(Icons.add),
         type: ExpandableFabType.up,
         childrenOffset: const Offset(8, 8),
         distance: 60,
+        overlayStyle: ExpandableFabOverlayStyle(
+          blur: 2,
+        ),
         children: [
           FloatingActionButton.small(
             heroTag: 'useTemplate',
             tooltip: t.useTemplate,
-            onPressed: null,
+            onPressed: () async {
+              fabKey.currentState?.toggle();
+              final template = await chooseTemplateDialog(context);
+              if (template == null) {
+                return;
+              }
+              final workout = await ref.read(
+                saveWorkoutProvider(
+                  workout: Workout()
+                    ..date = DateTime.now()
+                    ..template.value = template,
+                ).future,
+              );
+              for (final exercise in template.exercises) {
+                await ref
+                    .read(createMovementProvider(workout, exercise).future);
+              }
+              if (context.mounted) {
+                context.router.push(EditWorkoutRoute(workout: workout));
+              }
+            },
             child: const Icon(Icons.control_point_duplicate_rounded),
           ),
           FloatingActionButton.small(
@@ -37,12 +63,14 @@ class WorkoutsPage extends ConsumerWidget {
             tooltip: t.newWorkout,
             child: const Icon(Icons.add),
             onPressed: () async {
-              final router = context.router;
+              fabKey.currentState?.toggle();
               final workout = await ref.read(
                 saveWorkoutProvider(workout: Workout()..date = DateTime.now())
                     .future,
               );
-              router.push(EditWorkoutRoute(workout: workout));
+              if (context.mounted) {
+                context.router.push(EditWorkoutRoute(workout: workout));
+              }
             },
           ),
         ],

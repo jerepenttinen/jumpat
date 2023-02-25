@@ -5,6 +5,7 @@
   "cancel": "Peruuta",
   "save": "Tallenna",
   "templateDialogTitle": "Luo uusi malli",
+  "chooseTemplateDialogTitle": "Valitse malli",
   "templates": "Mallit",
   "asTemplate": "Käytä mallina",
   "templateNameHint": "Mallin nimi",
