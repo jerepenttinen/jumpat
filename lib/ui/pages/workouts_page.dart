@@ -5,6 +5,7 @@ import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/choose_template_dialog.dart';
+import 'package:jumpat/ui/widgets/watching_list.dart';
 import 'package:jumpat/ui/widgets/workout_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +21,10 @@ class WorkoutsPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.name),
       ),
-      body: const WorkoutsList(),
+      body: WatchingList(
+        provider: watchWorkoutsProvider,
+        itemBuilder: (workout) => WorkoutCard(workout: workout),
+      ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         key: fabKey,
@@ -106,28 +110,6 @@ class WorkoutsPage extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class WorkoutsList extends ConsumerWidget {
-  const WorkoutsList({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final workoutsAsync = ref.watch(watchWorkoutsProvider);
-    return workoutsAsync.when(
-      data: (workouts) {
-        return ListView.builder(
-          itemCount: workouts.length,
-          itemBuilder: (context, index) {
-            final workout = workouts[index];
-            return WorkoutCard(workout: workout);
-          },
-        );
-      },
-      error: (err, stack) => Text('$err'),
-      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:jumpat/ui/widgets/watching_list.dart';
 
 class ExercisesPage extends ConsumerWidget {
   const ExercisesPage({super.key});
@@ -16,29 +17,10 @@ class ExercisesPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.exercises),
       ),
-      body: const ExercisesList(),
-    );
-  }
-}
-
-class ExercisesList extends ConsumerWidget {
-  const ExercisesList({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final exercisesAsync = ref.watch(watchExercisesProvider);
-    return exercisesAsync.when(
-      data: (exercises) {
-        return ListView.builder(
-          itemCount: exercises.length,
-          itemBuilder: (context, index) {
-            final exercise = exercises[index];
-            return ExerciseListItem(exercise: exercise);
-          },
-        );
-      },
-      error: (err, stack) => Text('$err'),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      body: WatchingList(
+        provider: watchExercisesProvider,
+        itemBuilder: (exercise) => ExerciseListItem(exercise: exercise),
+      ),
     );
   }
 }
