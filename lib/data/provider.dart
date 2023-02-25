@@ -175,3 +175,11 @@ Future<Template> createTemplate(
   final isarService = await ref.watch(isarServiceProvider.future);
   return isarService.createTemplate(workout, name, color);
 }
+
+@riverpod
+Future<bool> existsAnyTemplates(
+  ExistsAnyTemplatesRef ref,
+) async {
+  final isarInstance = await ref.watch(isarInstanceProvider.future);
+  return (await isarInstance.templates.count()) > 0;
+}

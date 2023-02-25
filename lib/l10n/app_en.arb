@@ -22,6 +22,7 @@
   "asTemplate": "Use as template",
   "templateNameHint": "Template name",
   "templateColor": "Template color",
+  "noTemplatesFound": "No templates found",
   "create": "Create",
   "exercises": "Exercises",
   "exercise": "Exercise",

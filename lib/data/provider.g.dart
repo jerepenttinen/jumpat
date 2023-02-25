@@ -775,3 +775,16 @@ class CreateTemplateFamily extends Family<AsyncValue<Template>> {
   @override
   String? get name => r'createTemplateProvider';
 }
+
+String _$existsAnyTemplatesHash() =>
+    r'528bf1f70f41764336b7ca804ef3e87ccbb490b8';
+
+/// See also [existsAnyTemplates].
+final existsAnyTemplatesProvider = AutoDisposeFutureProvider<bool>(
+  existsAnyTemplates,
+  name: r'existsAnyTemplatesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$existsAnyTemplatesHash,
+);
+typedef ExistsAnyTemplatesRef = AutoDisposeFutureProviderRef<bool>;
