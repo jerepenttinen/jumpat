@@ -53,6 +53,18 @@ class SelectExercise extends ConsumerWidget {
           onChanged: (value) {
             search(value);
           },
+          onSubmitted: (value) async {
+            final exercises =
+                await ref.read(SearchExercisesProvider(value).future);
+            final exercise = exercises.isEmpty
+                ? await ref
+                    .read(createExerciseProvider(searchTerm.value).future)
+                : exercises.first;
+
+            if (context.mounted) {
+              Navigator.of(context).pop(exercise);
+            }
+          },
         ),
         StreamBuilder(
           stream: exercises,
