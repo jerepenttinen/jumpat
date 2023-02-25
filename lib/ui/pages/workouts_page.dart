@@ -33,7 +33,7 @@ class WorkoutsPage extends ConsumerWidget {
         childrenOffset: const Offset(8, 8),
         distance: 60,
         overlayStyle: ExpandableFabOverlayStyle(
-          blur: 2,
+          color: Colors.black54,
         ),
         children: [
           FloatingActionButton.small(
