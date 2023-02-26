@@ -7,6 +7,7 @@ environment:
 dependencies:
   auto_route: ^5.0.4
   cupertino_icons: ^1.0.2
+  fast_immutable_collections: ^8.2.0
   flutter:
     sdk: flutter
   flutter_expandable_fab: ^1.7.0
