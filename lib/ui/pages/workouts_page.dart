@@ -70,7 +70,7 @@ class WorkoutsPage extends ConsumerWidget {
                       .read(createMovementProvider(workout, exercise).future);
                 }
                 if (context.mounted) {
-                  await context.router.push(EditWorkoutRoute(workout: workout));
+                  // await context.router.push(EditWorkoutRoute(workout: workout));
                 }
               }
             },
@@ -87,7 +87,7 @@ class WorkoutsPage extends ConsumerWidget {
                     .future,
               );
               if (context.mounted) {
-                await context.router.push(EditWorkoutRoute(workout: workout));
+                // await context.router.push(EditWorkoutRoute(workout: workout));
               }
             },
           ),

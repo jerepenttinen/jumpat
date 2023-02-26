@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:jumpat/data/tables.dart';
+import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
+import 'package:jumpat/features/workout/presentation/pages/edit_workout_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/workouts_page.dart';
 import 'package:jumpat/ui/pages/edit_movement_page.dart';
-import 'package:jumpat/ui/pages/edit_workout_page.dart';
 import 'package:jumpat/ui/pages/exercise_history_page.dart';
 import 'package:jumpat/ui/pages/exercises_page.dart';
 import 'package:jumpat/ui/pages/settings_page.dart';
 import 'package:jumpat/ui/pages/templates_page.dart';
-// import 'package:jumpat/ui/pages/workouts_page.dart';
 
 part 'app_router.gr.dart';
 

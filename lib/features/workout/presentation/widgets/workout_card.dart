@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -5,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/workout/application/movement/movement_providers.dart';
 import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
+import 'package:jumpat/ui/routes/app_router.dart';
 
 enum CardMenuItem { edit, asTemplate, delete }
 
@@ -56,13 +58,15 @@ class WorkoutCard extends HookConsumerWidget {
               onSelected: (value) async {
                 switch (value) {
                   case CardMenuItem.edit:
-                    await ref
-                        .read(movementCreateControllerprovider.notifier)
-                        .handle();
+                    await context.router
+                        .push(EditWorkoutRoute(workout: workout));
                     break;
                   case CardMenuItem.delete:
                     break;
                   case CardMenuItem.asTemplate:
+                    await ref
+                        .read(movementCreateControllerprovider.notifier)
+                        .handle();
                     break;
                 }
               },
@@ -84,11 +88,11 @@ class WorkoutCard extends HookConsumerWidget {
           ),
           Container(
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            child: ListBody(
-              children: movements.maybeWhen(
-                data: (movements) => movements.map(_buildMovementLine).toList(),
-                orElse: () => [const SizedBox()],
+            child: movements.maybeWhen(
+              data: (movements) => ListBody(
+                children: movements.map(_buildMovementLine).toList(),
               ),
+              orElse: () => const SizedBox(),
             ),
           ),
         ],

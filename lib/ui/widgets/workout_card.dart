@@ -45,9 +45,9 @@ class WorkoutCard extends ConsumerWidget {
               onSelected: (value) async {
                 switch (value) {
                   case CardMenuItem.edit:
-                    await context.router.push(
-                      EditWorkoutRoute(workout: workout),
-                    );
+                    // await context.router.push(
+                    //   EditWorkoutRoute(workout: workout),
+                    // );
                     break;
                   case CardMenuItem.delete:
                     final delete = await confirmDelete(context);

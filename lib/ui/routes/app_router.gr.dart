@@ -122,7 +122,7 @@ class WorkoutsRoute extends PageRouteInfo<void> {
 /// [EditWorkoutPage]
 class EditWorkoutRoute extends PageRouteInfo<EditWorkoutRouteArgs> {
   EditWorkoutRoute({
-    required Workout workout,
+    required WorkoutEntity workout,
     Key? key,
   }) : super(
           EditWorkoutRoute.name,
@@ -142,7 +142,7 @@ class EditWorkoutRouteArgs {
     this.key,
   });
 
-  final Workout workout;
+  final WorkoutEntity workout;
 
   final Key? key;
 

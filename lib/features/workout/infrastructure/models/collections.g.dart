@@ -35,17 +35,18 @@ const WorkoutSchema = CollectionSchema(
   idName: r'isarId',
   indexes: {},
   links: {
-    r'movements': LinkSchema(
-      id: 3527571958092860486,
-      name: r'movements',
-      target: r'Movement',
-      single: false,
-    ),
     r'template': LinkSchema(
       id: 217722955489900210,
       name: r'template',
       target: r'Template',
       single: true,
+    ),
+    r'movements': LinkSchema(
+      id: 8484376023960306683,
+      name: r'movements',
+      target: r'Movement',
+      single: false,
+      linkName: r'workout',
     )
   },
   embeddedSchemas: {},
@@ -108,13 +109,13 @@ Id _workoutGetId(Workout object) {
 }
 
 List<IsarLinkBase<dynamic>> _workoutGetLinks(Workout object) {
-  return [object.movements, object.template];
+  return [object.template, object.movements];
 }
 
 void _workoutAttach(IsarCollection<dynamic> col, Id id, Workout object) {
+  object.template.attach(col, col.isar.collection<Template>(), r'template', id);
   object.movements
       .attach(col, col.isar.collection<Movement>(), r'movements', id);
-  object.template.attach(col, col.isar.collection<Template>(), r'template', id);
 }
 
 extension WorkoutQueryWhereSort on QueryBuilder<Workout, Workout, QWhere> {
@@ -436,6 +437,19 @@ extension WorkoutQueryObject
 
 extension WorkoutQueryLinks
     on QueryBuilder<Workout, Workout, QFilterCondition> {
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> template(
+      FilterQuery<Template> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'template');
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> templateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'template', 0, true, 0, true);
+    });
+  }
+
   QueryBuilder<Workout, Workout, QAfterFilterCondition> movements(
       FilterQuery<Movement> q) {
     return QueryBuilder.apply(this, (query) {
@@ -490,19 +504,6 @@ extension WorkoutQueryLinks
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
           r'movements', lower, includeLower, upper, includeUpper);
-    });
-  }
-
-  QueryBuilder<Workout, Workout, QAfterFilterCondition> template(
-      FilterQuery<Template> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'template');
-    });
-  }
-
-  QueryBuilder<Workout, Workout, QAfterFilterCondition> templateIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'template', 0, true, 0, true);
     });
   }
 }
@@ -644,18 +645,16 @@ const MovementSchema = CollectionSchema(
   indexes: {},
   links: {
     r'workout': LinkSchema(
-      id: -4704890953703251708,
+      id: 9019229603366275251,
       name: r'workout',
       target: r'Workout',
       single: true,
-      linkName: r'movements',
     ),
     r'exercise': LinkSchema(
-      id: 8321152254744226047,
+      id: 5321245429505012810,
       name: r'exercise',
       target: r'Exercise',
       single: true,
-      linkName: r'movements',
     )
   },
   embeddedSchemas: {},
@@ -1370,10 +1369,11 @@ const ExerciseSchema = CollectionSchema(
   indexes: {},
   links: {
     r'movements': LinkSchema(
-      id: -7405892840739992864,
+      id: -445711532192490034,
       name: r'movements',
       target: r'Movement',
       single: false,
+      linkName: r'exercise',
     )
   },
   embeddedSchemas: {},

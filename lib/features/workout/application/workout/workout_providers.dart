@@ -2,7 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/core/providers.dart';
-import 'package:jumpat/features/workout/application/controllers/workout/workout_create_controller.dart';
+import 'package:jumpat/features/workout/application/workout/workout_create_controller.dart';
 import 'package:jumpat/features/workout/application/workout/workout_list_controller.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_workout_repository.dart';
