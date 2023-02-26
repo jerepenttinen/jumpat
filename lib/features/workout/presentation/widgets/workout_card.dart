@@ -1,19 +1,38 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/providers.dart';
 
 enum CardMenuItem { edit, asTemplate, delete }
 
-class WorkoutCard extends ConsumerWidget {
+class WorkoutCard extends HookConsumerWidget {
   const WorkoutCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
-    final workout = ref.watch(currentWorkoutProvider).toNullable()!;
+    final workout = ref.watch(currentWorkoutProvider);
     final movements = ref.watch(movementListControllerProvider);
+
+    ref.listen(movementCreateControllerprovider, (previous, next) {
+      next.maybeWhen(
+        data: (data) {
+          data.match(
+            () {},
+            (movement) {
+              ref
+                  .read(movementListControllerProvider.notifier)
+                  .addMovement(movement);
+            },
+          );
+        },
+        orElse: () {},
+      );
+    });
+
     return Card(
       elevation: 1,
       shape: workout.template.match(
@@ -37,6 +56,9 @@ class WorkoutCard extends ConsumerWidget {
               onSelected: (value) async {
                 switch (value) {
                   case CardMenuItem.edit:
+                    await ref
+                        .read(movementCreateControllerprovider.notifier)
+                        .handle();
                     break;
                   case CardMenuItem.delete:
                     break;
@@ -75,8 +97,12 @@ class WorkoutCard extends ConsumerWidget {
   }
 
   Text _buildMovementLine(MovementEntity movement) {
+    final exercise = movement.exercise.name.getOrCrash();
+    final weight = movement.weight.getOrCrash();
+    final sets = movement.sets.map((set) => set.getOrCrash()).toIList();
+
     return Text(
-      '${movement.exercise.name} ${movement.weight}kg ${movement.sets}',
+      '$exercise ${weight}kg $sets',
     );
   }
 }

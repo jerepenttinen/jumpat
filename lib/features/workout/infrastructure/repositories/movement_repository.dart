@@ -2,11 +2,13 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:isar/isar.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_movement_repository.dart';
 import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
+import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/movement_entity_converter.dart';
 
 class MovementRepository implements IMovementRepository {
@@ -14,12 +16,6 @@ class MovementRepository implements IMovementRepository {
 
   final Isar client;
   final WorkoutEntity workout;
-
-  @override
-  Future<Either<MovementFailure, Unit>> create(MovementEntity movement) {
-    // TODO: implement create
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) {
@@ -54,5 +50,25 @@ class MovementRepository implements IMovementRepository {
         )
         .findAll();
     return Right(movements.map(MovementEntityConverter().toDomain).toIList());
+  }
+
+  @override
+  Future<Either<MovementFailure, MovementEntity>> create(
+    ExerciseEntity exercise,
+  ) async {
+    final movement =
+        MovementEntity.create(workout: workout, exercise: exercise);
+
+    await client.writeTxn(
+      () async {
+        final m = MovementEntityConverter().toInfra(movement);
+        await client.movements.put(m);
+        await client.exercises.put(ExerciseEntityConverter().toInfra(exercise));
+        await m.exercise.save();
+        await m.workout.save();
+      },
+    );
+
+    return Right(movement);
   }
 }

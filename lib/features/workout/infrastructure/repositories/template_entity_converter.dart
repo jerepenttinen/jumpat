@@ -24,7 +24,12 @@ class TemplateEntityConverter
 
   @override
   Template toInfra(TemplateEntity domain) {
-    // TODO: implement toInfra
-    throw UnimplementedError();
+    return Template()
+      ..id = domain.id.getOrCrash()
+      ..name = domain.name.getOrCrash()
+      ..color = domain.color.getOrCrash().value
+      ..exercises.addAll(
+        domain.exercises.map(ExerciseEntityConverter().toInfra),
+      );
   }
 }

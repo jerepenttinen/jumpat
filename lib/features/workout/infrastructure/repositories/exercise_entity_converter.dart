@@ -16,7 +16,8 @@ class ExerciseEntityConverter
 
   @override
   Exercise toInfra(ExerciseEntity domain) {
-    // TODO: implement toInfra
-    throw UnimplementedError();
+    return Exercise()
+      ..id = domain.id.getOrCrash()
+      ..name = domain.name.getOrCrash();
   }
 }

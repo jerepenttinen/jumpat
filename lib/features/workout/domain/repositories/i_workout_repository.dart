@@ -12,7 +12,7 @@ abstract class IWorkoutRepository {
   Stream<Either<WorkoutFailure, TemplateEntity>> watchTemplate(
     WorkoutEntity workout,
   );
-  Future<Either<WorkoutFailure, Unit>> create(WorkoutEntity workout);
+  Future<Either<WorkoutFailure, WorkoutEntity>> create();
   Future<Either<WorkoutFailure, Unit>> update(WorkoutEntity workout);
   Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout);
 }

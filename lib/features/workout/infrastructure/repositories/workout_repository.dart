@@ -17,12 +17,6 @@ class WorkoutRepository implements IWorkoutRepository {
   final Isar client;
 
   @override
-  Future<Either<WorkoutFailure, Unit>> create(WorkoutEntity workout) {
-    // TODO: implement create
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout) {
     // TODO: implement delete
     throw UnimplementedError();
@@ -57,5 +51,16 @@ class WorkoutRepository implements IWorkoutRepository {
       WorkoutEntity workout) {
     // TODO: implement watchTemplate
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<WorkoutFailure, WorkoutEntity>> create() async {
+    final workout = WorkoutEntity.empty();
+
+    await client.writeTxn(
+      () => client.workouts.put(WorkoutEntityConverter().toInfra(workout)),
+    );
+
+    return Right(workout);
   }
 }

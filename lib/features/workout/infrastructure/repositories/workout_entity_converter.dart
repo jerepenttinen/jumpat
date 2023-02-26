@@ -20,7 +20,11 @@ class WorkoutEntityConverter
 
   @override
   Workout toInfra(WorkoutEntity domain) {
-    // TODO: implement toInfra
-    throw UnimplementedError();
+    return Workout()
+      ..id = domain.id.getOrCrash()
+      ..date = domain.date
+      ..template.value = domain.template
+          .map((t) => TemplateEntityConverter().toInfra(t))
+          .toNullable();
   }
 }

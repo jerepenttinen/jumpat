@@ -2,7 +2,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/core/providers.dart';
+import 'package:jumpat/features/workout/application/movement_create_controller.dart';
 import 'package:jumpat/features/workout/application/movement_list_controller.dart';
+import 'package:jumpat/features/workout/application/workout_create_controller.dart';
 import 'package:jumpat/features/workout/application/workout_list_controller.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
@@ -21,23 +23,44 @@ final workoutListControllerProvider = StateNotifierProvider<
   return WorkoutListController(repo);
 });
 
-final currentWorkoutProvider = Provider<Option<WorkoutEntity>>((ref) {
-  return none();
+final currentWorkoutProvider = Provider<WorkoutEntity>((ref) {
+  throw UnimplementedError('Workout not provided');
 });
 
-final movementRepositoryProvider = Provider<IMovementRepository>((ref) {
-  final workout = ref.watch(currentWorkoutProvider);
-  return workout.match(
-    () => throw UnimplementedError('Workout not provided'),
-    (workout) => MovementRepository(
+final movementRepositoryProvider = Provider<IMovementRepository>(
+  (ref) {
+    final workout = ref.watch(currentWorkoutProvider);
+    return MovementRepository(
       client: ref.watch(isarInstanceProvider),
       workout: workout,
-    ),
-  );
-});
+    );
+  },
+  dependencies: [currentWorkoutProvider, isarInstanceProvider],
+);
 
 final movementListControllerProvider = StateNotifierProvider<
-    MovementListController, AsyncValue<IList<MovementEntity>>>((ref) {
-  final repo = ref.watch(movementRepositoryProvider);
-  return MovementListController(repo);
-});
+    MovementListController, AsyncValue<IList<MovementEntity>>>(
+  (ref) {
+    final repo = ref.watch(movementRepositoryProvider);
+    return MovementListController(repo);
+  },
+  dependencies: [movementRepositoryProvider],
+);
+
+final movementCreateControllerprovider = StateNotifierProvider<
+    MovementCreateController, AsyncValue<Option<MovementEntity>>>(
+  (ref) {
+    final repo = ref.watch(movementRepositoryProvider);
+    return MovementCreateController(repo);
+  },
+  dependencies: [movementRepositoryProvider],
+);
+
+final workoutCreateControllerprovider = StateNotifierProvider<
+    WorkoutCreateController, AsyncValue<Option<WorkoutEntity>>>(
+  (ref) {
+    final repo = ref.watch(workoutRepositoryProvider);
+    return WorkoutCreateController(repo);
+  },
+  dependencies: [workoutRepositoryProvider],
+);

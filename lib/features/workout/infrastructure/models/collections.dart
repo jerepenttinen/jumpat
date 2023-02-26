@@ -9,8 +9,11 @@ class Workout {
   Id get isarId => fastHash(id);
 
   late DateTime date;
-  final movements = IsarLinks<Movement>();
+
   final template = IsarLink<Template>();
+
+  @Backlink(to: 'workout')
+  final movements = IsarLinks<Movement>();
 }
 
 @collection
@@ -21,10 +24,8 @@ class Movement {
   late double weight;
   late List<int> sets;
 
-  @Backlink(to: 'movements')
   final workout = IsarLink<Workout>();
 
-  @Backlink(to: 'movements')
   final exercise = IsarLink<Exercise>();
 }
 
@@ -34,6 +35,8 @@ class Exercise {
   Id get isarId => fastHash(id);
 
   late String name;
+
+  @Backlink(to: 'exercise')
   final movements = IsarLinks<Movement>();
 }
 

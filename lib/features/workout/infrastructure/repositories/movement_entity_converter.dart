@@ -23,7 +23,11 @@ class MovementEntityConverter
 
   @override
   Movement toInfra(MovementEntity domain) {
-    // TODO: implement toInfra
-    throw UnimplementedError();
+    return Movement()
+      ..id = domain.id.getOrCrash()
+      ..weight = domain.weight.getOrCrash()
+      ..sets = domain.sets.map((set) => set.getOrCrash()).toList()
+      ..exercise.value = ExerciseEntityConverter().toInfra(domain.exercise)
+      ..workout.value = WorkoutEntityConverter().toInfra(domain.workout);
   }
 }

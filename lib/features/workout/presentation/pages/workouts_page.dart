@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
 import 'package:jumpat/features/workout/providers.dart';
@@ -34,15 +33,12 @@ class WorkoutsList extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (workouts) => ListView.builder(
         itemCount: workouts.length,
-        itemBuilder: (context, index) {
-          final workout = workouts[index];
-          return ProviderScope(
-            overrides: [
-              currentWorkoutProvider.overrideWithValue(some(workout)),
-            ],
-            child: const WorkoutCard(),
-          );
-        },
+        itemBuilder: (context, index) => ProviderScope(
+          overrides: [
+            currentWorkoutProvider.overrideWithValue(workouts[index]),
+          ],
+          child: const WorkoutCard(),
+        ),
       ),
     );
   }
@@ -95,6 +91,22 @@ class WorkoutsFab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(workoutCreateControllerprovider, (previous, next) {
+      next.maybeWhen(
+        data: (data) {
+          data.match(
+            () {},
+            (workout) {
+              ref
+                  .read(workoutListControllerProvider.notifier)
+                  .addWorkout(workout);
+            },
+          );
+        },
+        orElse: () {},
+      );
+    });
+
     final t = AppLocalizations.of(context)!;
     final fabKey = GlobalKey<ExpandableFabState>();
     return ExpandableFab(
@@ -153,6 +165,7 @@ class WorkoutsFab extends ConsumerWidget {
           child: const Icon(Icons.add),
           onPressed: () async {
             fabKey.currentState?.toggle();
+            await ref.read(workoutCreateControllerprovider.notifier).handle();
             // final workout = await ref.read(
             //   saveWorkoutProvider(workout: Workout()..date = DateTime.now())
             //       .future,

@@ -16,4 +16,9 @@ class ExerciseEntity with _$ExerciseEntity implements IEntity {
         id: UniqueId(),
         name: ExerciseName(''),
       );
+
+  factory ExerciseEntity.create({required String name}) => ExerciseEntity(
+        id: UniqueId(),
+        name: ExerciseName(name),
+      );
 }
