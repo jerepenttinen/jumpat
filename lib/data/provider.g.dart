@@ -29,27 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$isarInstanceHash() => r'a61204c6188b24b4425a0a640c6c4fcd50f584b7';
-
-/// See also [isarInstance].
-final isarInstanceProvider = FutureProvider<Isar>(
-  isarInstance,
-  name: r'isarInstanceProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$isarInstanceHash,
-);
-typedef IsarInstanceRef = FutureProviderRef<Isar>;
-String _$isarServiceHash() => r'531b1dd6af2e5f70653f705cb6ec5b5d1e7a2ef8';
-
-/// See also [isarService].
-final isarServiceProvider = AutoDisposeFutureProvider<IsarService>(
-  isarService,
-  name: r'isarServiceProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$isarServiceHash,
-);
-typedef IsarServiceRef = AutoDisposeFutureProviderRef<IsarService>;
-String _$deleteWorkoutHash() => r'b4248d62b4254ec4321e193153b5782c1836afcb';
+String _$deleteWorkoutHash() => r'39967af0b73c70970ce90a6629826ce45eca2c42';
 
 /// See also [deleteWorkout].
 class DeleteWorkoutProvider extends AutoDisposeFutureProvider<void> {
@@ -119,7 +99,7 @@ class DeleteWorkoutFamily extends Family<AsyncValue<void>> {
   String? get name => r'deleteWorkoutProvider';
 }
 
-String _$deleteMovementHash() => r'ea18732c844d00caa93a89b31a21989a99e1e916';
+String _$deleteMovementHash() => r'b239e5ba2c9647575822eaed591a359d3e515c49';
 
 /// See also [deleteMovement].
 class DeleteMovementProvider extends AutoDisposeFutureProvider<void> {
@@ -189,7 +169,7 @@ class DeleteMovementFamily extends Family<AsyncValue<void>> {
   String? get name => r'deleteMovementProvider';
 }
 
-String _$saveWorkoutHash() => r'ef5d320e891579db74cf7056e3a2884f256ad2c6';
+String _$saveWorkoutHash() => r'b5917553b64608bc192163be9954e92480126a63';
 
 /// See also [saveWorkout].
 class SaveWorkoutProvider extends AutoDisposeFutureProvider<Workout> {
@@ -259,7 +239,7 @@ class SaveWorkoutFamily extends Family<AsyncValue<Workout>> {
   String? get name => r'saveWorkoutProvider';
 }
 
-String _$saveMovementHash() => r'3ae8042913cefdfee2b418d389accbdecc3feb31';
+String _$saveMovementHash() => r'c1eec954925f22dade3099a6c12b2a8407f01edf';
 
 /// See also [saveMovement].
 class SaveMovementProvider extends AutoDisposeFutureProvider<Movement> {
@@ -329,7 +309,7 @@ class SaveMovementFamily extends Family<AsyncValue<Movement>> {
   String? get name => r'saveMovementProvider';
 }
 
-String _$createMovementHash() => r'65b8b7a7b192cb9f0d04ce2f3881f47156a4ca5a';
+String _$createMovementHash() => r'aed0617c141257aa2cbaeb70eef90207c86a9632';
 
 /// See also [createMovement].
 class CreateMovementProvider extends AutoDisposeFutureProvider<Movement> {
@@ -408,10 +388,10 @@ class CreateMovementFamily extends Family<AsyncValue<Movement>> {
   String? get name => r'createMovementProvider';
 }
 
-String _$saveExerciseHash() => r'5242da1743b88a9f97a35fb68c5016e3056b6df1';
+String _$saveExerciseHash() => r'f1d40f0ad1089a62ddadebe6a0c50e8221ea858c';
 
 /// See also [saveExercise].
-class SaveExerciseProvider extends AutoDisposeFutureProvider<int> {
+class SaveExerciseProvider extends AutoDisposeFutureProvider<Exercise> {
   SaveExerciseProvider(
     this.exercise,
   ) : super(
@@ -443,12 +423,12 @@ class SaveExerciseProvider extends AutoDisposeFutureProvider<int> {
   }
 }
 
-typedef SaveExerciseRef = AutoDisposeFutureProviderRef<int>;
+typedef SaveExerciseRef = AutoDisposeFutureProviderRef<Exercise>;
 
 /// See also [saveExercise].
 final saveExerciseProvider = SaveExerciseFamily();
 
-class SaveExerciseFamily extends Family<AsyncValue<int>> {
+class SaveExerciseFamily extends Family<AsyncValue<Exercise>> {
   SaveExerciseFamily();
 
   SaveExerciseProvider call(
@@ -460,7 +440,7 @@ class SaveExerciseFamily extends Family<AsyncValue<int>> {
   }
 
   @override
-  AutoDisposeFutureProvider<int> getProviderOverride(
+  AutoDisposeFutureProvider<Exercise> getProviderOverride(
     covariant SaveExerciseProvider provider,
   ) {
     return call(
@@ -478,7 +458,7 @@ class SaveExerciseFamily extends Family<AsyncValue<int>> {
   String? get name => r'saveExerciseProvider';
 }
 
-String _$searchExercisesHash() => r'141e5b46afb76778db6474e052b555a096f3b90a';
+String _$searchExercisesHash() => r'742bdeae4f1e2902800579eb042c461b0dcd87dc';
 
 /// See also [searchExercises].
 class SearchExercisesProvider
@@ -549,7 +529,7 @@ class SearchExercisesFamily extends Family<AsyncValue<List<Exercise>>> {
   String? get name => r'searchExercisesProvider';
 }
 
-String _$createExerciseHash() => r'3296042a413efac4db4418cab7ea9de798160912';
+String _$createExerciseHash() => r'4086a22f15a48d617394361fa30ab0e9c34e39a7';
 
 /// See also [createExercise].
 class CreateExerciseProvider extends AutoDisposeFutureProvider<Exercise> {
@@ -619,7 +599,7 @@ class CreateExerciseFamily extends Family<AsyncValue<Exercise>> {
   String? get name => r'createExerciseProvider';
 }
 
-String _$existsExerciseHash() => r'ab452a40795709e6df2be4150882cec5d2167405';
+String _$existsExerciseHash() => r'd573abae70c84d3926fa8701ed559b9190aee7d0';
 
 /// See also [existsExercise].
 class ExistsExerciseProvider extends AutoDisposeFutureProvider<bool> {
@@ -689,7 +669,7 @@ class ExistsExerciseFamily extends Family<AsyncValue<bool>> {
   String? get name => r'existsExerciseProvider';
 }
 
-String _$createTemplateHash() => r'20d40583289d83582790db5a96e57be612b8a0eb';
+String _$createTemplateHash() => r'78b5df3067844497c29c8fb8e0e6e06be7809187';
 
 /// See also [createTemplate].
 class CreateTemplateProvider extends AutoDisposeFutureProvider<Template> {
@@ -777,7 +757,7 @@ class CreateTemplateFamily extends Family<AsyncValue<Template>> {
 }
 
 String _$existsAnyTemplatesHash() =>
-    r'528bf1f70f41764336b7ca804ef3e87ccbb490b8';
+    r'326fd685cc939fd9e29d7861b2486666da907f25';
 
 /// See also [existsAnyTemplates].
 final existsAnyTemplatesProvider = AutoDisposeFutureProvider<bool>(
