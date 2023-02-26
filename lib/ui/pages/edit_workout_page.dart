@@ -1,19 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditWorkoutPage extends ConsumerWidget {
   const EditWorkoutPage({required this.workout, super.key});
   final Workout workout;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
     final workoutAsync = ref.watch(watchWorkoutProvider(workout));
     return workoutAsync.map(
@@ -62,7 +62,8 @@ class EditWorkoutPage extends ConsumerWidget {
               );
 
               if (context.mounted) {
-                context.router.push(EditMovementRoute(movement: movement));
+                await context.router
+                    .push(EditMovementRoute(movement: movement));
               }
             },
             child: const Icon(Icons.add),
@@ -136,8 +137,7 @@ class MovementsListItem extends ConsumerWidget {
       ),
       child: ListTile(
         title: Text(movement.exercise.value?.name ?? t.unknownExercise),
-        subtitle:
-            Text('${movement.weight.toString()}kg ${movement.sets.toString()}'),
+        subtitle: Text('${movement.weight}kg ${movement.sets}'),
       ),
     );
   }

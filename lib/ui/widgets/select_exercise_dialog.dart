@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<Exercise?> selectExerciseDialog(BuildContext context) async {
   final t = AppLocalizations.of(context)!;
-  return await showDialog<Exercise>(
+  return showDialog<Exercise>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(t.exercise),
@@ -21,22 +21,22 @@ class SelectExercise extends ConsumerWidget {
   const SelectExercise({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final searchTerm = BehaviorSubject<String>();
 
     void search(String term) => searchTerm.add(term);
 
-    final Stream<List<Exercise>> exercises = searchTerm
+    final exercises = searchTerm
         .debounceTime(const Duration(milliseconds: 300))
         .switchMap((value) async* {
       yield await ref.read(searchExercisesProvider(value).future);
     });
 
-    final Stream<bool> canCreate =
+    final canCreate =
         searchTerm.debounceTime(const Duration(milliseconds: 300)).switchMap(
       (value) async* {
-        yield (value.length > 2 &&
-            !await ref.read(existsExerciseProvider(value).future));
+        yield value.length > 2 &&
+            !await ref.read(existsExerciseProvider(value).future);
       },
     );
 
@@ -50,9 +50,7 @@ class SelectExercise extends ConsumerWidget {
           textCapitalization: TextCapitalization.sentences,
           autofocus: true,
           decoration: InputDecoration(hintText: t.exerciseNameHint),
-          onChanged: (value) {
-            search(value);
-          },
+          onChanged: search,
           onSubmitted: (value) async {
             final exercises =
                 await ref.read(SearchExercisesProvider(value).future);
@@ -89,8 +87,7 @@ class SelectExercise extends ConsumerWidget {
 
             if (canCreate) {
               return Padding(
-                padding:
-                    const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: ElevatedButton(
                   onPressed: () async {
                     final exercise = await ref
@@ -101,7 +98,7 @@ class SelectExercise extends ConsumerWidget {
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
                       t.createExerciseButton(searchTerm.value),
                       textAlign: TextAlign.center,

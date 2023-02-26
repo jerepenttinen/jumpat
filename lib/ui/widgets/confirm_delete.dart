@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-Future<bool> confirmDelete(BuildContext context) async {
+Future<bool?> confirmDelete(BuildContext context) async {
   final t = AppLocalizations.of(context)!;
-  return await showDialog(
+  return showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(

@@ -254,14 +254,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.5+1"
-  flutter_lints:
-    dependency: "direct dev"
-    description:
-      name: flutter_lints
-      sha256: aeb0b80a8b3709709c9cc496cdc027c5b3216796bc0af0ce1007eaf24464fd4c
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -301,6 +293,30 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fpdart:
+    dependency: "direct main"
+    description:
+      name: fpdart
+      sha256: "21053522d5a97347737525c84e8839340a0af3c0ef592f98fac37380fdd6a57b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
+  freezed:
+    dependency: "direct main"
+    description:
+      name: freezed
+      sha256: e819441678f1679b719008ff2ff0ef045d66eed9f9ec81166ca0d9b02a187454
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.2"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: aeac15850ef1b38ee368d4c53ba9a847e900bb2c53a4db3f6881cbb3cb684338
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -413,14 +429,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
-  lints:
+  logger:
     dependency: transitive
     description:
-      name: lints
-      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
+      name: logger
+      sha256: c40f9ef51e5bffb4ce69ad2d8c8aad7bd47ec109c090521109b63a4e2bc27191
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "1.2.2"
   logging:
     dependency: transitive
     description:
@@ -581,6 +597,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  pubspec:
+    dependency: transitive
+    description:
+      name: pubspec
+      sha256: f534a50a2b4d48dc3bc0ec147c8bd7c304280fff23b153f3f11803c4d49d927e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  pubspec_dependency_sorter:
+    dependency: "direct dev"
+    description:
+      name: pubspec_dependency_sorter
+      sha256: "001959f4eb5055df9f06bc842e5bb2b95773743deb33371e028432794975f3d5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   pubspec_parse:
     dependency: transitive
     description:
@@ -589,6 +621,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
   riverpod:
     dependency: transitive
     description:
@@ -794,6 +834,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  uri:
+    dependency: transitive
+    description:
+      name: uri
+      sha256: "889eea21e953187c6099802b7b4cf5219ba8f3518f604a1033064d45b1b8268a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  uuid:
+    dependency: "direct main"
+    description:
+      name: uuid
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.7"
   vector_math:
     dependency: transitive
     description:
@@ -802,6 +858,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  very_good_analysis:
+    dependency: "direct dev"
+    description:
+      name: very_good_analysis
+      sha256: ebc48c51db35beeeec8c414e32f7bd78e612bd7f5992ccb0d46e19edaeb40b08
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0+1"
   watcher:
     dependency: transitive
     description:

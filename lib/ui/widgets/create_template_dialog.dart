@@ -1,16 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 Future<Template?> showCreateTemplateDialog(
   BuildContext context,
   Workout workout,
 ) async {
-  return await showDialog(
+  return showDialog(
     context: context,
     builder: (context) => CreateTemplateDialog(workout: workout),
   );
@@ -21,7 +21,7 @@ class CreateTemplateDialog extends HookConsumerWidget {
   final Workout workout;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController();
     final color = useState<Color>(Colors.red);
     final name = useState<String>('');

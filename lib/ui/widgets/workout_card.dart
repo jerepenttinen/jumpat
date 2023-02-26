@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
@@ -16,7 +16,7 @@ class WorkoutCard extends ConsumerWidget {
   final Workout workout;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final movementsAsync = ref.watch(watchMovementsProvider(workout));
     final templateAsync = ref.watch(watchWorkoutTemplateProvider(workout));
     final t = AppLocalizations.of(context)!;
@@ -45,14 +45,15 @@ class WorkoutCard extends ConsumerWidget {
               onSelected: (value) async {
                 switch (value) {
                   case CardMenuItem.edit:
-                    context.router.push(EditWorkoutRoute(workout: workout));
+                    await context.router.push(
+                      EditWorkoutRoute(workout: workout),
+                    );
                     break;
                   case CardMenuItem.delete:
-                    confirmDelete(context).then((value) {
-                      if (value) {
-                        ref.read(deleteWorkoutProvider(workout));
-                      }
-                    });
+                    final delete = await confirmDelete(context);
+                    if (delete ?? false) {
+                      ref.read(deleteWorkoutProvider(workout));
+                    }
                     break;
                   case CardMenuItem.asTemplate:
                     await showCreateTemplateDialog(context, workout);
@@ -107,7 +108,7 @@ class WorkoutCardMovementLine extends ConsumerWidget {
         ref.watch(watchExerciseProvider(movement.exercise.value!));
     return exerciseAsync.maybeWhen(
       data: (exercise) => Text(
-        '${exercise.name} ${movement.weight.toString()}kg ${movement.sets.toString()}',
+        '${exercise.name} ${movement.weight}kg ${movement.sets}',
       ),
       orElse: () => const SizedBox(),
     );

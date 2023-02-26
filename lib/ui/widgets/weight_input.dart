@@ -10,7 +10,7 @@ class WeightInput extends HookWidget {
     super.key,
   });
   final double initial;
-  final Future Function(double) onWeightChanged;
+  final Future<void> Function(double) onWeightChanged;
 
   void selectAll(TextEditingController controller) {
     controller.selection = TextSelection(

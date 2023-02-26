@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/settings_provider.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -15,7 +15,7 @@ class SettingsPage extends ConsumerWidget {
         title: Text(t.settingsTitle),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Wrap(
           runSpacing: 20,
           children: const [
@@ -64,7 +64,7 @@ class DefaultRepCount extends HookConsumerWidget {
   const DefaultRepCount({super.key});
 
   @override
-  Widget build(context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final defaultRepCount = ref.watch(defaultRepCountProvider);
     final t = AppLocalizations.of(context)!;
     return Column(

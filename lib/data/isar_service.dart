@@ -4,19 +4,19 @@ import 'package:isar/isar.dart';
 import 'package:jumpat/data/tables.dart';
 
 class IsarService {
-  final Isar isar;
   IsarService({required this.isar});
+  final Isar isar;
 
   Future<void> deleteWorkout(Workout workout) async {
-    await isar.writeTxn(() async => await isar.workouts.delete(workout.id));
+    await isar.writeTxn(() async => isar.workouts.delete(workout.id));
   }
 
   Future<void> deleteMovement(Movement movement) async {
-    await isar.writeTxn(() async => await isar.movements.delete(movement.id));
+    await isar.writeTxn(() async => isar.movements.delete(movement.id));
   }
 
   Future<Workout> saveWorkout(Workout workout) async {
-    return await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       final id = await isar.workouts.put(workout);
       await workout.template.save();
       return Future.value(await isar.workouts.get(id));
@@ -27,7 +27,7 @@ class IsarService {
     final exercise = movement.exercise.value;
     final workout = movement.workout.value;
 
-    return await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       exercise?.movements.add(movement);
       workout?.movements.add(movement);
 
@@ -45,7 +45,7 @@ class IsarService {
     required Workout workout,
     required Exercise exercise,
   }) async {
-    return await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       final movement = Movement()
         ..sets = []
         ..weight = 0
@@ -106,7 +106,7 @@ class IsarService {
   }
 
   Future<Exercise> createExercise(String name) async {
-    return await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       final exercise = Exercise()..name = name;
       final id = await isar.exercises.put(exercise);
 
@@ -115,7 +115,7 @@ class IsarService {
   }
 
   Future<bool> existsExercise(String name) async {
-    return await isar.exercises
+    return isar.exercises
         .filter()
         .nameEqualTo(name, caseSensitive: false)
         .isNotEmpty();
@@ -128,7 +128,7 @@ class IsarService {
   }) async {
     final exercises = workout.movements.map((e) => e.exercise.value!).toList();
 
-    return await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       final template = Template()
         ..name = name
         ..color = color.value
@@ -146,7 +146,7 @@ class IsarService {
   }
 
   Future<Exercise> saveExercise(Exercise exercise) async {
-    return await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       await isar.exercises.put(exercise);
       return exercise;
     });

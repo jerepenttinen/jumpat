@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<Template?> chooseTemplateDialog(BuildContext context) async {
-  return await showDialog<Template>(
+  return showDialog<Template>(
     context: context,
     builder: (context) => const ChooseTemplateDialog(),
   );

@@ -1,20 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/choose_template_dialog.dart';
 import 'package:jumpat/ui/widgets/watching_list.dart';
 import 'package:jumpat/ui/widgets/workout_card.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WorkoutsPage extends ConsumerWidget {
   const WorkoutsPage({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
     final fabKey = GlobalKey<ExpandableFabState>();
     return Scaffold(
@@ -70,7 +70,7 @@ class WorkoutsPage extends ConsumerWidget {
                       .read(createMovementProvider(workout, exercise).future);
                 }
                 if (context.mounted) {
-                  context.router.push(EditWorkoutRoute(workout: workout));
+                  await context.router.push(EditWorkoutRoute(workout: workout));
                 }
               }
             },
@@ -87,7 +87,7 @@ class WorkoutsPage extends ConsumerWidget {
                     .future,
               );
               if (context.mounted) {
-                context.router.push(EditWorkoutRoute(workout: workout));
+                await context.router.push(EditWorkoutRoute(workout: workout));
               }
             },
           ),

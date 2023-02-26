@@ -1,18 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jumpat/ui/widgets/watching_list.dart';
 
 class ExercisesPage extends ConsumerWidget {
   const ExercisesPage({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.exercises),
@@ -30,7 +29,7 @@ class ExerciseListItem extends ConsumerWidget {
   final Exercise exercise;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       title: Text(exercise.name),
       trailing: IconButton(
@@ -59,7 +58,7 @@ Future<String?> showChangeExerciseName(
 ) async {
   final t = AppLocalizations.of(context)!;
   final controller = TextEditingController(text: exercise.name);
-  return await showDialog(
+  return showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(

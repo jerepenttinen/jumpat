@@ -1,28 +1,28 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/widgets/weight_input.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditMovementPage extends ConsumerWidget {
   const EditMovementPage({required this.movement, super.key});
   final Movement movement;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
     final movementAsync = ref.watch(watchMovementProvider(movement));
 
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
+        final currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
@@ -69,7 +69,7 @@ class EditMovementPage extends ConsumerWidget {
             body: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: WeightInput(
                     initial: movement.weight,
                     onWeightChanged: (weight) async {
@@ -118,7 +118,7 @@ class SetsList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final movementAsync = ref.watch(watchMovementProvider(movement));
     return movementAsync.when(
-      data: (movement) => _createList(movement),
+      data: _createList,
       error: (err, stack) => Text('$err'),
       loading: () => _createList(movement),
     );

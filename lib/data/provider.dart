@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/isar_service.dart';
 import 'package:jumpat/data/tables.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'provider.g.dart';
 
