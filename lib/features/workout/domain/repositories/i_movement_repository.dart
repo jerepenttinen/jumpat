@@ -6,6 +6,7 @@ import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
 
 abstract class IMovementRepository {
   Stream<Either<MovementFailure, IList<MovementEntity>>> watchAll();
+  Future<Either<MovementFailure, IList<MovementEntity>>> getAll();
   Stream<Either<MovementFailure, MovementEntity>> watchOne(UniqueId id);
   Future<Either<MovementFailure, Unit>> create(MovementEntity movement);
   Future<Either<MovementFailure, Unit>> update(MovementEntity movement);

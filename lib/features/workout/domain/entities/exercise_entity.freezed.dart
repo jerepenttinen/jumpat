@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ExerciseEntity {
   UniqueId get id => throw _privateConstructorUsedError;
   ExerciseName get name => throw _privateConstructorUsedError;
-  IList<MovementEntity> get movements => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ExerciseEntityCopyWith<ExerciseEntity> get copyWith =>
@@ -31,7 +30,7 @@ abstract class $ExerciseEntityCopyWith<$Res> {
           ExerciseEntity value, $Res Function(ExerciseEntity) then) =
       _$ExerciseEntityCopyWithImpl<$Res, ExerciseEntity>;
   @useResult
-  $Res call({UniqueId id, ExerciseName name, IList<MovementEntity> movements});
+  $Res call({UniqueId id, ExerciseName name});
 }
 
 /// @nodoc
@@ -49,7 +48,6 @@ class _$ExerciseEntityCopyWithImpl<$Res, $Val extends ExerciseEntity>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? movements = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -60,10 +58,6 @@ class _$ExerciseEntityCopyWithImpl<$Res, $Val extends ExerciseEntity>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as ExerciseName,
-      movements: null == movements
-          ? _value.movements
-          : movements // ignore: cast_nullable_to_non_nullable
-              as IList<MovementEntity>,
     ) as $Val);
   }
 }
@@ -76,7 +70,7 @@ abstract class _$$_ExerciseEntityCopyWith<$Res>
       __$$_ExerciseEntityCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UniqueId id, ExerciseName name, IList<MovementEntity> movements});
+  $Res call({UniqueId id, ExerciseName name});
 }
 
 /// @nodoc
@@ -92,7 +86,6 @@ class __$$_ExerciseEntityCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? movements = null,
   }) {
     return _then(_$_ExerciseEntity(
       id: null == id
@@ -103,10 +96,6 @@ class __$$_ExerciseEntityCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as ExerciseName,
-      movements: null == movements
-          ? _value.movements
-          : movements // ignore: cast_nullable_to_non_nullable
-              as IList<MovementEntity>,
     ));
   }
 }
@@ -114,19 +103,16 @@ class __$$_ExerciseEntityCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ExerciseEntity implements _ExerciseEntity {
-  const _$_ExerciseEntity(
-      {required this.id, required this.name, required this.movements});
+  const _$_ExerciseEntity({required this.id, required this.name});
 
   @override
   final UniqueId id;
   @override
   final ExerciseName name;
-  @override
-  final IList<MovementEntity> movements;
 
   @override
   String toString() {
-    return 'ExerciseEntity(id: $id, name: $name, movements: $movements)';
+    return 'ExerciseEntity(id: $id, name: $name)';
   }
 
   @override
@@ -135,13 +121,11 @@ class _$_ExerciseEntity implements _ExerciseEntity {
         (other.runtimeType == runtimeType &&
             other is _$_ExerciseEntity &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality().equals(other.movements, movements));
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, name, const DeepCollectionEquality().hash(movements));
+  int get hashCode => Object.hash(runtimeType, id, name);
 
   @JsonKey(ignore: true)
   @override
@@ -153,15 +137,12 @@ class _$_ExerciseEntity implements _ExerciseEntity {
 abstract class _ExerciseEntity implements ExerciseEntity {
   const factory _ExerciseEntity(
       {required final UniqueId id,
-      required final ExerciseName name,
-      required final IList<MovementEntity> movements}) = _$_ExerciseEntity;
+      required final ExerciseName name}) = _$_ExerciseEntity;
 
   @override
   UniqueId get id;
   @override
   ExerciseName get name;
-  @override
-  IList<MovementEntity> get movements;
   @override
   @JsonKey(ignore: true)
   _$$_ExerciseEntityCopyWith<_$_ExerciseEntity> get copyWith =>

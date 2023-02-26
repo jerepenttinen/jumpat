@@ -7,6 +7,7 @@ import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
 
 abstract class IWorkoutRepository {
   Stream<Either<WorkoutFailure, IList<WorkoutEntity>>> watchAll();
+  Future<Either<WorkoutFailure, IList<WorkoutEntity>>> getAll();
   Stream<Either<WorkoutFailure, WorkoutEntity>> watchOne(UniqueId id);
   Stream<Either<WorkoutFailure, TemplateEntity>> watchTemplate(
     WorkoutEntity workout,

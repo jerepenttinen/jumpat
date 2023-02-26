@@ -18,7 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$WorkoutEntity {
   UniqueId get id => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
-  IList<MovementEntity> get movements => throw _privateConstructorUsedError;
   Option<TemplateEntity> get template => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,11 +31,7 @@ abstract class $WorkoutEntityCopyWith<$Res> {
           WorkoutEntity value, $Res Function(WorkoutEntity) then) =
       _$WorkoutEntityCopyWithImpl<$Res, WorkoutEntity>;
   @useResult
-  $Res call(
-      {UniqueId id,
-      DateTime date,
-      IList<MovementEntity> movements,
-      Option<TemplateEntity> template});
+  $Res call({UniqueId id, DateTime date, Option<TemplateEntity> template});
 }
 
 /// @nodoc
@@ -54,7 +49,6 @@ class _$WorkoutEntityCopyWithImpl<$Res, $Val extends WorkoutEntity>
   $Res call({
     Object? id = null,
     Object? date = null,
-    Object? movements = null,
     Object? template = null,
   }) {
     return _then(_value.copyWith(
@@ -66,10 +60,6 @@ class _$WorkoutEntityCopyWithImpl<$Res, $Val extends WorkoutEntity>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      movements: null == movements
-          ? _value.movements
-          : movements // ignore: cast_nullable_to_non_nullable
-              as IList<MovementEntity>,
       template: null == template
           ? _value.template
           : template // ignore: cast_nullable_to_non_nullable
@@ -86,11 +76,7 @@ abstract class _$$_WorkoutEntityCopyWith<$Res>
       __$$_WorkoutEntityCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {UniqueId id,
-      DateTime date,
-      IList<MovementEntity> movements,
-      Option<TemplateEntity> template});
+  $Res call({UniqueId id, DateTime date, Option<TemplateEntity> template});
 }
 
 /// @nodoc
@@ -106,7 +92,6 @@ class __$$_WorkoutEntityCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? date = null,
-    Object? movements = null,
     Object? template = null,
   }) {
     return _then(_$_WorkoutEntity(
@@ -118,10 +103,6 @@ class __$$_WorkoutEntityCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      movements: null == movements
-          ? _value.movements
-          : movements // ignore: cast_nullable_to_non_nullable
-              as IList<MovementEntity>,
       template: null == template
           ? _value.template
           : template // ignore: cast_nullable_to_non_nullable
@@ -134,23 +115,18 @@ class __$$_WorkoutEntityCopyWithImpl<$Res>
 
 class _$_WorkoutEntity implements _WorkoutEntity {
   const _$_WorkoutEntity(
-      {required this.id,
-      required this.date,
-      required this.movements,
-      required this.template});
+      {required this.id, required this.date, required this.template});
 
   @override
   final UniqueId id;
   @override
   final DateTime date;
   @override
-  final IList<MovementEntity> movements;
-  @override
   final Option<TemplateEntity> template;
 
   @override
   String toString() {
-    return 'WorkoutEntity(id: $id, date: $date, movements: $movements, template: $template)';
+    return 'WorkoutEntity(id: $id, date: $date, template: $template)';
   }
 
   @override
@@ -160,14 +136,12 @@ class _$_WorkoutEntity implements _WorkoutEntity {
             other is _$_WorkoutEntity &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.date, date) || other.date == date) &&
-            const DeepCollectionEquality().equals(other.movements, movements) &&
             (identical(other.template, template) ||
                 other.template == template));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, date,
-      const DeepCollectionEquality().hash(movements), template);
+  int get hashCode => Object.hash(runtimeType, id, date, template);
 
   @JsonKey(ignore: true)
   @override
@@ -180,15 +154,12 @@ abstract class _WorkoutEntity implements WorkoutEntity {
   const factory _WorkoutEntity(
       {required final UniqueId id,
       required final DateTime date,
-      required final IList<MovementEntity> movements,
       required final Option<TemplateEntity> template}) = _$_WorkoutEntity;
 
   @override
   UniqueId get id;
   @override
   DateTime get date;
-  @override
-  IList<MovementEntity> get movements;
   @override
   Option<TemplateEntity> get template;
   @override
