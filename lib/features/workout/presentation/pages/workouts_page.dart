@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
-import 'package:jumpat/features/workout/providers.dart';
 
 class WorkoutsPage extends ConsumerWidget {
   const WorkoutsPage({super.key});

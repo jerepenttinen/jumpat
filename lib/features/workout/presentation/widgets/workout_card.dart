@@ -1,10 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/features/workout/application/movement/movement_providers.dart';
+import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
-import 'package:jumpat/features/workout/providers.dart';
 
 enum CardMenuItem { edit, asTemplate, delete }
 
