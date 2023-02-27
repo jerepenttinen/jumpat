@@ -24,9 +24,11 @@ class MovementRepository implements IMovementRepository {
   }
 
   @override
-  Future<Either<MovementFailure, Unit>> update(MovementEntity movement) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<Either<MovementFailure, Unit>> update(MovementEntity movement) async {
+    await client.writeTxn(
+      () => client.movements.put(MovementEntityConverter().toInfra(movement)),
+    );
+    return right(unit);
   }
 
   @override
@@ -49,7 +51,7 @@ class MovementRepository implements IMovementRepository {
           (q) => q.idEqualTo(workout.id.getOrCrash()),
         )
         .findAll();
-    return Right(movements.map(MovementEntityConverter().toDomain).toIList());
+    return right(movements.map(MovementEntityConverter().toDomain).toIList());
   }
 
   @override
@@ -69,6 +71,6 @@ class MovementRepository implements IMovementRepository {
       },
     );
 
-    return Right(movement);
+    return right(movement);
   }
 }

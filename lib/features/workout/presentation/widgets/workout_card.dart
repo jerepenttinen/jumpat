@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/workout/application/movement/movement_providers.dart';
 import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
+import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 
@@ -17,7 +18,7 @@ class WorkoutCard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
     final workout = ref.watch(currentWorkoutProvider);
-    final movements = ref.watch(movementListControllerProvider);
+    final movementsAsync = ref.watch(movementListControllerProvider);
 
     ref.listen(movementCreateControllerprovider, (previous, next) {
       next.maybeWhen(
@@ -66,7 +67,7 @@ class WorkoutCard extends HookConsumerWidget {
                   case CardMenuItem.asTemplate:
                     await ref
                         .read(movementCreateControllerprovider.notifier)
-                        .handle();
+                        .handle(ExerciseEntity.create(name: 'testi'));
                     break;
                 }
               },
@@ -88,7 +89,7 @@ class WorkoutCard extends HookConsumerWidget {
           ),
           Container(
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            child: movements.maybeWhen(
+            child: movementsAsync.maybeWhen(
               data: (movements) => ListBody(
                 children: movements.map(_buildMovementLine).toList(),
               ),

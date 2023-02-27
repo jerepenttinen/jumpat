@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/features/workout/application/movement/movement_providers.dart';
 import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
@@ -12,14 +11,27 @@ import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 
-class EditWorkoutPage extends ConsumerWidget {
+class EditWorkoutPage extends HookConsumerWidget {
   const EditWorkoutPage({required this.workout, super.key});
   final WorkoutEntity workout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
-    // final workoutAsync = ref.watch(watchWorkoutProvider(workout));
+    // ref.listen(movementCreateControllerprovider, (previous, next) {
+    //   next.maybeWhen(
+    //     data: (data) {
+    //       data.match(
+    //         () {},
+    //         (movement) {
+    //           context.router.push(EditMovementRoute(movement: movement));
+    //         },
+    //       );
+    //     },
+    //     orElse: () {},
+    //   );
+    // });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(t.workoutDateShort(workout.date)),
@@ -51,19 +63,16 @@ class EditWorkoutPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         heroTag: UniqueKey(),
         onPressed: () async {
-          // final exercise = await selectExerciseDialog(context);
+          final exercise = await selectExerciseDialog(context);
 
-          // if (exercise == null) {
-          //   return;
-          // }
-
-          // final movement = await ref.read(
-          //   createMovementProvider(workout, exercise).future,
-          // );
-
-          // if (context.mounted) {
-          //   await context.router.push(EditMovementRoute(movement: movement));
-          // }
+          await exercise.match(
+            () => null,
+            (exercise) async {
+              await ref
+                  .read(movementCreateControllerprovider.notifier)
+                  .handle(exercise);
+            },
+          );
         },
         child: const Icon(Icons.add),
       ),
@@ -77,6 +86,23 @@ class MovementsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final movementsAsync = ref.watch(movementListControllerProvider);
+
+    ref.listen(movementCreateControllerprovider, (previous, next) {
+      next.maybeWhen(
+        data: (data) {
+          data.match(
+            () {},
+            (movement) {
+              ref
+                  .read(movementListControllerProvider.notifier)
+                  .addMovement(movement);
+            },
+          );
+        },
+        orElse: () {},
+      );
+    });
+
     return movementsAsync.when(
       data: (movements) => ListView.builder(
         itemCount: movements.length,
@@ -103,6 +129,18 @@ class MovementsListItem extends ConsumerWidget {
     final weight = movement.weight.getOrCrash();
     final sets = movement.sets.map((set) => set.getOrCrash()).toIList();
 
+    ref.listen(movementEditControllerProvider(movement), (previous, next) {
+      next.maybeWhen(
+        data: (movement) {
+          print(movement);
+          ref
+              .read(movementListControllerProvider.notifier)
+              .updateMovement(movement);
+        },
+        orElse: () {},
+      );
+    });
+
     return Slidable(
       key: UniqueKey(),
       startActionPane: ActionPane(
@@ -114,7 +152,7 @@ class MovementsListItem extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) {
-              // context.router.push(EditMovementRoute(movement: movement));
+              context.router.push(EditMovementRoute(movement: movement));
             },
           )
         ],

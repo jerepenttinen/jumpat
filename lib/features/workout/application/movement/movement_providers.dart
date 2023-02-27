@@ -1,8 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/core/providers.dart';
 import 'package:jumpat/features/workout/application/movement/movement_create_controller.dart';
+import 'package:jumpat/features/workout/application/movement/movement_edit_controller.dart';
 import 'package:jumpat/features/workout/application/movement/movement_list_controller.dart';
 import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
@@ -34,6 +36,15 @@ final movementCreateControllerprovider = StateNotifierProvider<
   (ref) {
     final repo = ref.watch(movementRepositoryProvider);
     return MovementCreateController(repo);
+  },
+  dependencies: [movementRepositoryProvider],
+);
+
+final movementEditControllerProvider = StateNotifierProvider.family<
+    MovementEditController, AsyncValue<MovementEntity>, MovementEntity>(
+  (ref, movement) {
+    final repo = ref.watch(movementRepositoryProvider);
+    return MovementEditController(repo, movement);
   },
   dependencies: [movementRepositoryProvider],
 );

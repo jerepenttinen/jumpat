@@ -11,11 +11,10 @@ class MovementCreateController
 
   final IMovementRepository _movementRepository;
 
-  Future<void> handle() async {
+  Future<void> handle(ExerciseEntity exercise) async {
     state = const AsyncValue.loading();
 
-    final res =
-        await _movementRepository.create(ExerciseEntity.create(name: 'testi'));
+    final res = await _movementRepository.create(exercise);
     state = res.fold(
       (l) => AsyncValue.error(l, StackTrace.current),
       (r) => AsyncValue.data(some(r)),

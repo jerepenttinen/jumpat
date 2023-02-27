@@ -51,20 +51,20 @@ class EditWorkoutPage extends ConsumerWidget {
           floatingActionButton: FloatingActionButton(
             heroTag: UniqueKey(),
             onPressed: () async {
-              final exercise = await selectExerciseDialog(context);
+              // final exercise = await selectExerciseDialog(context);
 
-              if (exercise == null) {
-                return;
-              }
+              // if (exercise == null) {
+              //   return;
+              // }
 
-              final movement = await ref.read(
-                createMovementProvider(workout, exercise).future,
-              );
+              // final movement = await ref.read(
+              //   createMovementProvider(workout, exercise).future,
+              // );
 
-              if (context.mounted) {
-                await context.router
-                    .push(EditMovementRoute(movement: movement));
-              }
+              // if (context.mounted) {
+              //   await context.router
+              //       .push(EditMovementRoute(movement: movement));
+              // }
             },
             child: const Icon(Icons.add),
           ),
@@ -111,7 +111,7 @@ class MovementsListItem extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) {
-              context.router.push(EditMovementRoute(movement: movement));
+              // context.router.push(EditMovementRoute(movement: movement));
             },
           )
         ],

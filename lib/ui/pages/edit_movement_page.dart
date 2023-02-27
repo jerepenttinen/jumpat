@@ -51,16 +51,16 @@ class EditMovementPage extends ConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    final exercise = await selectExerciseDialog(context);
+                    // final exercise = await selectExerciseDialog(context);
 
-                    if (exercise == null) {
-                      return;
-                    }
+                    // if (exercise == null) {
+                    //   return;
+                    // }
 
-                    movement.exercise.value = exercise;
+                    // movement.exercise.value = exercise;
 
-                    exercise.movements.add(movement);
-                    await ref.read(saveMovementProvider(movement).future);
+                    // exercise.movements.add(movement);
+                    // await ref.read(saveMovementProvider(movement).future);
                   },
                   icon: const Icon(Icons.edit),
                 ),
@@ -85,21 +85,21 @@ class EditMovementPage extends ConsumerWidget {
             floatingActionButton: FloatingActionButton(
               heroTag: UniqueKey(),
               onPressed: () async {
-                FocusScope.of(context).requestFocus(FocusNode());
+                // FocusScope.of(context).requestFocus(FocusNode());
 
-                final defaultRepCount = movement.sets.isNotEmpty
-                    ? movement.sets.last
-                    : ref.read(defaultRepCountProvider);
+                // final defaultRepCount = movement.sets.isNotEmpty
+                //     ? movement.sets.last
+                //     : ref.read(defaultRepCountProvider);
 
-                final count =
-                    await chooseRepCountDialog(context, defaultRepCount);
-                if (count == null) {
-                  return;
-                }
+                // final count =
+                //     await chooseRepCountDialog(context, defaultRepCount);
+                // if (count == null) {
+                //   return;
+                // }
 
-                movement.sets = [...movement.sets, count];
+                // movement.sets = [...movement.sets, count];
 
-                await ref.read(saveMovementProvider(movement).future);
+                // await ref.read(saveMovementProvider(movement).future);
               },
               child: const Icon(Icons.add),
             ),
@@ -165,15 +165,15 @@ class SetsListItem extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.delete,
             onPressed: (context) async {
-              final count = await chooseRepCountDialog(context, repCount);
-              if (count == null) {
-                return;
-              }
-              final newSets = [...sets];
-              newSets[index] = count;
-              movement.sets = newSets;
+              // final count = await chooseRepCountDialog(context, repCount);
+              // if (count == null) {
+              //   return;
+              // }
+              // final newSets = [...sets];
+              // newSets[index] = count;
+              // movement.sets = newSets;
 
-              await ref.read(saveMovementProvider(movement).future);
+              // await ref.read(saveMovementProvider(movement).future);
             },
           )
         ],

@@ -156,7 +156,7 @@ class EditWorkoutRouteArgs {
 /// [EditMovementPage]
 class EditMovementRoute extends PageRouteInfo<EditMovementRouteArgs> {
   EditMovementRoute({
-    required Movement movement,
+    required MovementEntity movement,
     Key? key,
   }) : super(
           EditMovementRoute.name,
@@ -176,7 +176,7 @@ class EditMovementRouteArgs {
     this.key,
   });
 
-  final Movement movement;
+  final MovementEntity movement;
 
   final Key? key;
 

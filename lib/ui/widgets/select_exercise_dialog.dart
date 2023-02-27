@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
+import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/transformers.dart';
 
-Future<Exercise?> selectExerciseDialog(BuildContext context) async {
+Future<Option<ExerciseEntity>> selectExerciseDialog(
+  BuildContext context,
+) async {
   final t = AppLocalizations.of(context)!;
-  return showDialog<Exercise>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text(t.exercise),
-      content: const SelectExercise(),
+  return Option.fromNullable(
+    await showDialog<ExerciseEntity>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(t.exercise),
+        content: const SelectExercise(),
+      ),
     ),
   );
 }
