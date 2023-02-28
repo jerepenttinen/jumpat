@@ -1,12 +1,11 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
-import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/domain/values/movement_set.dart';
+import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'movement.g.dart';
@@ -45,7 +44,7 @@ class Movements extends _$Movements {
 
     await movement.match(
       (l) => null,
-      (r) async => await update((currentList) {
+      (r) async => update((currentList) {
         return currentList.add(r);
       }),
     );

@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$MovementsHash() => r'125a953c92d1fd8f0431e1bfcc2eae52edffe1cb';
+String _$MovementsHash() => r'28c871b24ddf207b290eae0fc135615d8a1077f1';
 
 /// See also [Movements].
 class MovementsProvider

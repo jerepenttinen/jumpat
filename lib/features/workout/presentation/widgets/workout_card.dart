@@ -56,7 +56,9 @@ class WorkoutCard extends HookConsumerWidget {
                     case CardMenuItem.delete:
                       final delete = await confirmDelete(context);
                       if (delete ?? false) {
-                        ref.read(workoutsProvider.notifier).remove(workout);
+                        await ref
+                            .read(workoutsProvider.notifier)
+                            .remove(workout);
                       }
                       break;
                     case CardMenuItem.asTemplate:

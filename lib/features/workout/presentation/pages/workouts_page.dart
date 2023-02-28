@@ -146,7 +146,8 @@ class WorkoutsFab extends ConsumerWidget {
           child: const Icon(Icons.add),
           onPressed: () async {
             fabKey.currentState?.toggle();
-            // await ref.read(workoutCreateControllerprovider.notifier).handle();
+            // await ref
+            // .read(workoutCreateControllerprovider.notifier).handle();
             // final workout = await ref.read(
             //   saveWorkoutProvider(workout: Workout()..date = DateTime.now())
             //       .future,
