@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
+import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
 
 class WorkoutsPage extends ConsumerWidget {
@@ -27,17 +27,14 @@ class WorkoutsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final workouts = ref.watch(workoutListControllerProvider);
+    final workouts = ref.watch(workoutsProvider);
     return workouts.when(
       error: (error, stackTrace) => Center(child: Text('$error')),
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (workouts) => ListView.builder(
         itemCount: workouts.length,
-        itemBuilder: (context, index) => ProviderScope(
-          overrides: [
-            currentWorkoutProvider.overrideWithValue(workouts[index]),
-          ],
-          child: const WorkoutCard(),
+        itemBuilder: (context, index) => WorkoutCard(
+          workoutId: workouts[index].id,
         ),
       ),
     );
@@ -91,22 +88,6 @@ class WorkoutsFab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(workoutCreateControllerprovider, (previous, next) {
-      next.maybeWhen(
-        data: (data) {
-          data.match(
-            () {},
-            (workout) {
-              ref
-                  .read(workoutListControllerProvider.notifier)
-                  .addWorkout(workout);
-            },
-          );
-        },
-        orElse: () {},
-      );
-    });
-
     final t = AppLocalizations.of(context)!;
     final fabKey = GlobalKey<ExpandableFabState>();
     return ExpandableFab(
@@ -165,7 +146,7 @@ class WorkoutsFab extends ConsumerWidget {
           child: const Icon(Icons.add),
           onPressed: () async {
             fabKey.currentState?.toggle();
-            await ref.read(workoutCreateControllerprovider.notifier).handle();
+            // await ref.read(workoutCreateControllerprovider.notifier).handle();
             // final workout = await ref.read(
             //   saveWorkoutProvider(workout: Workout()..date = DateTime.now())
             //       .future,

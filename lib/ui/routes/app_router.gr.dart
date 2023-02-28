@@ -28,7 +28,7 @@ class _$AppRouter extends RootStackRouter {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: EditWorkoutPage(
-          workout: args.workout,
+          workoutId: args.workoutId,
           key: args.key,
         ),
       );
@@ -38,7 +38,7 @@ class _$AppRouter extends RootStackRouter {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: EditMovementPage(
-          movement: args.movement,
+          movementId: args.movementId,
           key: args.key,
         ),
       );
@@ -122,13 +122,13 @@ class WorkoutsRoute extends PageRouteInfo<void> {
 /// [EditWorkoutPage]
 class EditWorkoutRoute extends PageRouteInfo<EditWorkoutRouteArgs> {
   EditWorkoutRoute({
-    required WorkoutEntity workout,
+    required UniqueId workoutId,
     Key? key,
   }) : super(
           EditWorkoutRoute.name,
           path: '/edit-workout-page',
           args: EditWorkoutRouteArgs(
-            workout: workout,
+            workoutId: workoutId,
             key: key,
           ),
         );
@@ -138,17 +138,17 @@ class EditWorkoutRoute extends PageRouteInfo<EditWorkoutRouteArgs> {
 
 class EditWorkoutRouteArgs {
   const EditWorkoutRouteArgs({
-    required this.workout,
+    required this.workoutId,
     this.key,
   });
 
-  final WorkoutEntity workout;
+  final UniqueId workoutId;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'EditWorkoutRouteArgs{workout: $workout, key: $key}';
+    return 'EditWorkoutRouteArgs{workoutId: $workoutId, key: $key}';
   }
 }
 
@@ -156,13 +156,13 @@ class EditWorkoutRouteArgs {
 /// [EditMovementPage]
 class EditMovementRoute extends PageRouteInfo<EditMovementRouteArgs> {
   EditMovementRoute({
-    required MovementEntity movement,
+    required UniqueId movementId,
     Key? key,
   }) : super(
           EditMovementRoute.name,
           path: '/edit-movement-page',
           args: EditMovementRouteArgs(
-            movement: movement,
+            movementId: movementId,
             key: key,
           ),
         );
@@ -172,17 +172,17 @@ class EditMovementRoute extends PageRouteInfo<EditMovementRouteArgs> {
 
 class EditMovementRouteArgs {
   const EditMovementRouteArgs({
-    required this.movement,
+    required this.movementId,
     this.key,
   });
 
-  final MovementEntity movement;
+  final UniqueId movementId;
 
   final Key? key;
 
   @override
   String toString() {
-    return 'EditMovementRouteArgs{movement: $movement, key: $key}';
+    return 'EditMovementRouteArgs{movementId: $movementId, key: $key}';
   }
 }
 

@@ -3,13 +3,16 @@ import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
+import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
 
 abstract class IMovementRepository {
-  Stream<Either<MovementFailure, IList<MovementEntity>>> watchAll();
-  Future<Either<MovementFailure, IList<MovementEntity>>> getAll();
-  Stream<Either<MovementFailure, MovementEntity>> watchOne(UniqueId id);
+  Future<IList<MovementEntity>> getAll(
+    WorkoutEntity workout,
+  );
+  Future<MovementEntity> get(UniqueId id);
   Future<Either<MovementFailure, MovementEntity>> create(
+    WorkoutEntity workoutEntity,
     ExerciseEntity exercise,
   );
   Future<Either<MovementFailure, Unit>> update(MovementEntity movement);

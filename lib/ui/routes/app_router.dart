@@ -10,6 +10,7 @@ import 'package:jumpat/ui/pages/exercise_history_page.dart';
 import 'package:jumpat/ui/pages/exercises_page.dart';
 import 'package:jumpat/ui/pages/settings_page.dart';
 import 'package:jumpat/ui/pages/templates_page.dart';
+import 'package:jumpat/features/core/domain/unique_id.dart';
 
 part 'app_router.gr.dart';
 

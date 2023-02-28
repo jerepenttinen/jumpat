@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:isar/isar.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
@@ -12,10 +13,9 @@ import 'package:jumpat/features/workout/infrastructure/repositories/exercise_ent
 import 'package:jumpat/features/workout/infrastructure/repositories/movement_entity_converter.dart';
 
 class MovementRepository implements IMovementRepository {
-  MovementRepository({required this.workout, required this.client});
+  MovementRepository({required this.client});
 
   final Isar client;
-  final WorkoutEntity workout;
 
   @override
   Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) {
@@ -32,30 +32,21 @@ class MovementRepository implements IMovementRepository {
   }
 
   @override
-  Stream<Either<MovementFailure, IList<MovementEntity>>> watchAll() {
-    // TODO: implement watchAll
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<Either<MovementFailure, MovementEntity>> watchOne(UniqueId id) {
-    // TODO: implement watchOne
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<MovementFailure, IList<MovementEntity>>> getAll() async {
+  Future<IList<MovementEntity>> getAll(
+    WorkoutEntity workout,
+  ) async {
     final movements = await client.movements
         .filter()
         .workout(
           (q) => q.idEqualTo(workout.id.getOrCrash()),
         )
         .findAll();
-    return right(movements.map(MovementEntityConverter().toDomain).toIList());
+    return movements.map(MovementEntityConverter().toDomain).toIList();
   }
 
   @override
   Future<Either<MovementFailure, MovementEntity>> create(
+    WorkoutEntity workout,
     ExerciseEntity exercise,
   ) async {
     final movement =
@@ -72,5 +63,11 @@ class MovementRepository implements IMovementRepository {
     );
 
     return right(movement);
+  }
+
+  @override
+  Future<MovementEntity> get(UniqueId id) async {
+    final result = await client.movements.get(fastHash(id.getOrCrash()));
+    return MovementEntityConverter().toDomain(result!);
   }
 }

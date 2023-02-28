@@ -7,9 +7,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/data/tables.dart';
-import 'package:jumpat/features/workout/application/movement/movement_providers.dart';
-import 'package:jumpat/features/workout/application/workout/workout_providers.dart';
+import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
+import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/values/movement_set.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
@@ -17,107 +18,99 @@ import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/widgets/weight_input.dart';
 
 class EditMovementPage extends ConsumerWidget {
-  const EditMovementPage({required this.movement, super.key});
-  final MovementEntity movement;
+  const EditMovementPage({required this.movementId, super.key});
+  final UniqueId movementId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ProviderScope(
-      overrides: [currentWorkoutProvider.overrideWithValue(movement.workout)],
-      child: EditMovementView(movement: movement),
-    );
-  }
-}
-
-class EditMovementView extends ConsumerWidget {
-  const EditMovementView({required this.movement, super.key});
-  final MovementEntity movement;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () {
-        final currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            movement.exercise.name.getOrCrash(),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // context.router.push(
-                //   ExerciseHistoryRoute(
-                //     exercise: movement.exercise,
-                //   ),
-                // );
-              },
-              icon: const Icon(Icons.history),
+    final movementAsync = ref.watch(movementStateProvider(id: movementId));
+    return movementAsync.maybeWhen(
+      orElse: () => const SizedBox(),
+      data: (movement) => GestureDetector(
+        onTap: () {
+          final currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              movement.exercise.name.getOrCrash(),
             ),
-            IconButton(
-              onPressed: () async {
-                // final exercise = await selectExerciseDialog(context);
-
-                // if (exercise == null) {
-                //   return;
-                // }
-
-                // movement.exercise.value = exercise;
-
-                // exercise.movements.add(movement);
-                // await ref.read(saveMovementProvider(movement).future);
-              },
-              icon: const Icon(Icons.edit),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: WeightInput(
-                initial: movement.weight.getOrCrash(),
-                onWeightChanged: (weight) async {
-                  // await ref.read(
-                  //   saveMovementProvider(movement..weight = weight).future,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  // context.router.push(
+                  //   ExerciseHistoryRoute(
+                  //     exercise: movement.exercise,
+                  //   ),
                   // );
                 },
+                icon: const Icon(Icons.history),
               ),
-            ),
-            SetsList(movement: movement),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: UniqueKey(),
-          onPressed: () async {
-            FocusScope.of(context).requestFocus(FocusNode());
+              IconButton(
+                onPressed: () async {
+                  // final exercise = await selectExerciseDialog(context);
 
-            final defaultRepCount = movement.sets.isNotEmpty
-                ? movement.sets.last.getOrCrash()
-                : ref.read(defaultRepCountProvider);
+                  // if (exercise == null) {
+                  //   return;
+                  // }
 
-            final count = await chooseRepCountDialog(context, defaultRepCount);
+                  // movement.exercise.value = exercise;
 
-            await count.match(
-              () => null,
-              (count) async {
-                await ref
-                    .read(
-                      movementEditControllerProvider(movement).notifier,
-                    )
-                    .addSet(MovementSet(count));
-              },
-            );
+                  // exercise.movements.add(movement);
+                  // await ref.read(saveMovementProvider(movement).future);
+                },
+                icon: const Icon(Icons.edit),
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: WeightInput(
+                  initial: movement.weight.getOrCrash(),
+                  onWeightChanged: (weight) async {
+                    // await ref.read(
+                    //   saveMovementProvider(movement..weight = weight).future,
+                    // );
+                  },
+                ),
+              ),
+              SetsList(movement: movement),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            heroTag: UniqueKey(),
+            onPressed: () async {
+              FocusScope.of(context).requestFocus(FocusNode());
 
-            // movement.sets = [...movement.sets, count];
+              final defaultRepCount = movement.sets.isNotEmpty
+                  ? movement.sets.last.getOrCrash()
+                  : ref.read(defaultRepCountProvider);
 
-            // await ref.read(saveMovementProvider(movement).future);
-          },
-          child: const Icon(Icons.add),
+              final count =
+                  await chooseRepCountDialog(context, defaultRepCount);
+
+              await count.match(
+                () => null,
+                (count) async {
+                  await ref
+                      .read(
+                        movementStateProvider(id: movementId).notifier,
+                      )
+                      .addSet(MovementSet(count));
+                },
+              );
+
+              // movement.sets = [...movement.sets, count];
+
+              // await ref.read(saveMovementProvider(movement).future);
+            },
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
