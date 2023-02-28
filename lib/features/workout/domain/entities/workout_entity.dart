@@ -20,3 +20,7 @@ class WorkoutEntity with _$WorkoutEntity implements IEntity {
         template: const None(),
       );
 }
+
+int workoutEntityComparator(WorkoutEntity w1, WorkoutEntity w2) {
+  return w2.date.compareTo(w1.date);
+}

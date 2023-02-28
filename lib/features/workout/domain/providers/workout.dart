@@ -20,7 +20,10 @@ class Workouts extends _$Workouts {
     await repository.update(workout);
 
     await update((currentList) {
-      return currentList.updateById([workout], (item) => item.id);
+      return currentList.updateById(
+        [workout],
+        (item) => item.id,
+      ).sortOrdered(workoutEntityComparator);
     });
   }
 }
