@@ -18,9 +18,9 @@ class MovementRepository implements IMovementRepository {
   final Isar client;
 
   @override
-  Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) async {
+    await client.workouts.delete(fastHash(movement.id.getOrCrash()));
+    return right(unit);
   }
 
   @override

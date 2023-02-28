@@ -15,9 +15,9 @@ class WorkoutRepository implements IWorkoutRepository {
   final Isar client;
 
   @override
-  Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout) async {
+    await client.workouts.delete(fastHash(workout.id.getOrCrash()));
+    return right(unit);
   }
 
   @override
