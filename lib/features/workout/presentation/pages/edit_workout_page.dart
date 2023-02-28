@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
+import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 
@@ -17,23 +18,35 @@ class EditWorkoutPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
+    final workoutAsync = ref.watch(workoutStateProvider(id: workoutId));
     return Scaffold(
       appBar: AppBar(
-        // title: Text(t.workoutDateShort(workout.date)),
+        title: workoutAsync.maybeWhen(
+          data: (workout) => Text(t.workoutDateShort(workout.date)),
+          orElse: () => null,
+        ),
         actions: [
           IconButton(
             onPressed: () async {
-              // final newDate = await showDatePicker(
-              //   context: context,
-              //   initialDate: workout.date,
-              //   firstDate: DateTime(2010),
-              //   lastDate: DateTime(2050),
-              // );
+              final workout = await ref.read(
+                workoutStateProvider(id: workoutId).future,
+              );
+              if (context.mounted) {
+                final newDate = await showDatePicker(
+                  context: context,
+                  initialDate: workout.date,
+                  firstDate: DateTime(2010),
+                  lastDate: DateTime(2050),
+                );
 
-              // if (newDate != null) {
-              //   workout.date = newDate;
-              //   await ref.read(saveWorkoutProvider(workout: workout).future);
-              // }
+                if (newDate != null) {
+                  await ref
+                      .read(
+                        workoutStateProvider(id: workoutId).notifier,
+                      )
+                      .updateDate(newDate);
+                }
+              }
             },
             icon: const Icon(Icons.calendar_today),
           ),
@@ -61,7 +74,7 @@ class EditWorkoutPage extends HookConsumerWidget {
 }
 
 class MovementsList extends ConsumerWidget {
-  MovementsList({required this.workoutId, super.key});
+  const MovementsList({required this.workoutId, super.key});
   final UniqueId workoutId;
 
   @override
