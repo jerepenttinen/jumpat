@@ -16,7 +16,9 @@ class WorkoutRepository implements IWorkoutRepository {
 
   @override
   Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout) async {
-    await client.workouts.delete(fastHash(workout.id.getOrCrash()));
+    await client.writeTxn(
+      () => client.workouts.delete(fastHash(workout.id.getOrCrash())),
+    );
     return right(unit);
   }
 

@@ -19,7 +19,9 @@ class MovementRepository implements IMovementRepository {
 
   @override
   Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) async {
-    await client.workouts.delete(fastHash(movement.id.getOrCrash()));
+    await client.writeTxn(
+      () => client.workouts.delete(fastHash(movement.id.getOrCrash())),
+    );
     return right(unit);
   }
 

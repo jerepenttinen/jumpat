@@ -26,6 +26,15 @@ class Workouts extends _$Workouts {
       ).sortOrdered(workoutEntityComparator);
     });
   }
+
+  Future<void> remove(WorkoutEntity workout) async {
+    final repository = ref.watch(workoutRepositoryProvider);
+    await repository.delete(workout);
+
+    await update((currentList) {
+      return currentList.removeWhere((item) => item.id == workout.id);
+    });
+  }
 }
 
 @Riverpod(keepAlive: true)

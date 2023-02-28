@@ -1,20 +1,14 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/settings_provider.dart';
-import 'package:jumpat/data/tables.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
-import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/values/movement_set.dart';
-import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
-import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/widgets/weight_input.dart';
 
 class EditMovementPage extends ConsumerWidget {
