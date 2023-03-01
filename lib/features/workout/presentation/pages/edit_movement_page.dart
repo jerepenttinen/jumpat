@@ -8,8 +8,9 @@ import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/values/movement_set.dart';
+import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
+import 'package:jumpat/features/workout/presentation/widgets/weight_input.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
-import 'package:jumpat/ui/widgets/weight_input.dart';
 
 class EditMovementPage extends ConsumerWidget {
   const EditMovementPage({required this.movementId, super.key});
@@ -67,9 +68,9 @@ class EditMovementPage extends ConsumerWidget {
                 child: WeightInput(
                   initial: movement.weight.getOrCrash(),
                   onWeightChanged: (weight) async {
-                    // await ref.read(
-                    //   saveMovementProvider(movement..weight = weight).future,
-                    // );
+                    await ref
+                        .read(movementStateProvider(id: movementId).notifier)
+                        .updateWeight(MovementWeight(weight));
                   },
                 ),
               ),
@@ -98,10 +99,6 @@ class EditMovementPage extends ConsumerWidget {
                       .addSet(MovementSet(count));
                 },
               );
-
-              // movement.sets = [...movement.sets, count];
-
-              // await ref.read(saveMovementProvider(movement).future);
             },
             child: const Icon(Icons.add),
           ),

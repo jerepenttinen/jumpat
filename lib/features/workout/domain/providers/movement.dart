@@ -6,6 +6,7 @@ import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/domain/values/movement_set.dart';
+import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -72,6 +73,19 @@ class MovementState extends _$MovementState {
 
     final movement = state.value!;
     final updatedMovement = movement.copyWith(sets: movement.sets.add(set));
+    final movements =
+        ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
+    await movements.save(updatedMovement);
+    state = AsyncValue.data(updatedMovement);
+  }
+
+  Future<void> updateWeight(MovementWeight weight) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final movement = state.value!;
+    final updatedMovement = movement.copyWith(weight: weight);
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
     await movements.save(updatedMovement);
