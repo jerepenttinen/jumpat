@@ -34,18 +34,18 @@ class EditMovementPage extends ConsumerWidget {
                 movement.exercise.value?.name ?? t.unknownExercise,
               ),
               actions: [
-                IconButton(
-                  onPressed: movement.exercise.value != null
-                      ? () {
-                          context.router.push(
-                            ExerciseHistoryRoute(
-                              exercise: movement.exercise.value!,
-                            ),
-                          );
-                        }
-                      : null,
-                  icon: const Icon(Icons.history),
-                ),
+                // IconButton(
+                //   onPressed: movement.exercise.value != null
+                //       ? () {
+                //           context.router.push(
+                //             ExerciseHistoryRoute(
+                //               exercise: movement.exercise.value!,
+                //             ),
+                //           );
+                //         }
+                //       : null,
+                //   icon: const Icon(Icons.history),
+                // ),
                 IconButton(
                   onPressed: () async {
                     // final exercise = await selectExerciseDialog(context);

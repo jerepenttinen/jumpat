@@ -1,6 +1,4 @@
-import 'dart:math';
-
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -11,10 +9,11 @@ import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
-import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
+import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/presentation/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/weight_input.dart';
+import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 
 class EditMovementPage extends ConsumerWidget {
@@ -41,11 +40,11 @@ class EditMovementPage extends ConsumerWidget {
             actions: [
               IconButton(
                 onPressed: () {
-                  // context.router.push(
-                  //   ExerciseHistoryRoute(
-                  //     exercise: movement.exercise,
-                  //   ),
-                  // );
+                  context.router.push(
+                    ExerciseHistoryRoute(
+                      exercise: movement.exercise,
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.history),
               ),

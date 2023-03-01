@@ -190,7 +190,7 @@ class EditMovementRouteArgs {
 /// [ExerciseHistoryPage]
 class ExerciseHistoryRoute extends PageRouteInfo<ExerciseHistoryRouteArgs> {
   ExerciseHistoryRoute({
-    required Exercise exercise,
+    required ExerciseEntity exercise,
     Key? key,
   }) : super(
           ExerciseHistoryRoute.name,
@@ -210,7 +210,7 @@ class ExerciseHistoryRouteArgs {
     this.key,
   });
 
-  final Exercise exercise;
+  final ExerciseEntity exercise;
 
   final Key? key;
 

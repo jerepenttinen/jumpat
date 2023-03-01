@@ -10,6 +10,7 @@ abstract class IMovementRepository {
   Future<IList<MovementEntity>> getAll(
     WorkoutEntity workout,
   );
+  Future<IList<MovementEntity>> getAllByExercise(ExerciseEntity exercise);
   Future<MovementEntity> get(UniqueId id);
   Future<Either<MovementFailure, MovementEntity>> create(
     WorkoutEntity workoutEntity,

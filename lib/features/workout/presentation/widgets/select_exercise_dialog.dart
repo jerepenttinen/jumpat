@@ -50,8 +50,9 @@ class SelectExercise extends HookConsumerWidget {
           decoration: InputDecoration(hintText: t.exerciseNameHint),
           onChanged: search,
           onSubmitted: (value) async {
-            final exercise =
-                ref.read(exercisesProvider.notifier).submit(searchTerm.value);
+            final exercise = await ref
+                .read(exercisesProvider.notifier)
+                .submit(searchTerm.value);
 
             if (context.mounted) {
               Navigator.of(context).pop(exercise);

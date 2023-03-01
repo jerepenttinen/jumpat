@@ -78,4 +78,23 @@ class MovementRepository implements IMovementRepository {
     final result = await client.movements.get(fastHash(id.getOrCrash()));
     return MovementEntityConverter().toDomain(result!);
   }
+
+  @override
+  Future<IList<MovementEntity>> getAllByExercise(
+    ExerciseEntity exerciseEntity,
+  ) async {
+    final exercise = ExerciseEntityConverter().toInfra(exerciseEntity);
+    final workouts = await client.workouts
+        .filter()
+        .movements((m) => m.exercise((e) => e.isarIdEqualTo(exercise.isarId)))
+        .sortByDateDesc()
+        .findAll();
+
+    return workouts
+        .expand(
+          (w) => w.movements.where((m) => m.exercise.value?.id == exercise.id),
+        )
+        .map(MovementEntityConverter().toDomain)
+        .toIList();
+  }
 }

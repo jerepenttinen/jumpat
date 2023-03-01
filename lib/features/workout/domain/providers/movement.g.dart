@@ -200,3 +200,92 @@ abstract class _$MovementState extends BuildlessAsyncNotifier<MovementEntity> {
     required UniqueId id,
   });
 }
+
+String _$ExerciseMovementsHash() => r'eb3dfef150c80c3c1497c0fa061987d963ea5ea0';
+
+/// See also [ExerciseMovements].
+class ExerciseMovementsProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    ExerciseMovements, IList<MovementEntity>> {
+  ExerciseMovementsProvider({
+    required this.exercise,
+  }) : super(
+          () => ExerciseMovements()..exercise = exercise,
+          from: exerciseMovementsProvider,
+          name: r'exerciseMovementsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$ExerciseMovementsHash,
+        );
+
+  final ExerciseEntity exercise;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExerciseMovementsProvider && other.exercise == exercise;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, exercise.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+
+  @override
+  FutureOr<IList<MovementEntity>> runNotifierBuild(
+    covariant _$ExerciseMovements notifier,
+  ) {
+    return notifier.build(
+      exercise: exercise,
+    );
+  }
+}
+
+typedef ExerciseMovementsRef
+    = AutoDisposeAsyncNotifierProviderRef<IList<MovementEntity>>;
+
+/// See also [ExerciseMovements].
+final exerciseMovementsProvider = ExerciseMovementsFamily();
+
+class ExerciseMovementsFamily
+    extends Family<AsyncValue<IList<MovementEntity>>> {
+  ExerciseMovementsFamily();
+
+  ExerciseMovementsProvider call({
+    required ExerciseEntity exercise,
+  }) {
+    return ExerciseMovementsProvider(
+      exercise: exercise,
+    );
+  }
+
+  @override
+  AutoDisposeAsyncNotifierProviderImpl<ExerciseMovements, IList<MovementEntity>>
+      getProviderOverride(
+    covariant ExerciseMovementsProvider provider,
+  ) {
+    return call(
+      exercise: provider.exercise,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'exerciseMovementsProvider';
+}
+
+abstract class _$ExerciseMovements
+    extends BuildlessAutoDisposeAsyncNotifier<IList<MovementEntity>> {
+  late final ExerciseEntity exercise;
+
+  FutureOr<IList<MovementEntity>> build({
+    required ExerciseEntity exercise,
+  });
+}

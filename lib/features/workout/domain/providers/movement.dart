@@ -123,3 +123,13 @@ class MovementState extends _$MovementState {
     state = AsyncValue.data(updatedMovement);
   }
 }
+
+@riverpod
+class ExerciseMovements extends _$ExerciseMovements {
+  @override
+  Future<IList<MovementEntity>> build({required ExerciseEntity exercise}) {
+    final repository = ref.watch(movementRepositoryProvider);
+
+    return repository.getAllByExercise(exercise);
+  }
+}

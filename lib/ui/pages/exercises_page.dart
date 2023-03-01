@@ -45,7 +45,7 @@ class ExerciseListItem extends ConsumerWidget {
       leading: IconButton(
         icon: const Icon(Icons.history),
         onPressed: () {
-          context.router.push(ExerciseHistoryRoute(exercise: exercise));
+          // context.router.push(ExerciseHistoryRoute(exercise: exercise));
         },
       ),
     );
