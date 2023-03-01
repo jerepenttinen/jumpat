@@ -60,7 +60,7 @@ class WorkoutsDrawer extends StatelessWidget {
               leading: const Icon(Icons.list_alt),
               onTap: () {
                 Navigator.pop(context);
-                // context.router.push(const TemplatesRoute());
+                context.router.push(const TemplatesRoute());
               },
             ),
             ListTile(
@@ -76,7 +76,7 @@ class WorkoutsDrawer extends StatelessWidget {
               leading: const Icon(Icons.settings),
               onTap: () {
                 Navigator.pop(context);
-                // context.router.push(const SettingsRoute());
+                context.router.push(const SettingsRoute());
               },
             ),
           ],

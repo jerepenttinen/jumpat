@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
-import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/features/core/infrastructure/isar.dart';
 import 'package:jumpat/features/core/providers.dart';
+import 'package:jumpat/features/settings/domain/providers.dart';
+import 'package:jumpat/features/settings/infrastructure/providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -18,7 +19,6 @@ void main() async {
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
         isarInstanceProvider.overrideWithValue(isar),
-        // isarServiceProvider.overrideWithValue(IsarService(isar: isar)),
       ],
       child: MyApp(),
     ),
@@ -32,7 +32,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final providedLocale = ref.watch(localeProvider);
+    final providedLocale = ref.watch(localeStateProvider);
 
     return MaterialApp.router(
       locale: providedLocale,
