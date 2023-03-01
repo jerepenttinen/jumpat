@@ -8,6 +8,7 @@ import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/confirm_delete.dart';
+import 'package:jumpat/features/workout/presentation/widgets/create_template_dialog.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
 
 enum CardMenuItem { edit, asTemplate, delete }
@@ -62,14 +63,7 @@ class WorkoutCard extends HookConsumerWidget {
                       }
                       break;
                     case CardMenuItem.asTemplate:
-                      ref
-                          .read(
-                            movementsProvider(workoutId: workoutId).notifier,
-                          )
-                          .create(
-                            workout,
-                            ExerciseEntity.create(name: 'testi'),
-                          );
+                      await showCreateTemplateDialog(context, workout).run();
                       break;
                   }
                 },

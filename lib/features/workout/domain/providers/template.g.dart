@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'workout.dart';
+part of 'template.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,44 +29,45 @@ class _SystemHash {
   }
 }
 
-String _$WorkoutsHash() => r'7d91130fd114c1859813ff733de36801d4113010';
+String _$TemplatesHash() => r'ed28c72430e178f19b6aacf76f4be961bbf6a997';
 
-/// See also [Workouts].
-final workoutsProvider = AsyncNotifierProvider<Workouts, IList<WorkoutEntity>>(
-  Workouts.new,
-  name: r'workoutsProvider',
+/// See also [Templates].
+final templatesProvider =
+    AsyncNotifierProvider<Templates, IList<TemplateEntity>>(
+  Templates.new,
+  name: r'templatesProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$WorkoutsHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$TemplatesHash,
 );
-typedef WorkoutsRef = AsyncNotifierProviderRef<IList<WorkoutEntity>>;
+typedef TemplatesRef = AsyncNotifierProviderRef<IList<TemplateEntity>>;
 
-abstract class _$Workouts extends AsyncNotifier<IList<WorkoutEntity>> {
+abstract class _$Templates extends AsyncNotifier<IList<TemplateEntity>> {
   @override
-  FutureOr<IList<WorkoutEntity>> build();
+  FutureOr<IList<TemplateEntity>> build();
 }
 
-String _$WorkoutStateHash() => r'c79759c38d409c657a21df80a3fe2e2366f09ab5';
+String _$TemplateStateHash() => r'3d8e86011cb9170741c5f39b91aaeafc601ce8fb';
 
-/// See also [WorkoutState].
-class WorkoutStateProvider
-    extends AsyncNotifierProviderImpl<WorkoutState, WorkoutEntity> {
-  WorkoutStateProvider({
+/// See also [TemplateState].
+class TemplateStateProvider
+    extends AsyncNotifierProviderImpl<TemplateState, TemplateEntity> {
+  TemplateStateProvider({
     required this.id,
   }) : super(
-          () => WorkoutState()..id = id,
-          from: workoutStateProvider,
-          name: r'workoutStateProvider',
+          () => TemplateState()..id = id,
+          from: templateStateProvider,
+          name: r'templateStateProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$WorkoutStateHash,
+                  : _$TemplateStateHash,
         );
 
   final UniqueId id;
 
   @override
   bool operator ==(Object other) {
-    return other is WorkoutStateProvider && other.id == id;
+    return other is TemplateStateProvider && other.id == id;
   }
 
   @override
@@ -78,8 +79,8 @@ class WorkoutStateProvider
   }
 
   @override
-  FutureOr<WorkoutEntity> runNotifierBuild(
-    covariant _$WorkoutState notifier,
+  FutureOr<TemplateEntity> runNotifierBuild(
+    covariant _$TemplateState notifier,
   ) {
     return notifier.build(
       id: id,
@@ -87,25 +88,25 @@ class WorkoutStateProvider
   }
 }
 
-typedef WorkoutStateRef = AsyncNotifierProviderRef<WorkoutEntity>;
+typedef TemplateStateRef = AsyncNotifierProviderRef<TemplateEntity>;
 
-/// See also [WorkoutState].
-final workoutStateProvider = WorkoutStateFamily();
+/// See also [TemplateState].
+final templateStateProvider = TemplateStateFamily();
 
-class WorkoutStateFamily extends Family<AsyncValue<WorkoutEntity>> {
-  WorkoutStateFamily();
+class TemplateStateFamily extends Family<AsyncValue<TemplateEntity>> {
+  TemplateStateFamily();
 
-  WorkoutStateProvider call({
+  TemplateStateProvider call({
     required UniqueId id,
   }) {
-    return WorkoutStateProvider(
+    return TemplateStateProvider(
       id: id,
     );
   }
 
   @override
-  AsyncNotifierProviderImpl<WorkoutState, WorkoutEntity> getProviderOverride(
-    covariant WorkoutStateProvider provider,
+  AsyncNotifierProviderImpl<TemplateState, TemplateEntity> getProviderOverride(
+    covariant TemplateStateProvider provider,
   ) {
     return call(
       id: provider.id,
@@ -119,13 +120,13 @@ class WorkoutStateFamily extends Family<AsyncValue<WorkoutEntity>> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'workoutStateProvider';
+  String? get name => r'templateStateProvider';
 }
 
-abstract class _$WorkoutState extends BuildlessAsyncNotifier<WorkoutEntity> {
+abstract class _$TemplateState extends BuildlessAsyncNotifier<TemplateEntity> {
   late final UniqueId id;
 
-  FutureOr<WorkoutEntity> build({
+  FutureOr<TemplateEntity> build({
     required UniqueId id,
   });
 }

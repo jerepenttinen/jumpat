@@ -31,7 +31,11 @@ class WorkoutRepository implements IWorkoutRepository {
   @override
   Future<Either<WorkoutFailure, Unit>> update(WorkoutEntity workout) async {
     await client.writeTxn(
-      () => client.workouts.put(WorkoutEntityConverter().toInfra(workout)),
+      () async {
+        final w = WorkoutEntityConverter().toInfra(workout);
+        await client.workouts.put(w);
+        await w.template.save();
+      },
     );
 
     return const Right(unit);

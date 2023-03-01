@@ -1,11 +1,13 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:isar/isar.dart';
-import 'package:jumpat/features/workout/domain/failures/template_failure.dart';
-import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
-import 'package:fpdart/src/unit.dart';
-import 'package:fpdart/src/either.dart';
-import 'package:fast_immutable_collections/src/ilist/ilist.dart';
+import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
+import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
+import 'package:jumpat/features/workout/domain/failures/template_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_template_repository.dart';
+import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
+import 'package:jumpat/features/workout/infrastructure/repositories/template_entity_converter.dart';
 
 class TemplateRepository implements ITemplateRepository {
   const TemplateRepository({required this.client});
@@ -13,32 +15,27 @@ class TemplateRepository implements ITemplateRepository {
   final Isar client;
 
   @override
-  Future<Either<TemplateFailure, int>> count() {
-    // TODO: implement count
-    throw UnimplementedError();
+  Future<Either<TemplateFailure, Unit>> update(TemplateEntity template) async {
+    await client.writeTxn(
+      () async {
+        final t = TemplateEntityConverter().toInfra(template);
+        await client.templates.put(t);
+        await t.exercises.save();
+      },
+    );
+    return right(unit);
   }
 
   @override
-  Future<Either<TemplateFailure, Unit>> create(TemplateEntity template) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<IList<TemplateEntity>> getAll() async {
+    final templates = await client.templates.where().findAll();
+    return templates.map(TemplateEntityConverter().toDomain).toIList();
   }
 
   @override
-  Future<Either<TemplateFailure, Unit>> update(TemplateEntity template) {
-    // TODO: implement update
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<Either<TemplateFailure, IList<TemplateEntity>>> watchAll() {
-    // TODO: implement watchAll
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<Either<TemplateFailure, TemplateEntity>> watchOne(UniqueId id) {
-    // TODO: implement watchOne
-    throw UnimplementedError();
+  Future<Option<TemplateEntity>> get(UniqueId id) async {
+    final template = await client.templates.get(fastHash(id.getOrCrash()));
+    return Option.fromNullable(template)
+        .map(TemplateEntityConverter().toDomain);
   }
 }

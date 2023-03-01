@@ -1,6 +1,12 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
+import 'package:jumpat/features/workout/domain/providers/movement.dart';
+import 'package:jumpat/features/workout/domain/providers/template.dart';
+import 'package:jumpat/features/workout/domain/values/template_color.dart';
+import 'package:jumpat/features/workout/domain/values/template_name.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -55,5 +61,32 @@ class WorkoutState extends _$WorkoutState {
     final workouts = ref.read(workoutsProvider.notifier);
     await workouts.save(updatedWorkout);
     state = AsyncValue.data(updatedWorkout);
+  }
+
+  Future<Option<TemplateEntity>> createTemplate({
+    required TemplateColor color,
+    required TemplateName name,
+  }) async {
+    if (!state.hasValue) {
+      return none();
+    }
+
+    final workout = state.value!;
+    final movements =
+        await ref.read(movementsProvider(workoutId: workout.id).future);
+
+    final exercises = movements.map((movement) => movement.exercise).toIList();
+
+    final template =
+        TemplateEntity.create(name: name, color: color, exercises: exercises);
+
+    await ref.read(templatesProvider.notifier).save(template);
+
+    final updatedWorkout = workout.copyWith(template: some(template));
+    final workouts = ref.read(workoutsProvider.notifier);
+    await workouts.save(updatedWorkout);
+    state = AsyncValue.data(updatedWorkout);
+
+    return some(template);
   }
 }

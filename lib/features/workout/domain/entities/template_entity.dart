@@ -25,4 +25,22 @@ class TemplateEntity with _$TemplateEntity implements IEntity {
         color: TemplateColor(const Color(0x00000000)),
         exercises: IList(),
       );
+
+  factory TemplateEntity.create({
+    required TemplateName name,
+    required TemplateColor color,
+    required IList<ExerciseEntity> exercises,
+  }) =>
+      TemplateEntity(
+        id: UniqueId(),
+        name: name,
+        color: color,
+        exercises: exercises,
+      );
+}
+
+int templateEntityComparator(TemplateEntity t1, TemplateEntity t2) {
+  final name1 = t1.name.getOrCrash().toLowerCase();
+  final name2 = t2.name.getOrCrash().toLowerCase();
+  return name1.compareTo(name2);
 }
