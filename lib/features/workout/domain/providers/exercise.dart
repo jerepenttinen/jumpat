@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/values/exercise_name.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
@@ -59,5 +60,28 @@ class Exercises extends _$Exercises {
     }
 
     return exercise;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class ExerciseState extends _$ExerciseState {
+  @override
+  Future<ExerciseEntity> build({required UniqueId id}) async {
+    final repository = ref.watch(exerciseRepositoryProvider);
+
+    final exercise = await repository.get(id);
+    return exercise.toNullable()!;
+  }
+
+  Future<void> updateName(ExerciseName newName) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final exercise = state.value!;
+    final updatedExercise = exercise.copyWith(name: newName);
+    final exercises = ref.read(exercisesProvider.notifier);
+    await exercises.save(updatedExercise);
+    state = AsyncValue.data(updatedExercise);
   }
 }

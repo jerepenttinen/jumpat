@@ -1,6 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:isar/isar.dart';
+import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/exercise_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_exercise_repository.dart';
@@ -27,5 +29,15 @@ class ExerciseRepository implements IExerciseRepository {
     );
 
     return const Right(unit);
+  }
+
+  @override
+  Future<Either<ExerciseFailure, ExerciseEntity>> get(UniqueId id) async {
+    final exercise = await client.exercises.get(fastHash(id.getOrCrash()));
+    if (exercise != null) {
+      return right(ExerciseEntityConverter().toDomain(exercise));
+    } else {
+      return left(const ExerciseFailure.notFound());
+    }
   }
 }

@@ -45,3 +45,88 @@ abstract class _$Exercises extends AsyncNotifier<IList<ExerciseEntity>> {
   @override
   FutureOr<IList<ExerciseEntity>> build();
 }
+
+String _$ExerciseStateHash() => r'd1e46ece0181d3541c903d16bcfb56ead9ac5545';
+
+/// See also [ExerciseState].
+class ExerciseStateProvider
+    extends AsyncNotifierProviderImpl<ExerciseState, ExerciseEntity> {
+  ExerciseStateProvider({
+    required this.id,
+  }) : super(
+          () => ExerciseState()..id = id,
+          from: exerciseStateProvider,
+          name: r'exerciseStateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$ExerciseStateHash,
+        );
+
+  final UniqueId id;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExerciseStateProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+
+  @override
+  FutureOr<ExerciseEntity> runNotifierBuild(
+    covariant _$ExerciseState notifier,
+  ) {
+    return notifier.build(
+      id: id,
+    );
+  }
+}
+
+typedef ExerciseStateRef = AsyncNotifierProviderRef<ExerciseEntity>;
+
+/// See also [ExerciseState].
+final exerciseStateProvider = ExerciseStateFamily();
+
+class ExerciseStateFamily extends Family<AsyncValue<ExerciseEntity>> {
+  ExerciseStateFamily();
+
+  ExerciseStateProvider call({
+    required UniqueId id,
+  }) {
+    return ExerciseStateProvider(
+      id: id,
+    );
+  }
+
+  @override
+  AsyncNotifierProviderImpl<ExerciseState, ExerciseEntity> getProviderOverride(
+    covariant ExerciseStateProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'exerciseStateProvider';
+}
+
+abstract class _$ExerciseState extends BuildlessAsyncNotifier<ExerciseEntity> {
+  late final UniqueId id;
+
+  FutureOr<ExerciseEntity> build({
+    required UniqueId id,
+  });
+}

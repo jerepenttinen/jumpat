@@ -1,7 +1,7 @@
 name: jumpat
-version: 1.0.0+1
+version: 2.0.0+1
 publish_to: none
-description: A new Flutter project.
+description: Jumppasovellus.
 environment:
   sdk: ">=2.19.2 <3.0.0"
 dependencies:

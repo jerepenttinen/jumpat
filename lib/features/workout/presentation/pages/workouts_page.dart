@@ -68,7 +68,7 @@ class WorkoutsDrawer extends StatelessWidget {
               leading: const Icon(Icons.fitness_center),
               onTap: () {
                 Navigator.pop(context);
-                // context.router.push(const ExercisesRoute());
+                context.router.push(const ExercisesRoute());
               },
             ),
             ListTile(
