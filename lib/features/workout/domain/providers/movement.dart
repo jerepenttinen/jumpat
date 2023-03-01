@@ -109,4 +109,17 @@ class MovementState extends _$MovementState {
     await movements.save(updatedMovement);
     state = AsyncValue.data(updatedMovement);
   }
+
+  Future<void> updateExercise(ExerciseEntity exercise) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final movement = state.value!;
+    final updatedMovement = movement.copyWith(exercise: exercise);
+    final movements =
+        ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
+    await movements.save(updatedMovement);
+    state = AsyncValue.data(updatedMovement);
+  }
 }

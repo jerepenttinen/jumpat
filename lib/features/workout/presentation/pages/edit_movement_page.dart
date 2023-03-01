@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
@@ -10,6 +13,7 @@ import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
+import 'package:jumpat/features/workout/presentation/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/weight_input.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
 
@@ -47,16 +51,20 @@ class EditMovementPage extends ConsumerWidget {
               ),
               IconButton(
                 onPressed: () async {
-                  // final exercise = await selectExerciseDialog(context);
-
-                  // if (exercise == null) {
-                  //   return;
-                  // }
-
-                  // movement.exercise.value = exercise;
-
-                  // exercise.movements.add(movement);
-                  // await ref.read(saveMovementProvider(movement).future);
+                  await selectExerciseDialog(context)
+                      .flatMap(
+                        (exercise) => TaskOption.fromTask(
+                          Task(
+                            () => ref
+                                .read(
+                                  movementStateProvider(id: movementId)
+                                      .notifier,
+                                )
+                                .updateExercise(exercise),
+                          ),
+                        ),
+                      )
+                      .run();
                 },
                 icon: const Icon(Icons.edit),
               ),
