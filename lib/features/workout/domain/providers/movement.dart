@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
@@ -38,16 +39,22 @@ class Movements extends _$Movements {
     });
   }
 
-  Future<void> create(WorkoutEntity workout, ExerciseEntity exercise) async {
-    final repository = ref.watch(movementRepositoryProvider);
-    final movement = await repository.create(workout, exercise);
+  TaskOption<MovementEntity> create(
+    WorkoutEntity workout,
+    ExerciseEntity exercise,
+  ) {
+    return TaskOption(() async {
+      final repository = ref.watch(movementRepositoryProvider);
+      final movement =
+          MovementEntity.create(workout: workout, exercise: exercise);
 
-    await movement.match(
-      (l) => null,
-      (r) async => update((currentList) {
-        return currentList.add(r);
-      }),
-    );
+      final result = await repository.update(movement);
+
+      return await result.match((l) => none(), (r) async {
+        await update((currentList) => currentList.add(movement));
+        return some(movement);
+      });
+    });
   }
 }
 

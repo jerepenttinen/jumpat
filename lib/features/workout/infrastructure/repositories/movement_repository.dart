@@ -11,6 +11,7 @@ import 'package:jumpat/features/workout/domain/repositories/i_movement_repositor
 import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/movement_entity_converter.dart';
+import 'package:jumpat/features/workout/infrastructure/repositories/workout_entity_converter.dart';
 
 class MovementRepository implements IMovementRepository {
   MovementRepository({required this.client});
@@ -28,7 +29,12 @@ class MovementRepository implements IMovementRepository {
   @override
   Future<Either<MovementFailure, Unit>> update(MovementEntity movement) async {
     await client.writeTxn(
-      () => client.movements.put(MovementEntityConverter().toInfra(movement)),
+      () async {
+        final m = MovementEntityConverter().toInfra(movement);
+        await client.movements.put(m);
+        await m.exercise.save();
+        await m.workout.save();
+      },
     );
     return right(unit);
   }

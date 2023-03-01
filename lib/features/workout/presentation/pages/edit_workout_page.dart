@@ -2,13 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
+import 'package:jumpat/features/workout/presentation/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/ui/routes/app_router.dart';
-import 'package:jumpat/ui/widgets/select_exercise_dialog.dart';
 
 class EditWorkoutPage extends HookConsumerWidget {
   const EditWorkoutPage({required this.workoutId, super.key});
@@ -55,16 +56,35 @@ class EditWorkoutPage extends HookConsumerWidget {
       floatingActionButton: FloatingActionButton(
         heroTag: UniqueKey(),
         onPressed: () async {
-          final exercise = await selectExerciseDialog(context);
-
-          await exercise.match(
-            () => null,
-            (exercise) async {
-              // await ref
-              //     .read(movementCreateControllerprovider.notifier)
-              //     .handle(exercise);
-            },
+          final workout = await ref.read(
+            workoutStateProvider(id: workoutId).future,
           );
+
+          TaskOption<Unit> pushEditMovementRoute(MovementEntity movement) {
+            return TaskOption(
+              () async {
+                if (context.mounted) {
+                  await context.router.push(
+                    EditMovementRoute(movementId: movement.id),
+                  );
+                }
+                return some(unit);
+              },
+            );
+          }
+
+          if (context.mounted) {
+            await selectExerciseDialog(context)
+                .flatMap(
+                  (exercise) => ref
+                      .read(movementsProvider(workoutId: workoutId).notifier)
+                      .create(workout, exercise),
+                )
+                .flatMap(
+                  pushEditMovementRoute,
+                )
+                .run();
+          }
         },
         child: const Icon(Icons.add),
       ),
