@@ -36,5 +36,3 @@ analyzer:
     - "**.freezed.dart"
     - "**.g.dart"
     - "**.gr.dart"
-  plugins:
-    - custom_lint

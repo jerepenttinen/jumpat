@@ -127,7 +127,11 @@ class MovementsListItem extends ConsumerWidget {
         extentRatio: 0.3,
         dismissible: DismissiblePane(
           onDismissed: () async {
-            // await ref.read(deleteMovementProvider(movement).future);
+            await ref
+                .read(
+                  movementsProvider(workoutId: movement.workout.id).notifier,
+                )
+                .remove(movement);
           },
         ),
         children: [
@@ -136,7 +140,11 @@ class MovementsListItem extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
-              // await ref.read(deleteMovementProvider(movement).future);
+              await ref
+                  .read(
+                    movementsProvider(workoutId: movement.workout.id).notifier,
+                  )
+                  .remove(movement);
             },
           )
         ],

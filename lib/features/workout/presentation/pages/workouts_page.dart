@@ -1,9 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
+import 'package:jumpat/ui/routes/app_router.dart';
 
 class WorkoutsPage extends ConsumerWidget {
   const WorkoutsPage({super.key});
@@ -146,15 +149,12 @@ class WorkoutsFab extends ConsumerWidget {
           child: const Icon(Icons.add),
           onPressed: () async {
             fabKey.currentState?.toggle();
-            // await ref
-            // .read(workoutCreateControllerprovider.notifier).handle();
-            // final workout = await ref.read(
-            //   saveWorkoutProvider(workout: Workout()..date = DateTime.now())
-            //       .future,
-            // );
-            // if (context.mounted) {
-            //   await context.router.push(EditWorkoutRoute(workout: workout));
-            // }
+            final workout = WorkoutEntity.empty();
+            await ref.read(workoutsProvider.notifier).save(workout);
+            if (context.mounted) {
+              await context.router
+                  .push(EditWorkoutRoute(workoutId: workout.id));
+            }
           },
         ),
       ],
