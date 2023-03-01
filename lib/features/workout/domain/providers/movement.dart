@@ -34,11 +34,14 @@ class Movements extends _$Movements {
 
   Future<void> remove(MovementEntity movement) async {
     final repository = ref.watch(movementRepositoryProvider);
-    await repository.delete(movement);
+    final result = await repository.delete(movement);
 
-    await update((currentList) {
-      return currentList.removeWhere((item) => item.id == movement.id);
-    });
+    await result.match(
+      (l) => null,
+      (r) async => update((currentList) {
+        return currentList.removeWhere((item) => item.id == movement.id);
+      }),
+    );
   }
 
   TaskOption<MovementEntity> create(

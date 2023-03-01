@@ -20,10 +20,14 @@ class MovementRepository implements IMovementRepository {
 
   @override
   Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) async {
-    await client.writeTxn(
-      () => client.workouts.delete(fastHash(movement.id.getOrCrash())),
+    final deleted = await client.writeTxn(
+      () => client.movements.delete(fastHash(movement.id.getOrCrash())),
     );
-    return right(unit);
+    if (deleted) {
+      return right(unit);
+    } else {
+      return left(const MovementFailure.unableToDelete());
+    }
   }
 
   @override

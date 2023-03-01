@@ -19,32 +19,38 @@ mixin _$MovementFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() unexpected,
+    required TResult Function() unableToDelete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? unexpected,
+    TResult? Function()? unableToDelete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? unexpected,
+    TResult Function()? unableToDelete,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Unexpected value) unexpected,
+    required TResult Function(UnableToDelete value) unableToDelete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Unexpected value)? unexpected,
+    TResult? Function(UnableToDelete value)? unableToDelete,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Unexpected value)? unexpected,
+    TResult Function(UnableToDelete value)? unableToDelete,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -107,6 +113,7 @@ class _$Unexpected implements Unexpected {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() unexpected,
+    required TResult Function() unableToDelete,
   }) {
     return unexpected();
   }
@@ -115,6 +122,7 @@ class _$Unexpected implements Unexpected {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? unexpected,
+    TResult? Function()? unableToDelete,
   }) {
     return unexpected?.call();
   }
@@ -123,6 +131,7 @@ class _$Unexpected implements Unexpected {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? unexpected,
+    TResult Function()? unableToDelete,
     required TResult orElse(),
   }) {
     if (unexpected != null) {
@@ -135,6 +144,7 @@ class _$Unexpected implements Unexpected {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Unexpected value) unexpected,
+    required TResult Function(UnableToDelete value) unableToDelete,
   }) {
     return unexpected(this);
   }
@@ -143,6 +153,7 @@ class _$Unexpected implements Unexpected {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Unexpected value)? unexpected,
+    TResult? Function(UnableToDelete value)? unableToDelete,
   }) {
     return unexpected?.call(this);
   }
@@ -151,6 +162,7 @@ class _$Unexpected implements Unexpected {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Unexpected value)? unexpected,
+    TResult Function(UnableToDelete value)? unableToDelete,
     required TResult orElse(),
   }) {
     if (unexpected != null) {
@@ -162,4 +174,106 @@ class _$Unexpected implements Unexpected {
 
 abstract class Unexpected implements MovementFailure {
   const factory Unexpected() = _$Unexpected;
+}
+
+/// @nodoc
+abstract class _$$UnableToDeleteCopyWith<$Res> {
+  factory _$$UnableToDeleteCopyWith(
+          _$UnableToDelete value, $Res Function(_$UnableToDelete) then) =
+      __$$UnableToDeleteCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UnableToDeleteCopyWithImpl<$Res>
+    extends _$MovementFailureCopyWithImpl<$Res, _$UnableToDelete>
+    implements _$$UnableToDeleteCopyWith<$Res> {
+  __$$UnableToDeleteCopyWithImpl(
+      _$UnableToDelete _value, $Res Function(_$UnableToDelete) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$UnableToDelete implements UnableToDelete {
+  const _$UnableToDelete();
+
+  @override
+  String toString() {
+    return 'MovementFailure.unableToDelete()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$UnableToDelete);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() unexpected,
+    required TResult Function() unableToDelete,
+  }) {
+    return unableToDelete();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? unexpected,
+    TResult? Function()? unableToDelete,
+  }) {
+    return unableToDelete?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? unexpected,
+    TResult Function()? unableToDelete,
+    required TResult orElse(),
+  }) {
+    if (unableToDelete != null) {
+      return unableToDelete();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Unexpected value) unexpected,
+    required TResult Function(UnableToDelete value) unableToDelete,
+  }) {
+    return unableToDelete(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Unexpected value)? unexpected,
+    TResult? Function(UnableToDelete value)? unableToDelete,
+  }) {
+    return unableToDelete?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Unexpected value)? unexpected,
+    TResult Function(UnableToDelete value)? unableToDelete,
+    required TResult orElse(),
+  }) {
+    if (unableToDelete != null) {
+      return unableToDelete(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UnableToDelete implements MovementFailure {
+  const factory UnableToDelete() = _$UnableToDelete;
 }
