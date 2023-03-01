@@ -67,14 +67,29 @@ class MovementState extends _$MovementState {
     return ref.watch(movementRepositoryProvider).get(id);
   }
 
-  Future<void> addSet(RepetitionCount set) async {
+  Future<void> saveSet(MovementSetEntity set) async {
     if (!state.hasValue) {
       return;
     }
 
     final movement = state.value!;
     final updatedMovement = movement.copyWith(
-      sets: movement.sets.add(MovementSetEntity.create(count: set)),
+      sets: movement.sets.updateById([set], (item) => item.id),
+    );
+    final movements =
+        ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
+    await movements.save(updatedMovement);
+    state = AsyncValue.data(updatedMovement);
+  }
+
+  Future<void> removeSet(MovementSetEntity set) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final movement = state.value!;
+    final updatedMovement = movement.copyWith(
+      sets: movement.sets.removeWhere((item) => item.id == set.id),
     );
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);

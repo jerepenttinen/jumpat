@@ -135,7 +135,7 @@ class MovementsListItem extends ConsumerWidget {
           SlidableAction(
             label: t.edit,
             backgroundColor: Theme.of(context).colorScheme.primary,
-            icon: Icons.delete,
+            icon: Icons.edit,
             onPressed: (context) {
               context.router.push(EditMovementRoute(movementId: movement.id));
             },

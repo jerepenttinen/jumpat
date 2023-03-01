@@ -97,7 +97,11 @@ class EditMovementPage extends ConsumerWidget {
                       .read(
                         movementStateProvider(id: movementId).notifier,
                       )
-                      .addSet(RepetitionCount(count));
+                      .saveSet(
+                        MovementSetEntity.create(
+                          count: RepetitionCount(count),
+                        ),
+                      );
                 },
               );
             },
@@ -115,30 +119,25 @@ class SetsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sets = movement.sets;
-
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: sets.length,
+      itemCount: movement.sets.length,
       itemBuilder: (context, index) {
-        return SetsListItem(movement: movement, sets: sets, index: index);
+        final set = movement.sets[index];
+        return SetsListItem(movement: movement, set: set);
       },
     );
   }
 }
 
 class SetsListItem extends ConsumerWidget {
-  SetsListItem({
+  const SetsListItem({
     required this.movement,
-    required this.sets,
-    required this.index,
+    required this.set,
     super.key,
   });
   final MovementEntity movement;
-  final IList<MovementSetEntity> sets;
-  final int index;
-
-  late final set = sets[index];
+  final MovementSetEntity set;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -153,17 +152,21 @@ class SetsListItem extends ConsumerWidget {
           SlidableAction(
             label: t.edit,
             backgroundColor: Theme.of(context).colorScheme.primary,
-            icon: Icons.delete,
+            icon: Icons.edit,
             onPressed: (context) async {
-              // final count = await chooseRepCountDialog(context, repCount);
-              // if (count == null) {
-              //   return;
-              // }
-              // final newSets = [...sets];
-              // newSets[index] = count;
-              // movement.sets = newSets;
+              final count =
+                  await chooseRepCountDialog(context, set.count.getOrCrash());
 
-              // await ref.read(saveMovementProvider(movement).future);
+              await count.match(
+                () => null,
+                (count) async => ref
+                    .read(
+                      movementStateProvider(id: movement.id).notifier,
+                    )
+                    .saveSet(
+                      set.copyWith(count: RepetitionCount(count)),
+                    ),
+              );
             },
           )
         ],
@@ -173,8 +176,9 @@ class SetsListItem extends ConsumerWidget {
         extentRatio: 0.3,
         dismissible: DismissiblePane(
           onDismissed: () async {
-            // movement.sets = [...sets]..removeAt(index);
-            // await ref.read(saveMovementProvider(movement).future);
+            await ref
+                .read(movementStateProvider(id: movement.id).notifier)
+                .removeSet(set);
           },
         ),
         children: [
@@ -183,8 +187,9 @@ class SetsListItem extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.error,
             icon: Icons.delete,
             onPressed: (context) async {
-              // movement.sets = [...sets]..removeAt(index);
-              // await ref.read(saveMovementProvider(movement).future);
+              await ref
+                  .read(movementStateProvider(id: movement.id).notifier)
+                  .removeSet(set);
             },
           )
         ],

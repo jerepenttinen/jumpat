@@ -116,7 +116,7 @@ abstract class _$Movements
   });
 }
 
-String _$MovementStateHash() => r'2c422c320744d88c5876bc2223fd73ed1d890ed7';
+String _$MovementStateHash() => r'6807bbd9ff29c5ce4e612b6318d5b5f4358d0237';
 
 /// See also [MovementState].
 class MovementStateProvider
