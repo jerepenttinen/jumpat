@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/app_router.dart';
 import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/features/core/infrastructure/isar.dart';
 import 'package:jumpat/features/core/providers.dart';
-import 'package:jumpat/ui/routes/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

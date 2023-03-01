@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/provider.dart';
 import 'package:jumpat/data/tables.dart';
-import 'package:jumpat/ui/routes/app_router.dart';
+import 'package:jumpat/app_router.dart';
 import 'package:jumpat/ui/widgets/watching_list.dart';
 
 class ExercisesPage extends ConsumerWidget {

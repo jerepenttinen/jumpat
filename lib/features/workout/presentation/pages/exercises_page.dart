@@ -2,10 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/exercise.dart';
 import 'package:jumpat/features/workout/domain/values/exercise_name.dart';
-import 'package:jumpat/ui/routes/app_router.dart';
 
 class ExercisesPage extends ConsumerWidget {
   const ExercisesPage({super.key});

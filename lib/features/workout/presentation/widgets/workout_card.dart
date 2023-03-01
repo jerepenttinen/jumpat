@@ -2,14 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
-import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/confirm_delete.dart';
 import 'package:jumpat/features/workout/presentation/widgets/create_template_dialog.dart';
-import 'package:jumpat/ui/routes/app_router.dart';
 
 enum CardMenuItem { edit, asTemplate, delete }
 
