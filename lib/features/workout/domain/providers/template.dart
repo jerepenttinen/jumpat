@@ -1,9 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
-import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
-import 'package:jumpat/features/workout/domain/values/template_color.dart';
-import 'package:jumpat/features/workout/domain/values/template_name.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

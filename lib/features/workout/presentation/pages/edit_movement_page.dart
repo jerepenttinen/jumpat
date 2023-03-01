@@ -5,8 +5,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
-import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/settings/domain/providers.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
@@ -90,12 +90,12 @@ class EditMovementPage extends ConsumerWidget {
             onPressed: () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
-              final defaultRepCount = movement.sets.isNotEmpty
+              final defaultRepetitionCount = movement.sets.isNotEmpty
                   ? movement.sets.last.count.getOrCrash()
-                  : ref.read(defaultRepCountProvider);
+                  : ref.read(defaultRepetitionCountProvider);
 
               final count =
-                  await chooseRepCountDialog(context, defaultRepCount);
+                  await chooseRepCountDialog(context, defaultRepetitionCount);
 
               await count.match(
                 () => null,

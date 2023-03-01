@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:jumpat/data/provider.dart';
-import 'package:jumpat/data/tables.dart';
+import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
+import 'package:jumpat/features/workout/domain/providers/template.dart';
 
-Future<Template?> chooseTemplateDialog(BuildContext context) async {
-  return showDialog<Template>(
+Future<TemplateEntity?> chooseTemplateDialog(BuildContext context) async {
+  return showDialog<TemplateEntity>(
     context: context,
     builder: (context) => const ChooseTemplateDialog(),
   );
@@ -17,7 +17,7 @@ class ChooseTemplateDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final templatesAsync = ref.watch(watchTemplatesProvider);
+    final templatesAsync = ref.watch(templatesProvider);
     final t = AppLocalizations.of(context)!;
 
     return AlertDialog(
@@ -29,9 +29,9 @@ class ChooseTemplateDialog extends ConsumerWidget {
             children: templates
                 .map(
                   (template) => ListTile(
-                    title: Text(template.name),
+                    title: Text(template.name.getOrCrash()),
                     leading: CircleColor(
-                      color: Color(template.color),
+                      color: template.color.getOrCrash(),
                       circleSize: Theme.of(context).iconTheme.size ?? 24,
                     ),
                     onTap: () => Navigator.of(context).pop(template),
