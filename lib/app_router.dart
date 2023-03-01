@@ -6,9 +6,9 @@ import 'package:jumpat/features/workout/presentation/pages/edit_movement_page.da
 import 'package:jumpat/features/workout/presentation/pages/edit_workout_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/exercise_history_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/exercises_page.dart';
+import 'package:jumpat/features/workout/presentation/pages/settings_page.dart';
+import 'package:jumpat/features/workout/presentation/pages/templates_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/workouts_page.dart';
-import 'package:jumpat/ui/pages/settings_page.dart';
-import 'package:jumpat/ui/pages/templates_page.dart';
 
 part 'app_router.gr.dart';
 
