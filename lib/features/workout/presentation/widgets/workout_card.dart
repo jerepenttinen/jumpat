@@ -62,7 +62,7 @@ class WorkoutCard extends HookConsumerWidget {
                       }
                       break;
                     case CardMenuItem.asTemplate:
-                      await ref
+                      ref
                           .read(
                             movementsProvider(workoutId: workoutId).notifier,
                           )
@@ -107,7 +107,7 @@ class WorkoutCard extends HookConsumerWidget {
   Text _buildMovementLine(MovementEntity movement) {
     final exercise = movement.exercise.name.getOrCrash();
     final weight = movement.weight.getOrCrash();
-    final sets = movement.sets.map((set) => set.getOrCrash()).toList();
+    final sets = movement.sets.map((set) => set.count.getOrCrash()).toList();
 
     return Text(
       '$exercise ${weight}kg $sets',

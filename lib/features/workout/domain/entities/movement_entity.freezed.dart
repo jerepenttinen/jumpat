@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MovementEntity {
   UniqueId get id => throw _privateConstructorUsedError;
   MovementWeight get weight => throw _privateConstructorUsedError;
-  IList<MovementSet> get sets => throw _privateConstructorUsedError;
+  IList<MovementSetEntity> get sets => throw _privateConstructorUsedError;
   WorkoutEntity get workout => throw _privateConstructorUsedError;
   ExerciseEntity get exercise => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $MovementEntityCopyWith<$Res> {
   $Res call(
       {UniqueId id,
       MovementWeight weight,
-      IList<MovementSet> sets,
+      IList<MovementSetEntity> sets,
       WorkoutEntity workout,
       ExerciseEntity exercise});
 
@@ -75,7 +75,7 @@ class _$MovementEntityCopyWithImpl<$Res, $Val extends MovementEntity>
       sets: null == sets
           ? _value.sets
           : sets // ignore: cast_nullable_to_non_nullable
-              as IList<MovementSet>,
+              as IList<MovementSetEntity>,
       workout: null == workout
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
@@ -115,7 +115,7 @@ abstract class _$$_MovementEntityCopyWith<$Res>
   $Res call(
       {UniqueId id,
       MovementWeight weight,
-      IList<MovementSet> sets,
+      IList<MovementSetEntity> sets,
       WorkoutEntity workout,
       ExerciseEntity exercise});
 
@@ -154,7 +154,7 @@ class __$$_MovementEntityCopyWithImpl<$Res>
       sets: null == sets
           ? _value.sets
           : sets // ignore: cast_nullable_to_non_nullable
-              as IList<MovementSet>,
+              as IList<MovementSetEntity>,
       workout: null == workout
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
@@ -182,7 +182,7 @@ class _$_MovementEntity implements _MovementEntity {
   @override
   final MovementWeight weight;
   @override
-  final IList<MovementSet> sets;
+  final IList<MovementSetEntity> sets;
   @override
   final WorkoutEntity workout;
   @override
@@ -221,7 +221,7 @@ abstract class _MovementEntity implements MovementEntity {
   const factory _MovementEntity(
       {required final UniqueId id,
       required final MovementWeight weight,
-      required final IList<MovementSet> sets,
+      required final IList<MovementSetEntity> sets,
       required final WorkoutEntity workout,
       required final ExerciseEntity exercise}) = _$_MovementEntity;
 
@@ -230,7 +230,7 @@ abstract class _MovementEntity implements MovementEntity {
   @override
   MovementWeight get weight;
   @override
-  IList<MovementSet> get sets;
+  IList<MovementSetEntity> get sets;
   @override
   WorkoutEntity get workout;
   @override

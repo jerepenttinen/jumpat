@@ -3,9 +3,10 @@ import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
+import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
-import 'package:jumpat/features/workout/domain/values/movement_set.dart';
+import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -66,13 +67,15 @@ class MovementState extends _$MovementState {
     return ref.watch(movementRepositoryProvider).get(id);
   }
 
-  Future<void> addSet(MovementSet set) async {
+  Future<void> addSet(RepetitionCount set) async {
     if (!state.hasValue) {
       return;
     }
 
     final movement = state.value!;
-    final updatedMovement = movement.copyWith(sets: movement.sets.add(set));
+    final updatedMovement = movement.copyWith(
+      sets: movement.sets.add(MovementSetEntity.create(count: set)),
+    );
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
     await movements.save(updatedMovement);

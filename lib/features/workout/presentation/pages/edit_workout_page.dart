@@ -124,7 +124,7 @@ class MovementsListItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
     final weight = movement.weight.getOrCrash();
-    final sets = movement.sets.map((set) => set.getOrCrash()).toList();
+    final sets = movement.sets.map((set) => set.count.getOrCrash()).toList();
 
     return Slidable(
       key: UniqueKey(),

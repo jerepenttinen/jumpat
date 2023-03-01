@@ -6,8 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/data/settings_provider.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
+import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
-import 'package:jumpat/features/workout/domain/values/movement_set.dart';
+import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 import 'package:jumpat/features/workout/presentation/widgets/weight_input.dart';
 import 'package:jumpat/ui/widgets/choose_rep_count_dialog.dart';
@@ -83,7 +84,7 @@ class EditMovementPage extends ConsumerWidget {
               FocusScope.of(context).requestFocus(FocusNode());
 
               final defaultRepCount = movement.sets.isNotEmpty
-                  ? movement.sets.last.getOrCrash()
+                  ? movement.sets.last.count.getOrCrash()
                   : ref.read(defaultRepCountProvider);
 
               final count =
@@ -96,7 +97,7 @@ class EditMovementPage extends ConsumerWidget {
                       .read(
                         movementStateProvider(id: movementId).notifier,
                       )
-                      .addSet(MovementSet(count));
+                      .addSet(RepetitionCount(count));
                 },
               );
             },
@@ -114,16 +115,6 @@ class SetsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final movementAsync = ref.watch(watchMovementProvider(movement));
-    // return movementAsync.when(
-    //   data: _createList,
-    //   error: (err, stack) => Text('$err'),
-    //   loading: () => _createList(movement),
-    // );
-    return _createList(movement);
-  }
-
-  Widget _createList(MovementEntity movement) {
     final sets = movement.sets;
 
     return ListView.builder(
@@ -144,10 +135,10 @@ class SetsListItem extends ConsumerWidget {
     super.key,
   });
   final MovementEntity movement;
-  final IList<MovementSet> sets;
+  final IList<MovementSetEntity> sets;
   final int index;
 
-  late final repCount = sets[index];
+  late final set = sets[index];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -199,7 +190,7 @@ class SetsListItem extends ConsumerWidget {
         ],
       ),
       child: ListTile(
-        title: Text(repCount.getOrCrash().toString()),
+        title: Text(set.count.getOrCrash().toString()),
       ),
     );
   }
