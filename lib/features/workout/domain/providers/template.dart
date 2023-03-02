@@ -3,6 +3,7 @@ import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
+import 'package:jumpat/features/workout/domain/values/template_color.dart';
 import 'package:jumpat/features/workout/domain/values/template_name.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -62,6 +63,22 @@ class TemplateState extends _$TemplateState {
 
     final template = state.value!;
     final updatedTemplate = template.copyWith(name: name);
+    final templates = ref.read(templatesProvider.notifier);
+    await templates.save(updatedTemplate);
+    state = AsyncValue.data(updatedTemplate);
+
+    ref
+      ..invalidate(workoutStateProvider)
+      ..invalidate(workoutsProvider);
+  }
+
+  Future<void> updateColor(TemplateColor color) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final template = state.value!;
+    final updatedTemplate = template.copyWith(color: color);
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
     state = AsyncValue.data(updatedTemplate);

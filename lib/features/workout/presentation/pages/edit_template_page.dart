@@ -6,7 +6,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/providers/template.dart';
+import 'package:jumpat/features/workout/domain/values/template_color.dart';
 import 'package:jumpat/features/workout/domain/values/template_name.dart';
+import 'package:jumpat/features/workout/presentation/widgets/change_template_color.dart';
 import 'package:jumpat/features/workout/presentation/widgets/change_template_name.dart';
 import 'package:jumpat/features/workout/presentation/widgets/select_exercise_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/slidable_edit_delete_item.dart';
@@ -25,9 +27,29 @@ class EditTemplatePage extends ConsumerWidget {
           data: (template) => Text(template.name.getOrCrash()),
           orElse: () => Text(t.exercises),
         ),
-        actions: [
-          templateAsync.maybeWhen(
-            data: (template) => IconButton(
+        actions: templateAsync.maybeWhen(
+          data: (template) => [
+            IconButton(
+              icon: CircleColor(
+                color: template.color.getOrCrash(),
+                circleSize: 24,
+              ),
+              onPressed: () async {
+                final newColor = await changeTemplateColorDialog(
+                  context,
+                  template.color,
+                );
+
+                if (newColor == null) {
+                  return;
+                }
+
+                await ref
+                    .read(templateStateProvider(id: templateId).notifier)
+                    .updateColor(TemplateColor(newColor));
+              },
+            ),
+            IconButton(
               onPressed: () async {
                 final newName = await changeTemplateNameDialog(
                   context,
@@ -43,10 +65,10 @@ class EditTemplatePage extends ConsumerWidget {
                     .updateName(TemplateName(newName));
               },
               icon: const Icon(Icons.edit),
-            ),
-            orElse: SizedBox.new,
-          ),
-        ],
+            )
+          ],
+          orElse: List.empty,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

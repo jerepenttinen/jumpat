@@ -65,5 +65,6 @@
   "defaultRepCount": "Default repetition count",
   "newWorkout": "New workout",
   "useTemplate": "Use template",
-  "changeTemplateName": "Change template name"
+  "changeTemplateName": "Change template name",
+  "changeTemplateColor": "Change template color"
 }

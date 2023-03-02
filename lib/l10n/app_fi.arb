@@ -35,5 +35,6 @@
   "defaultRepCount": "Oletus toistojen määrä",
   "newWorkout": "Uusi jumppa",
   "useTemplate": "Käytä mallia",
-  "changeTemplateName": "Muuta mallin nimeä"
+  "changeTemplateName": "Muuta mallin nimeä",
+  "changeTemplateColor": "Muuta mallin väriä"
 }
