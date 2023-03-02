@@ -23,6 +23,7 @@ class WeightInput extends HookWidget {
   Widget build(BuildContext context) {
     final focusNode = useFocusNode();
     final controller = useTextEditingController(text: initial.toString());
+    final weight = useState(initial);
 
     useEffect(
       () {
@@ -32,6 +33,7 @@ class WeightInput extends HookWidget {
           } else {
             final d = double.tryParse(controller.text);
             if (d != null) {
+              weight.value = d;
               await onWeightChanged(d);
             }
           }
@@ -51,16 +53,53 @@ class WeightInput extends HookWidget {
       );
     }
 
-    return TextField(
-      autofocus: autofocus,
-      focusNode: focusNode,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      decoration: InputDecoration(labelText: t.weightHint),
-      controller: controller,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(
-          RegExp(r'^\d+\.?\d?'),
-        )
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        IconButton(
+          onPressed: weight.value > 0
+              ? () {
+                  final tens = weight.value * 10;
+                  if (tens % 25 == 0) {
+                    weight.value -= 2.5;
+                  } else {
+                    weight.value -= (tens % 25) / 10;
+                  }
+                  controller.text = weight.value.toString();
+                }
+              : null,
+          icon: const Icon(Icons.remove),
+        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: TextField(
+              autofocus: autofocus,
+              focusNode: focusNode,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: t.weightHint),
+              controller: controller,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+\.?\d?'),
+                )
+              ],
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            final tens = weight.value * 10;
+            if (tens % 25 == 0) {
+              weight.value += 2.5;
+            } else {
+              weight.value += 2.5 - (tens % 25) / 10;
+            }
+            controller.text = weight.value.toString();
+          },
+          icon: const Icon(Icons.add),
+        ),
       ],
     );
   }
