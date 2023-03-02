@@ -34,5 +34,7 @@
   "finnish": "suomi",
   "defaultRepCount": "Oletus toistojen määrä",
   "newWorkout": "Uusi jumppa",
-  "useTemplate": "Käytä mallia"
+  "useTemplate": "Käytä mallia",
+  "changeTemplateName": "Muuta mallin nimeä",
+  "changeTemplateColor": "Muuta mallin väriä"
 }

@@ -64,5 +64,7 @@
   "finnish": "Finnish",
   "defaultRepCount": "Default repetition count",
   "newWorkout": "New workout",
-  "useTemplate": "Use template"
+  "useTemplate": "Use template",
+  "changeTemplateName": "Change template name",
+  "changeTemplateColor": "Change template color"
 }
