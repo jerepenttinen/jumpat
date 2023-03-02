@@ -1,9 +1,10 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:isar/isar.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
-import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
+import 'package:jumpat/features/workout/domain/repositories/i_exercise_repository.dart';
+import 'package:jumpat/features/workout/domain/repositories/i_movement_repository.dart';
+import 'package:jumpat/features/workout/domain/repositories/i_workout_repository.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/exercise_repository.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/movement_repository.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/workout_repository.dart';
@@ -15,9 +16,12 @@ void main() async {
   await Isar.initializeIsarCore(download: true);
   final client = await openIsar();
 
-  final workoutRepository = WorkoutRepository(client: client);
-  final movementRepository = MovementRepository(client: client);
-  final exerciseRepository = ExerciseRepository(client: client);
+  final IWorkoutRepository workoutRepository =
+      WorkoutRepository(client: client);
+  final IMovementRepository movementRepository =
+      MovementRepository(client: client);
+  final IExerciseRepository exerciseRepository =
+      ExerciseRepository(client: client);
 
   group('WorkoutRepository', () {
     setUp(
