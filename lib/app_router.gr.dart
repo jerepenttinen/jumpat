@@ -43,6 +43,16 @@ class _$AppRouter extends RootStackRouter {
         ),
       );
     },
+    EditTemplateRoute.name: (routeData) {
+      final args = routeData.argsAs<EditTemplateRouteArgs>();
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: EditTemplatePage(
+          templateId: args.templateId,
+          key: args.key,
+        ),
+      );
+    },
     ExerciseHistoryRoute.name: (routeData) {
       final args = routeData.argsAs<ExerciseHistoryRouteArgs>();
       return MaterialPageX<dynamic>(
@@ -86,6 +96,10 @@ class _$AppRouter extends RootStackRouter {
         RouteConfig(
           EditMovementRoute.name,
           path: '/edit-movement-page',
+        ),
+        RouteConfig(
+          EditTemplateRoute.name,
+          path: '/edit-template-page',
         ),
         RouteConfig(
           ExerciseHistoryRoute.name,
@@ -183,6 +197,40 @@ class EditMovementRouteArgs {
   @override
   String toString() {
     return 'EditMovementRouteArgs{movementId: $movementId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [EditTemplatePage]
+class EditTemplateRoute extends PageRouteInfo<EditTemplateRouteArgs> {
+  EditTemplateRoute({
+    required UniqueId templateId,
+    Key? key,
+  }) : super(
+          EditTemplateRoute.name,
+          path: '/edit-template-page',
+          args: EditTemplateRouteArgs(
+            templateId: templateId,
+            key: key,
+          ),
+        );
+
+  static const String name = 'EditTemplateRoute';
+}
+
+class EditTemplateRouteArgs {
+  const EditTemplateRouteArgs({
+    required this.templateId,
+    this.key,
+  });
+
+  final UniqueId templateId;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'EditTemplateRouteArgs{templateId: $templateId, key: $key}';
   }
 }
 

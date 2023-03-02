@@ -4,6 +4,7 @@ import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/settings/presentation/pages/settings_page.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/presentation/pages/edit_movement_page.dart';
+import 'package:jumpat/features/workout/presentation/pages/edit_template_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/edit_workout_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/exercise_history_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/exercises_page.dart';
@@ -18,6 +19,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: WorkoutsPage, initial: true),
     AutoRoute(page: EditWorkoutPage),
     AutoRoute(page: EditMovementPage),
+    AutoRoute(page: EditTemplatePage),
     AutoRoute(page: ExerciseHistoryPage),
     AutoRoute(page: SettingsPage),
     AutoRoute(page: ExercisesPage),

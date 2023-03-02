@@ -1,7 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
+import 'package:jumpat/features/workout/domain/values/template_name.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -49,7 +51,48 @@ class TemplateState extends _$TemplateState {
   Future<TemplateEntity> build({required UniqueId id}) async {
     final repository = ref.watch(templateRepositoryProvider);
     final template = await repository.get(id);
-    // TODO: handle better
+    // TODO(jere): handle better
     return template.toNullable()!;
+  }
+
+  Future<void> updateName(TemplateName name) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final template = state.value!;
+    final updatedTemplate = template.copyWith(name: name);
+    final templates = ref.read(templatesProvider.notifier);
+    await templates.save(updatedTemplate);
+    state = AsyncValue.data(updatedTemplate);
+  }
+
+  Future<void> addExercise(ExerciseEntity exercise) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final template = state.value!;
+    final updatedTemplate = template.copyWith(
+      exercises: template.exercises.add(exercise),
+    );
+    final templates = ref.read(templatesProvider.notifier);
+    await templates.save(updatedTemplate);
+    state = AsyncValue.data(updatedTemplate);
+  }
+
+  Future<void> removeExercise(ExerciseEntity exercise) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final template = state.value!;
+    final updatedTemplate = template.copyWith(
+      exercises:
+          template.exercises.removeWhere((item) => item.id == exercise.id),
+    );
+    final templates = ref.read(templatesProvider.notifier);
+    await templates.save(updatedTemplate);
+    state = AsyncValue.data(updatedTemplate);
   }
 }

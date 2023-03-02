@@ -46,7 +46,7 @@ abstract class _$Templates extends AsyncNotifier<IList<TemplateEntity>> {
   FutureOr<IList<TemplateEntity>> build();
 }
 
-String _$TemplateStateHash() => r'3d8e86011cb9170741c5f39b91aaeafc601ce8fb';
+String _$TemplateStateHash() => r'cd012db08d6106bc203e02f0761307d08ad5d547';
 
 /// See also [TemplateState].
 class TemplateStateProvider

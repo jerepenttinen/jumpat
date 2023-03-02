@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/template.dart';
 
@@ -51,7 +53,7 @@ class TemplatesListItem extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.primary,
             icon: Icons.edit,
             onPressed: (context) {
-              // context.router.push(EditMovementRoute(movementId: movement.id));
+              context.router.push(EditTemplateRoute(templateId: template.id));
             },
           )
         ],
