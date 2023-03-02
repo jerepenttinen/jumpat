@@ -14,6 +14,7 @@ import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/presentation/widgets/choose_rep_count_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/select_exercise_dialog.dart';
+import 'package:jumpat/features/workout/presentation/widgets/slidable_edit_delete_item.dart';
 import 'package:jumpat/features/workout/presentation/widgets/weight_input.dart';
 
 class EditMovementPage extends ConsumerWidget {
@@ -148,59 +149,27 @@ class SetsListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final t = AppLocalizations.of(context)!;
+    return SlidableEditDeleteItem(
+      onDelete: () async {
+        await ref
+            .read(movementStateProvider(id: movement.id).notifier)
+            .removeSet(set);
+      },
+      onEdit: (context) async {
+        final count =
+            await chooseRepCountDialog(context, set.count.getOrCrash());
 
-    return Slidable(
-      key: UniqueKey(),
-      startActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.3,
-        children: [
-          SlidableAction(
-            label: t.edit,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            icon: Icons.edit,
-            onPressed: (context) async {
-              final count =
-                  await chooseRepCountDialog(context, set.count.getOrCrash());
-
-              await count.match(
-                () => null,
-                (count) async => ref
-                    .read(
-                      movementStateProvider(id: movement.id).notifier,
-                    )
-                    .saveSet(
-                      set.copyWith(count: RepetitionCount(count)),
-                    ),
-              );
-            },
-          )
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.3,
-        dismissible: DismissiblePane(
-          onDismissed: () async {
-            await ref
-                .read(movementStateProvider(id: movement.id).notifier)
-                .removeSet(set);
-          },
-        ),
-        children: [
-          SlidableAction(
-            label: t.delete,
-            backgroundColor: Theme.of(context).colorScheme.error,
-            icon: Icons.delete,
-            onPressed: (context) async {
-              await ref
-                  .read(movementStateProvider(id: movement.id).notifier)
-                  .removeSet(set);
-            },
-          )
-        ],
-      ),
+        await count.match(
+          () => null,
+          (count) async => ref
+              .read(
+                movementStateProvider(id: movement.id).notifier,
+              )
+              .saveSet(
+                set.copyWith(count: RepetitionCount(count)),
+              ),
+        );
+      },
       child: ListTile(
         title: Text(set.count.getOrCrash().toString()),
       ),

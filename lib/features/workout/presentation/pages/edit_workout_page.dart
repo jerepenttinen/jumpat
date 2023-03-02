@@ -10,6 +10,7 @@ import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/select_exercise_dialog.dart';
+import 'package:jumpat/features/workout/presentation/widgets/slidable_edit_delete_item.dart';
 
 class EditWorkoutPage extends HookConsumerWidget {
   const EditWorkoutPage({required this.workoutId, super.key});
@@ -122,53 +123,20 @@ class MovementsListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final t = AppLocalizations.of(context)!;
     final weight = movement.weight.getOrCrash();
     final sets = movement.sets.map((set) => set.count.getOrCrash()).toList();
 
-    return Slidable(
-      key: UniqueKey(),
-      startActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.3,
-        children: [
-          SlidableAction(
-            label: t.edit,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            icon: Icons.edit,
-            onPressed: (context) {
-              context.router.push(EditMovementRoute(movementId: movement.id));
-            },
-          )
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.3,
-        dismissible: DismissiblePane(
-          onDismissed: () async {
-            await ref
-                .read(
-                  movementsProvider(workoutId: movement.workout.id).notifier,
-                )
-                .remove(movement);
-          },
-        ),
-        children: [
-          SlidableAction(
-            label: t.delete,
-            backgroundColor: Theme.of(context).colorScheme.error,
-            icon: Icons.delete,
-            onPressed: (context) async {
-              await ref
-                  .read(
-                    movementsProvider(workoutId: movement.workout.id).notifier,
-                  )
-                  .remove(movement);
-            },
-          )
-        ],
-      ),
+    return SlidableEditDeleteItem(
+      onDelete: () async {
+        await ref
+            .read(
+              movementsProvider(workoutId: movement.workout.id).notifier,
+            )
+            .remove(movement);
+      },
+      onEdit: (context) {
+        context.router.push(EditMovementRoute(movementId: movement.id));
+      },
       child: ListTile(
         title: Text(movement.exercise.name.getOrCrash()),
         subtitle: Text('${weight}kg $sets'),

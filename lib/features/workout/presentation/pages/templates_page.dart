@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/template.dart';
+import 'package:jumpat/features/workout/presentation/widgets/slidable_edit_delete_item.dart';
 
 class TemplatesPage extends ConsumerWidget {
   const TemplatesPage({super.key});
@@ -40,43 +41,13 @@ class TemplatesListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final t = AppLocalizations.of(context)!;
-
-    return Slidable(
-      key: UniqueKey(),
-      startActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.3,
-        children: [
-          SlidableAction(
-            label: t.edit,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            icon: Icons.edit,
-            onPressed: (context) {
-              context.router.push(EditTemplateRoute(templateId: template.id));
-            },
-          )
-        ],
-      ),
-      endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.3,
-        dismissible: DismissiblePane(
-          onDismissed: () async {
-            await ref.read(templatesProvider.notifier).remove(template);
-          },
-        ),
-        children: [
-          SlidableAction(
-            label: t.delete,
-            backgroundColor: Theme.of(context).colorScheme.error,
-            icon: Icons.delete,
-            onPressed: (context) async {
-              await ref.read(templatesProvider.notifier).remove(template);
-            },
-          )
-        ],
-      ),
+    return SlidableEditDeleteItem(
+      onDelete: () async {
+        await ref.read(templatesProvider.notifier).remove(template);
+      },
+      onEdit: (context) {
+        context.router.push(EditTemplateRoute(templateId: template.id));
+      },
       child: ListTile(
         title: Text(template.name.getOrCrash()),
         leading: CircleColor(
