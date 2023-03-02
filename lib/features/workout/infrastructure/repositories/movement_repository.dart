@@ -8,6 +8,7 @@ import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_movement_repository.dart';
+import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/movement_entity_converter.dart';
@@ -99,5 +100,27 @@ class MovementRepository implements IMovementRepository {
       },
     );
     return right(unit);
+  }
+
+  @override
+  Future<MovementWeight> getPriorWeight(
+    DateTime date,
+    ExerciseEntity exercise,
+  ) async {
+    final movements = await client.movements
+        .filter()
+        .workout((q) => q.dateLessThan(date))
+        .exercise((q) => q.isarIdEqualTo(fastHash(exercise.id.getOrCrash())))
+        .findAll();
+
+    if (movements.isEmpty) {
+      return MovementWeight(0);
+    }
+
+    movements.sort(
+      (m1, m2) => m2.workout.value!.date.compareTo(m1.workout.value!.date),
+    );
+
+    return MovementEntityConverter().toDomain(movements.first).weight;
   }
 }

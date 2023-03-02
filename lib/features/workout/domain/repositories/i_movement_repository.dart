@@ -5,6 +5,7 @@ import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
+import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 
 abstract class IMovementRepository {
   Future<IList<MovementEntity>> getAll(
@@ -17,4 +18,5 @@ abstract class IMovementRepository {
     IList<MovementEntity> movements,
   );
   Future<Either<MovementFailure, Unit>> delete(MovementEntity movement);
+  Future<MovementWeight> getPriorWeight(DateTime date, ExerciseEntity exercise);
 }

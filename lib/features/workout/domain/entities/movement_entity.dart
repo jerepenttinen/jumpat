@@ -38,4 +38,17 @@ class MovementEntity with _$MovementEntity implements IEntity {
         workout: workout,
         exercise: exercise,
       );
+
+  factory MovementEntity.withWeight({
+    required WorkoutEntity workout,
+    required ExerciseEntity exercise,
+    required MovementWeight weight,
+  }) =>
+      MovementEntity(
+        id: UniqueId(),
+        weight: weight,
+        sets: IList(),
+        workout: workout,
+        exercise: exercise,
+      );
 }

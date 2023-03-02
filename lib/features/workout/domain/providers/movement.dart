@@ -49,8 +49,12 @@ class Movements extends _$Movements {
   ) {
     return TaskOption(() async {
       final repository = ref.watch(movementRepositoryProvider);
-      final movement =
-          MovementEntity.create(workout: workout, exercise: exercise);
+      final weight = await repository.getPriorWeight(workout.date, exercise);
+      final movement = MovementEntity.withWeight(
+        workout: workout,
+        exercise: exercise,
+        weight: weight,
+      );
 
       final result = await repository.update(movement);
 
@@ -66,11 +70,16 @@ class Movements extends _$Movements {
     IList<ExerciseEntity> exercises,
   ) async {
     final repository = ref.watch(movementRepositoryProvider);
-    final movements = exercises
-        .map(
-          (exercise) =>
-              MovementEntity.create(workout: workout, exercise: exercise),
-        )
+    final movements = (await Future.wait(
+      exercises.map((exercise) async {
+        final weight = await repository.getPriorWeight(workout.date, exercise);
+        return MovementEntity.withWeight(
+          workout: workout,
+          exercise: exercise,
+          weight: weight,
+        );
+      }),
+    ))
         .toIList();
 
     await repository.updateAll(movements);
