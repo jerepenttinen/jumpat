@@ -6,4 +6,5 @@ part 'movement_failure.freezed.dart';
 abstract class MovementFailure with _$MovementFailure {
   const factory MovementFailure.unexpected() = Unexpected;
   const factory MovementFailure.unableToDelete() = UnableToDelete;
+  const factory MovementFailure.unableToFind() = UnableToFind;
 }

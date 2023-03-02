@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$MovementsHash() => r'27bf0e9b016986e31ca2117f688597bdc358d2b3';
+String _$MovementsHash() => r'da99c07d4077340ab8983fb37786db47ace80421';
 
 /// See also [Movements].
 class MovementsProvider
@@ -116,7 +116,7 @@ abstract class _$Movements
   });
 }
 
-String _$MovementStateHash() => r'c645977dc7426a024252b084d2e23dac5c49c167';
+String _$MovementStateHash() => r'c492c8a90e801109f3dd188fffd1f192931f6f5a';
 
 /// See also [MovementState].
 class MovementStateProvider

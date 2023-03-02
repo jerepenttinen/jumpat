@@ -41,6 +41,27 @@ class Workouts extends _$Workouts {
       return currentList.removeWhere((item) => item.id == workout.id);
     });
   }
+
+  Future<WorkoutEntity> addFromTemplate(TemplateEntity template) async {
+    final workout = WorkoutEntity.template(template: template);
+
+    final repository = ref.watch(workoutRepositoryProvider);
+    await repository.update(workout);
+
+    final movements =
+        ref.watch(movementsProvider(workoutId: workout.id).notifier);
+
+    await movements.createAll(workout, template.exercises);
+
+    await update((currentList) {
+      return currentList.updateById(
+        [workout],
+        (item) => item.id,
+      ).sortOrdered(workoutEntityComparator);
+    });
+
+    return workout;
+  }
 }
 
 @Riverpod(keepAlive: true)

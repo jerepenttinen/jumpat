@@ -6,7 +6,6 @@ import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
-import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -61,13 +60,36 @@ class Movements extends _$Movements {
       });
     });
   }
+
+  Future<void> createAll(
+    WorkoutEntity workout,
+    IList<ExerciseEntity> exercises,
+  ) async {
+    final repository = ref.watch(movementRepositoryProvider);
+    final movements = exercises
+        .map(
+          (exercise) =>
+              MovementEntity.create(workout: workout, exercise: exercise),
+        )
+        .toIList();
+
+    await repository.updateAll(movements);
+
+    await update((currentList) {
+      return currentList.updateById(movements, (item) => item.id);
+    });
+  }
 }
 
 @Riverpod(keepAlive: true)
 class MovementState extends _$MovementState {
   @override
-  Future<MovementEntity> build({required UniqueId id}) {
-    return ref.watch(movementRepositoryProvider).get(id);
+  Future<MovementEntity> build({required UniqueId id}) async {
+    final movement = await ref.watch(movementRepositoryProvider).get(id);
+    return movement.match(
+      (l) => throw UnimplementedError(l.toString()),
+      (r) => r,
+    );
   }
 
   Future<void> saveSet(MovementSetEntity set) async {

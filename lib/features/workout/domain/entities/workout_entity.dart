@@ -19,6 +19,12 @@ class WorkoutEntity with _$WorkoutEntity implements IEntity {
         date: DateTime.now(),
         template: const None(),
       );
+  factory WorkoutEntity.template({required TemplateEntity template}) =>
+      WorkoutEntity(
+        id: UniqueId(),
+        date: DateTime.now(),
+        template: some(template),
+      );
 }
 
 int workoutEntityComparator(WorkoutEntity w1, WorkoutEntity w2) {

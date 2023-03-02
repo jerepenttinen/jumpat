@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -7,8 +6,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
-import 'package:jumpat/features/workout/domain/providers/movement.dart';
-import 'package:jumpat/features/workout/domain/providers/template.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/domain/values/template_color.dart';
 import 'package:jumpat/features/workout/domain/values/template_name.dart';

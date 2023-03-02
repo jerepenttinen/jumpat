@@ -17,7 +17,14 @@ class WorkoutRepository implements IWorkoutRepository {
   @override
   Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout) async {
     await client.writeTxn(
-      () => client.workouts.delete(fastHash(workout.id.getOrCrash())),
+      () async {
+        final id = fastHash(workout.id.getOrCrash());
+        await client.movements
+            .filter()
+            .workout((q) => q.isarIdEqualTo(id))
+            .deleteAll();
+        await client.workouts.delete(id);
+      },
     );
     return right(unit);
   }
@@ -39,17 +46,6 @@ class WorkoutRepository implements IWorkoutRepository {
     );
 
     return const Right(unit);
-  }
-
-  @override
-  Future<Either<WorkoutFailure, WorkoutEntity>> create() async {
-    final workout = WorkoutEntity.empty();
-
-    await client.writeTxn(
-      () => client.workouts.put(WorkoutEntityConverter().toInfra(workout)),
-    );
-
-    return Right(workout);
   }
 
   @override

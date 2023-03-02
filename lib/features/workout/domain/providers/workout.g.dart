@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$WorkoutsHash() => r'7d91130fd114c1859813ff733de36801d4113010';
+String _$WorkoutsHash() => r'3ee43b850a0a35d2ac0963a148cbcd8debb6bf14';
 
 /// See also [Workouts].
 final workoutsProvider = AsyncNotifierProvider<Workouts, IList<WorkoutEntity>>(

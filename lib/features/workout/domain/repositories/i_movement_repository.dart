@@ -11,11 +11,10 @@ abstract class IMovementRepository {
     WorkoutEntity workout,
   );
   Future<IList<MovementEntity>> getAllByExercise(ExerciseEntity exercise);
-  Future<MovementEntity> get(UniqueId id);
-  Future<Either<MovementFailure, MovementEntity>> create(
-    WorkoutEntity workoutEntity,
-    ExerciseEntity exercise,
-  );
+  Future<Either<MovementFailure, MovementEntity>> get(UniqueId id);
   Future<Either<MovementFailure, Unit>> update(MovementEntity movement);
+  Future<Either<MovementFailure, Unit>> updateAll(
+    IList<MovementEntity> movements,
+  );
   Future<Either<MovementFailure, Unit>> delete(MovementEntity movement);
 }

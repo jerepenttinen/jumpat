@@ -5,7 +5,6 @@ import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_set_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
-import 'package:jumpat/features/workout/domain/values/repetition_count.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
 
 part 'movement_entity.freezed.dart';

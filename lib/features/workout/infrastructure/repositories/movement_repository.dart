@@ -11,7 +11,6 @@ import 'package:jumpat/features/workout/domain/repositories/i_movement_repositor
 import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/movement_entity_converter.dart';
-import 'package:jumpat/features/workout/infrastructure/repositories/workout_entity_converter.dart';
 
 class MovementRepository implements IMovementRepository {
   MovementRepository({required this.client});
@@ -57,30 +56,12 @@ class MovementRepository implements IMovementRepository {
   }
 
   @override
-  Future<Either<MovementFailure, MovementEntity>> create(
-    WorkoutEntity workout,
-    ExerciseEntity exercise,
-  ) async {
-    final movement =
-        MovementEntity.create(workout: workout, exercise: exercise);
-
-    await client.writeTxn(
-      () async {
-        final m = MovementEntityConverter().toInfra(movement);
-        await client.movements.put(m);
-        await client.exercises.put(ExerciseEntityConverter().toInfra(exercise));
-        await m.exercise.save();
-        await m.workout.save();
-      },
-    );
-
-    return right(movement);
-  }
-
-  @override
-  Future<MovementEntity> get(UniqueId id) async {
+  Future<Either<MovementFailure, MovementEntity>> get(UniqueId id) async {
     final result = await client.movements.get(fastHash(id.getOrCrash()));
-    return MovementEntityConverter().toDomain(result!);
+    return Either.fromOption(
+      Option.fromNullable(result).map(MovementEntityConverter().toDomain),
+      MovementFailure.unableToFind,
+    );
   }
 
   @override
@@ -100,5 +81,23 @@ class MovementRepository implements IMovementRepository {
         )
         .map(MovementEntityConverter().toDomain)
         .toIList();
+  }
+
+  @override
+  Future<Either<MovementFailure, Unit>> updateAll(
+    IList<MovementEntity> movements,
+  ) async {
+    await client.writeTxn(
+      () async {
+        final infra = movements.map(MovementEntityConverter().toInfra).toList();
+        await client.movements.putAll(infra);
+
+        for (final movement in infra) {
+          await movement.exercise.save();
+          await movement.workout.save();
+        }
+      },
+    );
+    return right(unit);
   }
 }

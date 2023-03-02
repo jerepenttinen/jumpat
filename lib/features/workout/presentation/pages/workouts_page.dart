@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
+import 'package:jumpat/features/workout/presentation/widgets/choose_template_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
 
 class WorkoutsPage extends ConsumerWidget {
@@ -111,35 +112,19 @@ class WorkoutsFab extends ConsumerWidget {
           onPressed: () async {
             fabKey.currentState?.toggle();
 
-            // if (!(await ref.read(existsAnyTemplatesProvider.future))) {
-            //   if (context.mounted) {
-            //     ScaffoldMessenger.of(context).showSnackBar(
-            //       SnackBar(content: Text(t.noTemplatesFound)),
-            //     );
-            //   }
-            //   return;
-            // }
+            final template = await chooseTemplateDialog(context);
+            if (template == null) {
+              return;
+            }
 
-            // if (context.mounted) {
-            //   final template = await chooseTemplateDialog(context);
-            //   if (template == null) {
-            //     return;
-            //   }
-            //   final workout = await ref.read(
-            //     saveWorkoutProvider(
-            //       workout: Workout()
-            //         ..date = DateTime.now()
-            //         ..template.value = template,
-            //     ).future,
-            //   );
-            //   for (final exercise in template.exercises) {
-            //     await ref
-            //         .read(createMovementProvider(workout, exercise).future);
-            //   }
-            //   if (context.mounted) {
-            //   await context.router.push(EditWorkoutRoute(workout: workout));
-            //   }
-            // }
+            final workout = await ref
+                .read(workoutsProvider.notifier)
+                .addFromTemplate(template);
+
+            if (context.mounted) {
+              await context.router
+                  .push(EditWorkoutRoute(workoutId: workout.id));
+            }
           },
           child: const Icon(Icons.control_point_duplicate_rounded),
         ),
