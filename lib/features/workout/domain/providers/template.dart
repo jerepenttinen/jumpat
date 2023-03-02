@@ -65,6 +65,10 @@ class TemplateState extends _$TemplateState {
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
     state = AsyncValue.data(updatedTemplate);
+
+    ref
+      ..invalidate(workoutStateProvider)
+      ..invalidate(workoutsProvider);
   }
 
   Future<void> addExercise(ExerciseEntity exercise) async {
