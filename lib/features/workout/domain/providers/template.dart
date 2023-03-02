@@ -81,6 +81,30 @@ class TemplateState extends _$TemplateState {
     state = AsyncValue.data(updatedTemplate);
   }
 
+  Future<void> swapExercise({
+    required ExerciseEntity oldExercise,
+    required ExerciseEntity newExercise,
+  }) async {
+    if (!state.hasValue) {
+      return;
+    }
+
+    final template = state.value!;
+    final index =
+        template.exercises.indexWhere((item) => item.id == oldExercise.id);
+
+    if (index == -1) {
+      return;
+    }
+
+    final updatedTemplate = template.copyWith(
+      exercises: template.exercises.replace(index, newExercise),
+    );
+    final templates = ref.read(templatesProvider.notifier);
+    await templates.save(updatedTemplate);
+    state = AsyncValue.data(updatedTemplate);
+  }
+
   Future<void> removeExercise(ExerciseEntity exercise) async {
     if (!state.hasValue) {
       return;
