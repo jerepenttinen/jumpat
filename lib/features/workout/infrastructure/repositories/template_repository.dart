@@ -38,4 +38,12 @@ class TemplateRepository implements ITemplateRepository {
     return Option.fromNullable(template)
         .map(TemplateEntityConverter().toDomain);
   }
+
+  @override
+  Future<Either<TemplateFailure, Unit>> delete(TemplateEntity template) async {
+    await client.writeTxn(
+      () async => client.templates.delete(fastHash(template.id.getOrCrash())),
+    );
+    return right(unit);
+  }
 }

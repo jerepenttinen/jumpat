@@ -8,4 +8,5 @@ abstract class ITemplateRepository {
   Future<IList<TemplateEntity>> getAll();
   Future<Option<TemplateEntity>> get(UniqueId id);
   Future<Either<TemplateFailure, Unit>> update(TemplateEntity template);
+  Future<Either<TemplateFailure, Unit>> delete(TemplateEntity template);
 }

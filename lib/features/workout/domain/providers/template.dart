@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
+import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -25,6 +26,19 @@ class Templates extends _$Templates {
         [template],
         (item) => item.id,
       ).sortOrdered(templateEntityComparator);
+    });
+  }
+
+  Future<void> remove(TemplateEntity template) async {
+    final repository = ref.watch(templateRepositoryProvider);
+    await repository.delete(template);
+
+    ref
+      ..invalidate(workoutsProvider)
+      ..invalidate(workoutStateProvider);
+
+    await update((currentList) {
+      return currentList.removeWhere((item) => item.id == template.id);
     });
   }
 }
