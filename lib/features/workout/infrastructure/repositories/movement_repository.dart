@@ -213,7 +213,9 @@ class MovementRepository extends DatabaseAccessor<AppDatabase>
         innerJoin(workouts, workouts.id.equalsExp(movements.workout)),
         leftOuterJoin(templates, templates.id.equalsExp(workouts.template)),
       ],
-    )..where(movements.exercise.equals(exerciseEntity.id.getOrCrash()));
+    )
+      ..where(movements.exercise.equals(exerciseEntity.id.getOrCrash()))
+      ..orderBy([OrderingTerm.desc(workouts.date)]);
 
     return _listGetter(query);
   }
