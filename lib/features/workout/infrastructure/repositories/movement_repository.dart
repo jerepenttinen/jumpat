@@ -42,41 +42,45 @@ class MovementRepository extends DatabaseAccessor<AppDatabase>
   Future<IList<MovementEntity>> getAll(
     WorkoutEntity workout,
   ) async {
-    final movements = await client.movements
-        .filter()
-        .workout(
-          (q) => q.idEqualTo(workout.id.getOrCrash()),
-        )
-        .findAll();
-    return movements.map(MovementEntityConverter().toDomain).toIList();
+    return <MovementEntity>[].lock;
+    // final movements = await client.movements
+    //     .filter()
+    //     .workout(
+    //       (q) => q.idEqualTo(workout.id.getOrCrash()),
+    //     )
+    //     .findAll();
+    // return movements.map(MovementEntityConverter().toDomain).toIList();
   }
 
   @override
   Future<Either<MovementFailure, MovementEntity>> get(UniqueId id) async {
-    final result = await client.movements.get(fastHash(id.getOrCrash()));
-    return Either.fromOption(
-      Option.fromNullable(result).map(MovementEntityConverter().toDomain),
-      MovementFailure.unableToFind,
-    );
+    // final result = await client.movements.get(fastHash(id.getOrCrash()));
+    // return Either.fromOption(
+    //   Option.fromNullable(result).map(MovementEntityConverter().toDomain),
+    //   MovementFailure.unableToFind,
+    // );
+    return left(const MovementFailure.unableToFind());
   }
 
   @override
   Future<IList<MovementEntity>> getAllByExercise(
     ExerciseEntity exerciseEntity,
   ) async {
-    final exercise = ExerciseEntityConverter().toInfra(exerciseEntity);
-    final workouts = await client.workouts
-        .filter()
-        .movements((m) => m.exercise((e) => e.isarIdEqualTo(exercise.isarId)))
-        .sortByDateDesc()
-        .findAll();
+    return <MovementEntity>[].lock;
 
-    return workouts
-        .expand(
-          (w) => w.movements.where((m) => m.exercise.value?.id == exercise.id),
-        )
-        .map(MovementEntityConverter().toDomain)
-        .toIList();
+    // final exercise = ExerciseEntityConverter().toInfra(exerciseEntity);
+    // final workouts = await client.workouts
+    //     .filter()
+    //     .movements((m) => m.exercise((e) => e.isarIdEqualTo(exercise.isarId)))
+    //     .sortByDateDesc()
+    //     .findAll();
+
+    // return workouts
+    //     .expand(
+    //       (w) => w.movements.where((m) => m.exercise.value?.id == exercise.id),
+    //     )
+    //     .map(MovementEntityConverter().toDomain)
+    //     .toIList();
   }
 
   @override

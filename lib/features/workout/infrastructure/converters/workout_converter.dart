@@ -20,7 +20,13 @@ class WorkoutConverter implements IConverter<WorkoutEntity, WorkoutAggregate> {
   @override
   WorkoutAggregate toModel(WorkoutEntity entity) {
     return WorkoutAggregate(
-      workout: Workout(id: entity.id.getOrCrash(), date: entity.date),
+      workout: Workout(
+        id: entity.id.getOrCrash(),
+        date: entity.date,
+        template: entity.template
+            .map((template) => template.id.getOrCrash())
+            .toNullable(),
+      ),
       template: entity.template.map(TemplateConverter().toModel).toNullable(),
     );
   }

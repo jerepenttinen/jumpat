@@ -40,7 +40,7 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
     final workoutTemplates = workout.map(
       (row) => _WorkoutTemplate(
         row.readTable(workouts),
-        row.readTable(templates),
+        row.readTableOrNull(templates),
       ),
     );
 
@@ -103,7 +103,7 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
 
     final workoutTemplate = _WorkoutTemplate(
       workoutResult.readTable(workouts),
-      workoutResult.readTable(templates),
+      workoutResult.readTableOrNull(templates),
     );
 
     if (workoutTemplate.template == null) {
