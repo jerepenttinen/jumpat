@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
-import 'package:jumpat/features/core/infrastructure/isar.dart';
+import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/core/providers.dart';
 import 'package:jumpat/features/settings/domain/providers.dart';
 import 'package:jumpat/features/settings/infrastructure/providers.dart';
@@ -12,13 +12,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final sharedPreferences = await SharedPreferences.getInstance();
+  final appDatabase = AppDatabase();
 
-  final isar = await openIsar();
   runApp(
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-        isarInstanceProvider.overrideWithValue(isar),
+        appDatabaseProvider.overrideWithValue(appDatabase),
       ],
       child: MyApp(),
     ),

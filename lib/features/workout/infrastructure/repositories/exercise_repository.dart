@@ -1,41 +1,46 @@
+import 'package:drift/drift.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:isar/isar.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
-import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
+import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/exercise_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_exercise_repository.dart';
-import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
-import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
+import 'package:jumpat/features/workout/infrastructure/converters/exercise_converter.dart';
 
-class ExerciseRepository implements IExerciseRepository {
-  const ExerciseRepository({required this.client});
+part 'exercise_repository.g.dart';
 
-  final Isar client;
+@DriftAccessor(tables: [Exercises])
+class ExerciseRepository extends DatabaseAccessor<AppDatabase>
+    with _$ExerciseRepositoryMixin
+    implements IExerciseRepository {
+  ExerciseRepository({required this.db}) : super(db);
+
+  final AppDatabase db;
 
   @override
   Future<IList<ExerciseEntity>> getAll() async {
-    final exercises = await client.exercises.where().findAll();
-    return exercises
-        .map((exercise) => ExerciseEntityConverter().toDomain(exercise))
-        .toIList();
+    final result = await select(exercises).get();
+    return result.map(ExerciseConverter().toDomain).toIList();
   }
 
   @override
-  Future<Either<ExerciseFailure, Unit>> update(ExerciseEntity exercise) async {
-    await client.writeTxn(
-      () => client.exercises.put(ExerciseEntityConverter().toInfra(exercise)),
-    );
+  Future<Either<ExerciseFailure, Unit>> save(ExerciseEntity exercise) async {
+    await db
+        .into(exercises)
+        .insertOnConflictUpdate(ExerciseConverter().toModel(exercise));
 
     return const Right(unit);
   }
 
   @override
   Future<Either<ExerciseFailure, ExerciseEntity>> get(UniqueId id) async {
-    final exercise = await client.exercises.get(fastHash(id.getOrCrash()));
-    if (exercise != null) {
-      return right(ExerciseEntityConverter().toDomain(exercise));
+    final result = await (db.select(exercises)
+          ..where((exercise) => exercise.id.equals(id.getOrCrash())))
+        .getSingleOrNull();
+
+    if (result != null) {
+      return right(ExerciseConverter().toDomain(result));
     } else {
       return left(const ExerciseFailure.notFound());
     }

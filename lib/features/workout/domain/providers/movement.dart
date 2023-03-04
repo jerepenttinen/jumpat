@@ -24,7 +24,7 @@ class Movements extends _$Movements {
 
   Future<void> save(MovementEntity movement) async {
     final repository = ref.watch(movementRepositoryProvider);
-    await repository.update(movement);
+    await repository.save(movement);
 
     await update((currentList) {
       return currentList.updateById([movement], (item) => item.id);
@@ -33,7 +33,7 @@ class Movements extends _$Movements {
 
   Future<void> remove(MovementEntity movement) async {
     final repository = ref.watch(movementRepositoryProvider);
-    final result = await repository.delete(movement);
+    final result = await repository.remove(movement);
 
     await result.match(
       (l) => null,
@@ -56,7 +56,7 @@ class Movements extends _$Movements {
         weight: weight,
       );
 
-      final result = await repository.update(movement);
+      final result = await repository.save(movement);
 
       return await result.match((l) => none(), (r) async {
         await update((currentList) => currentList.add(movement));
@@ -82,7 +82,7 @@ class Movements extends _$Movements {
     ))
         .toIList();
 
-    await repository.updateAll(movements);
+    await repository.saveAll(movements);
 
     await update((currentList) {
       return currentList.updateById(movements, (item) => item.id);

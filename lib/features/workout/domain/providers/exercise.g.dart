@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$ExercisesHash() => r'cec40f364c94ab943613c6c923cbb0823c3b4f31';
+String _$ExercisesHash() => r'e545ee9ac9a7290eccb20d3f2e21849aa8a5a7cd';
 
 /// See also [Exercises].
 final exercisesProvider =

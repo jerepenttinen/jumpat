@@ -23,7 +23,7 @@ class Workouts extends _$Workouts {
 
   Future<void> save(WorkoutEntity workout) async {
     final repository = ref.watch(workoutRepositoryProvider);
-    await repository.update(workout);
+    await repository.save(workout);
 
     await update((currentList) {
       return currentList.updateById(
@@ -35,7 +35,7 @@ class Workouts extends _$Workouts {
 
   Future<void> remove(WorkoutEntity workout) async {
     final repository = ref.watch(workoutRepositoryProvider);
-    await repository.delete(workout);
+    await repository.remove(workout);
 
     await update((currentList) {
       return currentList.removeWhere((item) => item.id == workout.id);
@@ -46,7 +46,7 @@ class Workouts extends _$Workouts {
     final workout = WorkoutEntity.template(template: template);
 
     final repository = ref.watch(workoutRepositoryProvider);
-    await repository.update(workout);
+    await repository.save(workout);
 
     final movements =
         ref.watch(movementsProvider(workoutId: workout.id).notifier);

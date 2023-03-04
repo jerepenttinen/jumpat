@@ -13,10 +13,10 @@ abstract class IMovementRepository {
   );
   Future<IList<MovementEntity>> getAllByExercise(ExerciseEntity exercise);
   Future<Either<MovementFailure, MovementEntity>> get(UniqueId id);
-  Future<Either<MovementFailure, Unit>> update(MovementEntity movement);
-  Future<Either<MovementFailure, Unit>> updateAll(
+  Future<Either<MovementFailure, Unit>> save(MovementEntity movement);
+  Future<Either<MovementFailure, Unit>> saveAll(
     IList<MovementEntity> movements,
   );
-  Future<Either<MovementFailure, Unit>> delete(MovementEntity movement);
+  Future<Either<MovementFailure, Unit>> remove(MovementEntity movement);
   Future<MovementWeight> getPriorWeight(DateTime date, ExerciseEntity exercise);
 }

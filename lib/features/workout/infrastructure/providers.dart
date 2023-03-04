@@ -10,17 +10,17 @@ import 'package:jumpat/features/workout/infrastructure/repositories/template_rep
 import 'package:jumpat/features/workout/infrastructure/repositories/workout_repository.dart';
 
 final movementRepositoryProvider = Provider<IMovementRepository>((ref) {
-  return MovementRepository(client: ref.watch(isarInstanceProvider));
+  return MovementRepository(db: ref.watch(appDatabaseProvider));
 });
 
 final workoutRepositoryProvider = Provider<IWorkoutRepository>((ref) {
-  return WorkoutRepository(client: ref.watch(isarInstanceProvider));
+  return WorkoutRepository(db: ref.watch(appDatabaseProvider));
 });
 
 final exerciseRepositoryProvider = Provider<IExerciseRepository>((ref) {
-  return ExerciseRepository(client: ref.watch(isarInstanceProvider));
+  return ExerciseRepository(db: ref.watch(appDatabaseProvider));
 });
 
 final templateRepositoryProvider = Provider<ITemplateRepository>((ref) {
-  return TemplateRepository(client: ref.watch(isarInstanceProvider));
+  return TemplateRepository(db: ref.watch(appDatabaseProvider));
 });

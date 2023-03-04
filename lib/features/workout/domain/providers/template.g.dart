@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$TemplatesHash() => r'86bb390688ef39fa72bcb0cbcf1efb0c90e68a4e';
+String _$TemplatesHash() => r'00ac495774c367da3b63e29b2ef711a32dc49167';
 
 /// See also [Templates].
 final templatesProvider =
@@ -46,7 +46,7 @@ abstract class _$Templates extends AsyncNotifier<IList<TemplateEntity>> {
   FutureOr<IList<TemplateEntity>> build();
 }
 
-String _$TemplateStateHash() => r'cd012db08d6106bc203e02f0761307d08ad5d547';
+String _$TemplateStateHash() => r'401e57105d883dc5f51985c21cff521ae3351625';
 
 /// See also [TemplateState].
 class TemplateStateProvider

@@ -42,7 +42,7 @@ class Exercises extends _$Exercises {
 
   Future<void> save(ExerciseEntity exercise) async {
     final repository = ref.watch(exerciseRepositoryProvider);
-    await repository.update(exercise);
+    await repository.save(exercise);
 
     await update((currentList) {
       return currentList.updateById([exercise], (item) => item.id);
