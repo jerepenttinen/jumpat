@@ -32,7 +32,7 @@ class TemplateConverter
         name: entity.name.getOrCrash(),
         color: entity.color.getOrCrash().value,
       ),
-      exercises: entity.exercises.map(ExerciseConverter().toModel).toIList(),
+      exercises: entity.exercises.map(ExerciseConverter().toModel).toList(),
     );
   }
 }

@@ -170,7 +170,7 @@ abstract class _WorkoutAggregate implements WorkoutAggregate {
 /// @nodoc
 mixin _$MovementAggregate {
   Movement get movement => throw _privateConstructorUsedError;
-  IList<MovementSet> get sets => throw _privateConstructorUsedError;
+  List<MovementSet> get sets => throw _privateConstructorUsedError;
   WorkoutAggregate get workout => throw _privateConstructorUsedError;
   Exercise get exercise => throw _privateConstructorUsedError;
 
@@ -187,7 +187,7 @@ abstract class $MovementAggregateCopyWith<$Res> {
   @useResult
   $Res call(
       {Movement movement,
-      IList<MovementSet> sets,
+      List<MovementSet> sets,
       WorkoutAggregate workout,
       Exercise exercise});
 
@@ -220,7 +220,7 @@ class _$MovementAggregateCopyWithImpl<$Res, $Val extends MovementAggregate>
       sets: null == sets
           ? _value.sets
           : sets // ignore: cast_nullable_to_non_nullable
-              as IList<MovementSet>,
+              as List<MovementSet>,
       workout: null == workout
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
@@ -251,7 +251,7 @@ abstract class _$$_MovementAggregateCopyWith<$Res>
   @useResult
   $Res call(
       {Movement movement,
-      IList<MovementSet> sets,
+      List<MovementSet> sets,
       WorkoutAggregate workout,
       Exercise exercise});
 
@@ -281,9 +281,9 @@ class __$$_MovementAggregateCopyWithImpl<$Res>
           : movement // ignore: cast_nullable_to_non_nullable
               as Movement,
       sets: null == sets
-          ? _value.sets
+          ? _value._sets
           : sets // ignore: cast_nullable_to_non_nullable
-              as IList<MovementSet>,
+              as List<MovementSet>,
       workout: null == workout
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
@@ -301,14 +301,21 @@ class __$$_MovementAggregateCopyWithImpl<$Res>
 class _$_MovementAggregate implements _MovementAggregate {
   const _$_MovementAggregate(
       {required this.movement,
-      required this.sets,
+      required final List<MovementSet> sets,
       required this.workout,
-      required this.exercise});
+      required this.exercise})
+      : _sets = sets;
 
   @override
   final Movement movement;
+  final List<MovementSet> _sets;
   @override
-  final IList<MovementSet> sets;
+  List<MovementSet> get sets {
+    if (_sets is EqualUnmodifiableListView) return _sets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_sets);
+  }
+
   @override
   final WorkoutAggregate workout;
   @override
@@ -326,7 +333,7 @@ class _$_MovementAggregate implements _MovementAggregate {
             other is _$_MovementAggregate &&
             (identical(other.movement, movement) ||
                 other.movement == movement) &&
-            const DeepCollectionEquality().equals(other.sets, sets) &&
+            const DeepCollectionEquality().equals(other._sets, _sets) &&
             (identical(other.workout, workout) || other.workout == workout) &&
             (identical(other.exercise, exercise) ||
                 other.exercise == exercise));
@@ -334,7 +341,7 @@ class _$_MovementAggregate implements _MovementAggregate {
 
   @override
   int get hashCode => Object.hash(runtimeType, movement,
-      const DeepCollectionEquality().hash(sets), workout, exercise);
+      const DeepCollectionEquality().hash(_sets), workout, exercise);
 
   @JsonKey(ignore: true)
   @override
@@ -347,14 +354,14 @@ class _$_MovementAggregate implements _MovementAggregate {
 abstract class _MovementAggregate implements MovementAggregate {
   const factory _MovementAggregate(
       {required final Movement movement,
-      required final IList<MovementSet> sets,
+      required final List<MovementSet> sets,
       required final WorkoutAggregate workout,
       required final Exercise exercise}) = _$_MovementAggregate;
 
   @override
   Movement get movement;
   @override
-  IList<MovementSet> get sets;
+  List<MovementSet> get sets;
   @override
   WorkoutAggregate get workout;
   @override
@@ -368,7 +375,7 @@ abstract class _MovementAggregate implements MovementAggregate {
 /// @nodoc
 mixin _$TemplateAggregate {
   Template get template => throw _privateConstructorUsedError;
-  IList<Exercise> get exercises => throw _privateConstructorUsedError;
+  List<Exercise> get exercises => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TemplateAggregateCopyWith<TemplateAggregate> get copyWith =>
@@ -381,7 +388,7 @@ abstract class $TemplateAggregateCopyWith<$Res> {
           TemplateAggregate value, $Res Function(TemplateAggregate) then) =
       _$TemplateAggregateCopyWithImpl<$Res, TemplateAggregate>;
   @useResult
-  $Res call({Template template, IList<Exercise> exercises});
+  $Res call({Template template, List<Exercise> exercises});
 }
 
 /// @nodoc
@@ -408,7 +415,7 @@ class _$TemplateAggregateCopyWithImpl<$Res, $Val extends TemplateAggregate>
       exercises: null == exercises
           ? _value.exercises
           : exercises // ignore: cast_nullable_to_non_nullable
-              as IList<Exercise>,
+              as List<Exercise>,
     ) as $Val);
   }
 }
@@ -421,7 +428,7 @@ abstract class _$$_TemplateAggregateCopyWith<$Res>
       __$$_TemplateAggregateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Template template, IList<Exercise> exercises});
+  $Res call({Template template, List<Exercise> exercises});
 }
 
 /// @nodoc
@@ -444,9 +451,9 @@ class __$$_TemplateAggregateCopyWithImpl<$Res>
           : template // ignore: cast_nullable_to_non_nullable
               as Template,
       exercises: null == exercises
-          ? _value.exercises
+          ? _value._exercises
           : exercises // ignore: cast_nullable_to_non_nullable
-              as IList<Exercise>,
+              as List<Exercise>,
     ));
   }
 }
@@ -454,12 +461,19 @@ class __$$_TemplateAggregateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_TemplateAggregate implements _TemplateAggregate {
-  const _$_TemplateAggregate({required this.template, required this.exercises});
+  const _$_TemplateAggregate(
+      {required this.template, required final List<Exercise> exercises})
+      : _exercises = exercises;
 
   @override
   final Template template;
+  final List<Exercise> _exercises;
   @override
-  final IList<Exercise> exercises;
+  List<Exercise> get exercises {
+    if (_exercises is EqualUnmodifiableListView) return _exercises;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_exercises);
+  }
 
   @override
   String toString() {
@@ -473,12 +487,13 @@ class _$_TemplateAggregate implements _TemplateAggregate {
             other is _$_TemplateAggregate &&
             (identical(other.template, template) ||
                 other.template == template) &&
-            const DeepCollectionEquality().equals(other.exercises, exercises));
+            const DeepCollectionEquality()
+                .equals(other._exercises, _exercises));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, template, const DeepCollectionEquality().hash(exercises));
+      runtimeType, template, const DeepCollectionEquality().hash(_exercises));
 
   @JsonKey(ignore: true)
   @override
@@ -491,12 +506,12 @@ class _$_TemplateAggregate implements _TemplateAggregate {
 abstract class _TemplateAggregate implements TemplateAggregate {
   const factory _TemplateAggregate(
       {required final Template template,
-      required final IList<Exercise> exercises}) = _$_TemplateAggregate;
+      required final List<Exercise> exercises}) = _$_TemplateAggregate;
 
   @override
   Template get template;
   @override
-  IList<Exercise> get exercises;
+  List<Exercise> get exercises;
   @override
   @JsonKey(ignore: true)
   _$$_TemplateAggregateCopyWith<_$_TemplateAggregate> get copyWith =>

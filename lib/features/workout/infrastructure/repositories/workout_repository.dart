@@ -7,11 +7,12 @@ import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_workout_repository.dart';
+import 'package:jumpat/features/workout/infrastructure/aggregates/aggregates.dart';
 import 'package:jumpat/features/workout/infrastructure/converters/workout_converter.dart';
 
 part 'workout_repository.g.dart';
 
-@DriftAccessor(tables: [Workouts])
+@DriftAccessor(tables: [Workouts, Templates, TemplatesExercises])
 class WorkoutRepository extends DatabaseAccessor<AppDatabase>
     with _$WorkoutRepositoryMixin
     implements IWorkoutRepository {
@@ -29,8 +30,55 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<IList<WorkoutEntity>> getAll() async {
-    final workouts = await client.workouts.where().sortByDateDesc().findAll();
-    return workouts.map(WorkoutEntityConverter().toDomain).toIList();
+    final query = select(workouts).join(
+      [leftOuterJoin(templates, templates.id.equalsExp(workouts.template))],
+    )..orderBy([OrderingTerm.desc(workouts.date)]);
+
+    final workout = await query.get();
+
+    final workoutTemplates = workout.map(
+      (row) => _WorkoutTemplate(
+        row.readTable(workouts),
+        row.readTable(templates),
+      ),
+    );
+
+    final idToTemplate = {
+      for (var t in workoutTemplates)
+        if (t.template != null) t.template!.id: t.template!
+    };
+    final ids = idToTemplate.keys;
+
+    final exerciseQuery = await (select(templatesExercises).join([
+      innerJoin(exercises, exercises.id.equalsExp(templatesExercises.exercise)),
+    ])
+          ..where(templatesExercises.template.isIn(ids)))
+        .get();
+
+    final idToExercises = <int, List<Exercise>>{};
+
+    for (final row in exerciseQuery) {
+      final exercise = row.readTable(exercises);
+      final id = row.readTable(templatesExercises).template;
+      idToExercises.putIfAbsent(id, () => []).add(exercise);
+    }
+
+    return workoutTemplates
+        .map((e) {
+          TemplateAggregate? template;
+          if (e.template != null) {
+            template = TemplateAggregate(
+              template: e.template!,
+              exercises: idToExercises[e.template!.id] ?? <Exercise>[],
+            );
+          }
+          return WorkoutAggregate(
+            workout: e.workout,
+            template: template,
+          );
+        })
+        .map(WorkoutConverter().toDomain)
+        .toIList();
   }
 
   @override
@@ -50,4 +98,10 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
       return left(const WorkoutFailure.unexpected());
     }
   }
+}
+
+class _WorkoutTemplate {
+  _WorkoutTemplate(this.workout, this.template);
+  final Workout workout;
+  final Template? template;
 }

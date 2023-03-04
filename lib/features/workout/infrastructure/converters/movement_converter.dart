@@ -35,7 +35,7 @@ class MovementConverter
       ),
       sets: entity.sets
           .map(MovementSetConverter(entity.id.getOrCrash()).toModel)
-          .toIList(),
+          .toList(),
       workout: WorkoutConverter().toModel(entity.workout),
       exercise: ExerciseConverter().toModel(entity.exercise),
     );

@@ -57,7 +57,7 @@ class TemplateRepository extends DatabaseAccessor<AppDatabase>
       for (final id in ids)
         TemplateAggregate(
           template: idToTemplate[id]!,
-          exercises: IList(idToExercises[id] ?? <Exercise>[]),
+          exercises: idToExercises[id] ?? <Exercise>[],
         )
     ].map(TemplateConverter().toDomain).toIList();
   }
@@ -78,7 +78,7 @@ class TemplateRepository extends DatabaseAccessor<AppDatabase>
           ..where(templatesExercises.template.equals(id.getOrCrash())))
         .get();
 
-    final exs = exerciseQuery.map((row) => row.readTable(exercises)).toIList();
+    final exs = exerciseQuery.map((row) => row.readTable(exercises)).toList();
 
     return some(
       TemplateConverter().toDomain(
