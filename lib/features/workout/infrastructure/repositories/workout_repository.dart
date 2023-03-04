@@ -7,10 +7,11 @@ import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_workout_repository.dart';
+import 'package:jumpat/features/workout/infrastructure/converters/workout_converter.dart';
 
 part 'workout_repository.g.dart';
 
-@DriftAccessor(tables: [Workouts, Templates])
+@DriftAccessor(tables: [Workouts])
 class WorkoutRepository extends DatabaseAccessor<AppDatabase>
     with _$WorkoutRepositoryMixin
     implements IWorkoutRepository {
@@ -19,16 +20,10 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<Either<WorkoutFailure, Unit>> remove(WorkoutEntity workout) async {
-    await client.writeTxn(
-      () async {
-        final id = fastHash(workout.id.getOrCrash());
-        await client.movements
-            .filter()
-            .workout((q) => q.isarIdEqualTo(id))
-            .deleteAll();
-        await client.workouts.delete(id);
-      },
-    );
+    await (delete(workouts)
+          ..where((tbl) => tbl.id.equals(workout.id.getOrCrash())))
+        .go();
+
     return right(unit);
   }
 
@@ -40,15 +35,10 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<Either<WorkoutFailure, Unit>> save(WorkoutEntity workout) async {
-    await client.writeTxn(
-      () async {
-        final w = WorkoutEntityConverter().toInfra(workout);
-        await client.workouts.put(w);
-        await w.template.save();
-      },
-    );
+    final aggregate = WorkoutConverter().toModel(workout);
+    await db.into(workouts).insertOnConflictUpdate(aggregate.workout);
 
-    return const Right(unit);
+    return right(unit);
   }
 
   @override

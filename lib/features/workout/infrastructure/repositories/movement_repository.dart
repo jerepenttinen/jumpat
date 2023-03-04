@@ -10,6 +10,7 @@ import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_movement_repository.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
+import 'package:jumpat/features/workout/infrastructure/converters/movement_converter.dart';
 part 'movement_repository.g.dart';
 
 @DriftAccessor(tables: [Movements, Workouts, Exercises])
@@ -21,26 +22,19 @@ class MovementRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<Either<MovementFailure, Unit>> remove(MovementEntity movement) async {
-    final deleted = await client.writeTxn(
-      () => client.movements.delete(fastHash(movement.id.getOrCrash())),
-    );
-    if (deleted) {
-      return right(unit);
-    } else {
-      return left(const MovementFailure.unableToDelete());
-    }
+    await (delete(movements)
+          ..where((tbl) => tbl.id.equals(movement.id.getOrCrash())))
+        .go();
+
+    return right(unit);
   }
 
   @override
   Future<Either<MovementFailure, Unit>> save(MovementEntity movement) async {
-    await client.writeTxn(
-      () async {
-        final m = MovementEntityConverter().toInfra(movement);
-        await client.movements.put(m);
-        await m.exercise.save();
-        await m.workout.save();
-      },
-    );
+    final aggregate = MovementConverter().toModel(movement);
+
+    await db.into(movements).insertOnConflictUpdate(aggregate.movement);
+
     return right(unit);
   }
 
@@ -87,19 +81,17 @@ class MovementRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<Either<MovementFailure, Unit>> saveAll(
-    IList<MovementEntity> movements,
+    IList<MovementEntity> amovements,
   ) async {
-    await client.writeTxn(
-      () async {
-        final infra = movements.map(MovementEntityConverter().toInfra).toList();
-        await client.movements.putAll(infra);
+    await transaction(() async {
+      await batch((batch) {
+        batch.insertAllOnConflictUpdate(
+          movements,
+          amovements.map((mov) => MovementConverter().toModel(mov).movement),
+        );
+      });
+    });
 
-        for (final movement in infra) {
-          await movement.exercise.save();
-          await movement.workout.save();
-        }
-      },
-    );
     return right(unit);
   }
 
@@ -108,20 +100,29 @@ class MovementRepository extends DatabaseAccessor<AppDatabase>
     DateTime date,
     ExerciseEntity exercise,
   ) async {
-    final movements = await client.movements
-        .filter()
-        .workout((q) => q.dateLessThan(date))
-        .exercise((q) => q.isarIdEqualTo(fastHash(exercise.id.getOrCrash())))
-        .findAll();
+    final query = select(movements).join([
+      innerJoin(
+        workouts,
+        workouts.id.equalsExp(movements.workout),
+      ),
+      innerJoin(
+        exercises,
+        exercises.id.equalsExp(movements.exercise),
+      ),
+    ])
+      ..where(
+        exercises.id.equals(exercise.id.getOrCrash()) &
+            workouts.date.isSmallerThanValue(date),
+      )
+      ..orderBy([OrderingTerm.desc(workouts.date)])
+      ..limit(1);
 
-    if (movements.isEmpty) {
+    final result = await query.getSingleOrNull();
+
+    if (result == null) {
       return MovementWeight(0);
     }
 
-    movements.sort(
-      (m1, m2) => m2.workout.value!.date.compareTo(m1.workout.value!.date),
-    );
-
-    return MovementEntityConverter().toDomain(movements.first).weight;
+    return MovementWeight(result.readTable(movements).weight);
   }
 }
