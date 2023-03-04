@@ -1,4 +1,4 @@
-abstract class IConverter<T, K> {
-  T toFirst(K second);
-  K toSecond(T first);
+abstract class IConverter<Domain, Model> {
+  Domain toDomain(Model model);
+  Model toModel(Domain domain);
 }

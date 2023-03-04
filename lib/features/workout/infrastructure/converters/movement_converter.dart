@@ -4,64 +4,40 @@ import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/core/infrastructure/i_converter.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
+import 'package:jumpat/features/workout/infrastructure/aggregates/aggregates.dart';
 import 'package:jumpat/features/workout/infrastructure/converters/exercise_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/converters/movement_set_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/converters/workout_converter.dart';
-import 'package:jumpat/features/workout/infrastructure/dtos/aggregates.dart';
-import 'package:jumpat/features/workout/infrastructure/dtos/dtos.dart';
 
-class MovementEntityConverter
-    implements IConverter<MovementEntity, MovementDto> {
+class MovementConverter
+    implements IConverter<MovementEntity, MovementAggregate> {
   @override
-  MovementEntity toFirst(MovementDto dto) {
+  MovementEntity toDomain(MovementAggregate aggregate) {
     return MovementEntity(
-      id: UniqueId.fromUniqueInt(dto.id),
-      weight: MovementWeight(dto.weight),
-      sets: dto.sets.map(MovementSetEntityConverter().toFirst).toIList(),
-      workout: WorkoutEntityConverter().toFirst(dto.workout),
-      exercise: ExerciseEntityConverter().toFirst(dto.exercise),
-    );
-  }
-
-  @override
-  MovementDto toSecond(MovementEntity entity) {
-    return MovementDto(
-      id: entity.id.getOrCrash(),
-      weight: entity.weight.getOrCrash(),
-      sets: entity.sets.map(MovementSetEntityConverter().toSecond).toIList(),
-      workout: WorkoutEntityConverter().toSecond(entity.workout),
-      exercise: ExerciseEntityConverter().toSecond(entity.exercise),
-    );
-  }
-}
-
-class MovementDtoConverter
-    implements IConverter<MovementDto, MovementAggregate> {
-  @override
-  MovementDto toFirst(MovementAggregate aggregate) {
-    return MovementDto(
-      id: aggregate.movement.id,
-      weight: aggregate.movement.weight,
+      id: UniqueId.fromUniqueInt(aggregate.movement.id),
+      weight: MovementWeight(aggregate.movement.weight),
       sets: aggregate.sets
-          .map(MovementSetDtoConverter(aggregate.movement.id).toFirst)
+          .map(MovementSetConverter(aggregate.movement.id).toDomain)
           .toIList(),
-      workout: WorkoutDtoConverter().toFirst(aggregate.workout),
-      exercise: ExerciseDtoConverter().toFirst(aggregate.exercise),
+      workout: WorkoutConverter().toDomain(aggregate.workout),
+      exercise: ExerciseConverter().toDomain(aggregate.exercise),
     );
   }
 
   @override
-  MovementAggregate toSecond(MovementDto dto) {
+  MovementAggregate toModel(MovementEntity entity) {
     return MovementAggregate(
       movement: Movement(
-        id: dto.id,
-        weight: dto.weight,
-        exercise: dto.exercise.id,
-        workout: dto.workout.id,
+        id: entity.id.getOrCrash(),
+        weight: entity.weight.getOrCrash(),
+        exercise: entity.exercise.id.getOrCrash(),
+        workout: entity.workout.id.getOrCrash(),
       ),
-      sets: dto.sets.map(MovementSetDtoConverter(dto.id).toSecond).toIList(),
-      workout: WorkoutDtoConverter().toSecond(dto.workout),
-      exercise: ExerciseDtoConverter().toSecond(dto.exercise),
+      sets: entity.sets
+          .map(MovementSetConverter(entity.id.getOrCrash()).toModel)
+          .toIList(),
+      workout: WorkoutConverter().toModel(entity.workout),
+      exercise: ExerciseConverter().toModel(entity.exercise),
     );
   }
 }

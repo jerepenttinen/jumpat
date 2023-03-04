@@ -3,35 +3,21 @@ import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/core/infrastructure/i_converter.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/values/exercise_name.dart';
-import 'package:jumpat/features/workout/infrastructure/dtos/dtos.dart';
 
-class ExerciseEntityConverter
-    implements IConverter<ExerciseEntity, ExerciseDto> {
+class ExerciseConverter implements IConverter<ExerciseEntity, Exercise> {
   @override
-  ExerciseEntity toFirst(ExerciseDto dto) {
+  ExerciseEntity toDomain(Exercise model) {
     return ExerciseEntity(
-      id: UniqueId.fromUniqueInt(dto.id),
-      name: ExerciseName(dto.name),
+      id: UniqueId.fromUniqueInt(model.id),
+      name: ExerciseName(model.name),
     );
   }
 
   @override
-  ExerciseDto toSecond(ExerciseEntity entity) {
-    return ExerciseDto(
+  Exercise toModel(ExerciseEntity entity) {
+    return Exercise(
       id: entity.id.getOrCrash(),
       name: entity.name.getOrCrash(),
     );
-  }
-}
-
-class ExerciseDtoConverter implements IConverter<ExerciseDto, Exercise> {
-  @override
-  ExerciseDto toFirst(Exercise model) {
-    return ExerciseDto(id: model.id, name: model.name);
-  }
-
-  @override
-  Exercise toSecond(ExerciseDto dto) {
-    return Exercise(id: dto.id, name: dto.name);
   }
 }
