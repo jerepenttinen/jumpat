@@ -49,33 +49,3 @@ class TemplatesExercises extends Table {
   IntColumn get template => integer().references(Templates, #id)();
   IntColumn get exercise => integer().references(Exercises, #id)();
 }
-
-// Tables with joined references
-
-class WorkoutWithTemplate {
-  WorkoutWithTemplate(this.workout, this.template);
-
-  final Workout workout;
-  final Template? template;
-}
-
-class MovementWithExerciseWorkoutSets {
-  MovementWithExerciseWorkoutSets(
-    this.movement,
-    this.exercise,
-    this.workout,
-    this.sets,
-  );
-
-  final Movement movement;
-  final Exercise exercise;
-  final Workout workout;
-  final List<MovementSet> sets;
-}
-
-class TemplateWithExercises {
-  TemplateWithExercises(this.template, this.exercises);
-
-  final Template template;
-  final List<Exercise> exercises;
-}

@@ -6,4 +6,6 @@ part of 'template_repository.dart';
 mixin _$TemplateRepositoryMixin on DatabaseAccessor<AppDatabase> {
   $TemplatesTable get templates => attachedDatabase.templates;
   $ExercisesTable get exercises => attachedDatabase.exercises;
+  $TemplatesExercisesTable get templatesExercises =>
+      attachedDatabase.templatesExercises;
 }
