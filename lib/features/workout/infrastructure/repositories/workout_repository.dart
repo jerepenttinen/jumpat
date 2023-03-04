@@ -8,6 +8,7 @@ import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_workout_repository.dart';
 import 'package:jumpat/features/workout/infrastructure/aggregates/aggregates.dart';
+import 'package:jumpat/features/workout/infrastructure/converters/template_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/converters/workout_converter.dart';
 
 part 'workout_repository.g.dart';
@@ -91,12 +92,52 @@ class WorkoutRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<Either<WorkoutFailure, WorkoutEntity>> get(UniqueId id) async {
-    final workout = await client.workouts.get(fastHash(id.getOrCrash()));
-    if (workout != null) {
-      return right(WorkoutEntityConverter().toDomain(workout));
-    } else {
+    final query = select(workouts).join(
+      [leftOuterJoin(templates, templates.id.equalsExp(workouts.template))],
+    )..where(workouts.id.equals(id.getOrCrash()));
+
+    final workoutResult = await query.getSingleOrNull();
+    if (workoutResult == null) {
       return left(const WorkoutFailure.unexpected());
     }
+
+    final workoutTemplate = _WorkoutTemplate(
+      workoutResult.readTable(workouts),
+      workoutResult.readTable(templates),
+    );
+
+    if (workoutTemplate.template == null) {
+      return right(
+        WorkoutConverter().toDomain(
+          WorkoutAggregate(workout: workoutTemplate.workout, template: null),
+        ),
+      );
+    }
+
+    final template = await (select(templates)
+          ..where(
+            (template) => template.id.equals(workoutTemplate.template!.id),
+          ))
+        .getSingle();
+
+    final exerciseQuery = await (select(templatesExercises).join([
+      innerJoin(exercises, exercises.id.equalsExp(templatesExercises.exercise)),
+    ])
+          ..where(
+            templatesExercises.template.equals(workoutTemplate.template!.id),
+          ))
+        .get();
+
+    final exs = exerciseQuery.map((row) => row.readTable(exercises)).toList();
+
+    return right(
+      WorkoutConverter().toDomain(
+        WorkoutAggregate(
+          workout: workoutTemplate.workout,
+          template: TemplateAggregate(template: template, exercises: exs),
+        ),
+      ),
+    );
   }
 }
 
