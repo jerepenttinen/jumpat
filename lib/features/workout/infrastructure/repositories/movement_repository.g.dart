@@ -8,4 +8,7 @@ mixin _$MovementRepositoryMixin on DatabaseAccessor<AppDatabase> {
   $TemplatesTable get templates => attachedDatabase.templates;
   $WorkoutsTable get workouts => attachedDatabase.workouts;
   $MovementsTable get movements => attachedDatabase.movements;
+  $MovementSetsTable get movementSets => attachedDatabase.movementSets;
+  $TemplatesExercisesTable get templatesExercises =>
+      attachedDatabase.templatesExercises;
 }
