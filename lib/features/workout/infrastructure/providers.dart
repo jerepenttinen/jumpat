@@ -18,9 +18,9 @@ final workoutRepositoryProvider = Provider<IWorkoutRepository>((ref) {
 });
 
 final exerciseRepositoryProvider = Provider<IExerciseRepository>((ref) {
-  return ExerciseRepository(client: ref.watch(appDatabaseProvider));
+  return ExerciseRepository(db: ref.watch(appDatabaseProvider));
 });
 
 final templateRepositoryProvider = Provider<ITemplateRepository>((ref) {
-  return TemplateRepository(client: ref.watch(appDatabaseProvider));
+  return TemplateRepository(db: ref.watch(appDatabaseProvider));
 });

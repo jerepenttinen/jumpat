@@ -1,7 +1,8 @@
+import 'package:drift/drift.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:isar/isar.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
+import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
@@ -9,17 +10,17 @@ import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/movement_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_movement_repository.dart';
 import 'package:jumpat/features/workout/domain/values/movement_weight.dart';
-import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
-import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
-import 'package:jumpat/features/workout/infrastructure/repositories/movement_entity_converter.dart';
+part 'movement_repository.g.dart';
 
-class MovementRepository implements IMovementRepository {
-  MovementRepository({required this.client});
-
-  final Isar client;
+@DriftAccessor(tables: [Movements, Workouts, Exercises])
+class MovementRepository extends DatabaseAccessor<AppDatabase>
+    with _$MovementRepositoryMixin
+    implements IMovementRepository {
+  MovementRepository({required this.db}) : super(db);
+  final AppDatabase db;
 
   @override
-  Future<Either<MovementFailure, Unit>> delete(MovementEntity movement) async {
+  Future<Either<MovementFailure, Unit>> remove(MovementEntity movement) async {
     final deleted = await client.writeTxn(
       () => client.movements.delete(fastHash(movement.id.getOrCrash())),
     );
@@ -31,7 +32,7 @@ class MovementRepository implements IMovementRepository {
   }
 
   @override
-  Future<Either<MovementFailure, Unit>> update(MovementEntity movement) async {
+  Future<Either<MovementFailure, Unit>> save(MovementEntity movement) async {
     await client.writeTxn(
       () async {
         final m = MovementEntityConverter().toInfra(movement);
@@ -85,7 +86,7 @@ class MovementRepository implements IMovementRepository {
   }
 
   @override
-  Future<Either<MovementFailure, Unit>> updateAll(
+  Future<Either<MovementFailure, Unit>> saveAll(
     IList<MovementEntity> movements,
   ) async {
     await client.writeTxn(

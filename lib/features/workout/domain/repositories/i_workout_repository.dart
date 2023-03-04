@@ -7,6 +7,6 @@ import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
 abstract class IWorkoutRepository {
   Future<IList<WorkoutEntity>> getAll();
   Future<Either<WorkoutFailure, WorkoutEntity>> get(UniqueId id);
-  Future<Either<WorkoutFailure, Unit>> update(WorkoutEntity workout);
-  Future<Either<WorkoutFailure, Unit>> delete(WorkoutEntity workout);
+  Future<Either<WorkoutFailure, Unit>> save(WorkoutEntity workout);
+  Future<Either<WorkoutFailure, Unit>> remove(WorkoutEntity workout);
 }

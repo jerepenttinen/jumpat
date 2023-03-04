@@ -22,7 +22,7 @@ class Templates extends _$Templates {
 
   Future<void> save(TemplateEntity template) async {
     final repository = ref.watch(templateRepositoryProvider);
-    await repository.update(template);
+    await repository.save(template);
 
     await update((currentList) {
       return currentList.updateById(
@@ -34,7 +34,7 @@ class Templates extends _$Templates {
 
   Future<void> remove(TemplateEntity template) async {
     final repository = ref.watch(templateRepositoryProvider);
-    await repository.delete(template);
+    await repository.remove(template);
 
     ref
       ..invalidate(workoutsProvider)

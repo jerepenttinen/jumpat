@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$TemplatesHash() => r'86bb390688ef39fa72bcb0cbcf1efb0c90e68a4e';
+String _$TemplatesHash() => r'00ac495774c367da3b63e29b2ef711a32dc49167';
 
 /// See also [Templates].
 final templatesProvider =

@@ -20,8 +20,7 @@ void main() async {
       WorkoutRepository(client: client);
   final IMovementRepository movementRepository =
       MovementRepository(client: client);
-  final IExerciseRepository exerciseRepository =
-      ExerciseRepository(client: client);
+  final IExerciseRepository exerciseRepository = ExerciseRepository(db: client);
 
   group('WorkoutRepository', () {
     setUp(
@@ -30,16 +29,16 @@ void main() async {
 
     test('should delete movements when deleting workout', () async {
       final workout = WorkoutEntity.empty();
-      await workoutRepository.update(workout);
+      await workoutRepository.save(workout);
 
       final exercise = ExerciseEntity.create(name: 'test');
-      await exerciseRepository.update(exercise);
+      await exerciseRepository.save(exercise);
 
       final movement =
           MovementEntity.create(workout: workout, exercise: exercise);
-      await movementRepository.update(movement);
+      await movementRepository.save(movement);
 
-      await workoutRepository.delete(workout);
+      await workoutRepository.remove(workout);
 
       expect(
         (await workoutRepository.get(workout.id)).toNullable(),

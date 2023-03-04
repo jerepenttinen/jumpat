@@ -7,5 +7,5 @@ import 'package:jumpat/features/workout/domain/failures/exercise_failure.dart';
 abstract class IExerciseRepository {
   Future<IList<ExerciseEntity>> getAll();
   Future<Either<ExerciseFailure, ExerciseEntity>> get(UniqueId id);
-  Future<Either<ExerciseFailure, Unit>> update(ExerciseEntity exercise);
+  Future<Either<ExerciseFailure, Unit>> save(ExerciseEntity exercise);
 }
