@@ -6,7 +6,6 @@ import 'package:jumpat/features/core/infrastructure/i_entity_converter.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
 import 'package:jumpat/features/workout/domain/values/template_color.dart';
 import 'package:jumpat/features/workout/domain/values/template_name.dart';
-import 'package:jumpat/features/workout/infrastructure/models/collections.dart';
 import 'package:jumpat/features/workout/infrastructure/repositories/exercise_entity_converter.dart';
 
 class TemplateEntityConverter

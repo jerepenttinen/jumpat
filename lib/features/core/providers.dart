@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
+import 'package:jumpat/features/core/infrastructure/drift.dart';
 
-final isarInstanceProvider = Provider<Isar>((ref) {
+final appDatabaseProvider = Provider<AppDatabase>((ref) {
   throw UnimplementedError('Override this');
 });

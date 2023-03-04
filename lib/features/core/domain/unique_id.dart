@@ -1,26 +1,26 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/failures.dart';
 import 'package:jumpat/features/core/domain/value_object.dart';
-import 'package:uuid/uuid.dart';
+import 'package:tsid_creator/tsid_creator.dart';
 
-const _uuid = Uuid();
+final _factory = TsidFactory();
 
-class UniqueId extends ValueObject<String> {
+class UniqueId extends ValueObject<int> {
   factory UniqueId() {
     return UniqueId._(
-      right(_uuid.v4()),
+      right(_factory.generate().toInt()),
     );
   }
 
   const UniqueId._(this.value);
 
   /// Used with strings we trust are unique, such as database IDs.
-  factory UniqueId.fromUniqueString(String uniqueIdStr) {
+  factory UniqueId.fromUniqueInt(int uniqueIdInt) {
     return UniqueId._(
-      right(uniqueIdStr),
+      right(uniqueIdInt),
     );
   }
 
   @override
-  final Either<ValueFailure<String>, String> value;
+  final Either<ValueFailure<int>, int> value;
 }
