@@ -3,10 +3,14 @@ part of '../../../core/infrastructure/drift.dart';
 class Workouts extends Table {
   IntColumn get id => integer()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get template => integer().nullable().references(Templates, #id)();
+  IntColumn get template => integer().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<String> get customConstraints =>
+      ['FOREIGN KEY (template) REFERENCES templates (id) ON DELETE SET NULL'];
 }
 
 class Movements extends Table {
@@ -17,15 +21,25 @@ class Movements extends Table {
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<String> get customConstraints => [
+        'FOREIGN KEY (workout) REFERENCES workouts (id) ON DELETE CASCADE',
+        'FOREIGN KEY (exercise) REFERENCES exercises (id) ON DELETE RESTRICT',
+      ];
 }
 
 class MovementSets extends Table {
   IntColumn get id => integer()();
   IntColumn get count => integer()();
-  IntColumn get movement => integer().references(Movements, #id)();
+  IntColumn get movement => integer()();
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<String> get customConstraints =>
+      ['FOREIGN KEY (movement) REFERENCES movements (id) ON DELETE CASCADE'];
 }
 
 class Exercises extends Table {
@@ -46,6 +60,12 @@ class Templates extends Table {
 }
 
 class TemplatesExercises extends Table {
-  IntColumn get template => integer().references(Templates, #id)();
-  IntColumn get exercise => integer().references(Exercises, #id)();
+  IntColumn get template => integer()();
+  IntColumn get exercise => integer()();
+
+  @override
+  List<String> get customConstraints => [
+        'FOREIGN KEY (template) REFERENCES templates (id) ON DELETE CASCADE',
+        'FOREIGN KEY (exercise) REFERENCES exercises (id) ON DELETE CASCADE',
+      ];
 }
