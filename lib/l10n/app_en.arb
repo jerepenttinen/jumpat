@@ -69,5 +69,6 @@
   "changeTemplateColor": "Change template color",
   "backupTitle": "Backup",
   "importDatabase": "Import database",
-  "invalidFileFormat": "Invalid file format"
+  "invalidFileFormat": "Invalid file format",
+  "databaseImported": "Database imported"
 }

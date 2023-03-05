@@ -39,5 +39,6 @@
   "changeTemplateColor": "Muuta mallin väriä",
   "backupTitle": "Varmuuskopionti",
   "importDatabase": "Tuo tietokanta",
-  "invalidFileFormat": "Ei tuettu tiedosto"
+  "invalidFileFormat": "Ei tuettu tiedosto",
+  "databaseImported": "Tietokanta tuotu"
 }

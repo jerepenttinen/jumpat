@@ -41,6 +41,10 @@ class BackupPage extends ConsumerWidget {
 
               if (context.mounted) {
                 ref.invalidate(appDatabaseProvider);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(t.databaseImported)),
+                );
+                Navigator.of(context).pop();
               }
             } on Exception {
               if (context.mounted) {
