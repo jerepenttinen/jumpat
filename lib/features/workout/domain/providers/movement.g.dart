@@ -6,7 +6,7 @@ part of 'movement.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$movementsHash() => r'241bddb2d6a843e2947e380d5f8ae856126efe1c';
+String _$movementsHash() => r'c14c59f61d6f72f3b80f6c88177d3ac553f72b74';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -123,12 +123,13 @@ class MovementsProvider
   }
 }
 
-String _$movementStateHash() => r'c492c8a90e801109f3dd188fffd1f192931f6f5a';
+String _$movementStateHash() => r'b075f8699f56b98da8df286f0e89b48f1ee1d265';
 
-abstract class _$MovementState extends BuildlessAsyncNotifier<MovementEntity> {
+abstract class _$MovementState
+    extends BuildlessAsyncNotifier<Option<MovementEntity>> {
   late final UniqueId id;
 
-  Future<MovementEntity> build({
+  Future<Option<MovementEntity>> build({
     required UniqueId id,
   });
 }
@@ -138,7 +139,7 @@ abstract class _$MovementState extends BuildlessAsyncNotifier<MovementEntity> {
 const movementStateProvider = MovementStateFamily();
 
 /// See also [MovementState].
-class MovementStateFamily extends Family<AsyncValue<MovementEntity>> {
+class MovementStateFamily extends Family<AsyncValue<Option<MovementEntity>>> {
   /// See also [MovementState].
   const MovementStateFamily();
 
@@ -177,7 +178,7 @@ class MovementStateFamily extends Family<AsyncValue<MovementEntity>> {
 
 /// See also [MovementState].
 class MovementStateProvider
-    extends AsyncNotifierProviderImpl<MovementState, MovementEntity> {
+    extends AsyncNotifierProviderImpl<MovementState, Option<MovementEntity>> {
   /// See also [MovementState].
   MovementStateProvider({
     required this.id,
@@ -210,7 +211,7 @@ class MovementStateProvider
   }
 
   @override
-  Future<MovementEntity> runNotifierBuild(
+  Future<Option<MovementEntity>> runNotifierBuild(
     covariant MovementState notifier,
   ) {
     return notifier.build(

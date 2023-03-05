@@ -67,32 +67,32 @@ class Workouts extends _$Workouts {
 @Riverpod(keepAlive: true)
 class WorkoutState extends _$WorkoutState {
   @override
-  Future<WorkoutEntity> build({required UniqueId id}) async {
+  Future<Option<WorkoutEntity>> build({required UniqueId id}) async {
     final workout = await ref.watch(workoutRepositoryProvider).get(id);
-    return workout.match((l) => throw UnimplementedError(), (r) => r);
+    return workout.toOption();
   }
 
   Future<void> updateDate(DateTime newDate) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final workout = state.value!;
+    final workout = state.value!.toNullable()!;
     final updatedWorkout = workout.copyWith(date: newDate);
     final workouts = ref.read(workoutsProvider.notifier);
     await workouts.save(updatedWorkout);
-    state = AsyncValue.data(updatedWorkout);
+    state = AsyncValue.data(some(updatedWorkout));
   }
 
   Future<Option<TemplateEntity>> createTemplate({
     required TemplateColor color,
     required TemplateName name,
   }) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return none();
     }
 
-    final workout = state.value!;
+    final workout = state.value!.toNullable()!;
     final movements =
         await ref.read(movementsProvider(workoutId: workout.id).future);
 
@@ -106,7 +106,7 @@ class WorkoutState extends _$WorkoutState {
     final updatedWorkout = workout.copyWith(template: some(template));
     final workouts = ref.read(workoutsProvider.notifier);
     await workouts.save(updatedWorkout);
-    state = AsyncValue.data(updatedWorkout);
+    state = AsyncValue.data(some(updatedWorkout));
 
     return some(template);
   }

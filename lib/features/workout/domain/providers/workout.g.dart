@@ -21,7 +21,7 @@ final workoutsProvider =
 );
 
 typedef _$Workouts = AsyncNotifier<IList<WorkoutEntity>>;
-String _$workoutStateHash() => r'38c9930644b92538baa8ba35fe900e66d6524161';
+String _$workoutStateHash() => r'666cd5592c4abaa72f250b6644745365752215d3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -44,10 +44,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$WorkoutState extends BuildlessAsyncNotifier<WorkoutEntity> {
+abstract class _$WorkoutState
+    extends BuildlessAsyncNotifier<Option<WorkoutEntity>> {
   late final UniqueId id;
 
-  Future<WorkoutEntity> build({
+  Future<Option<WorkoutEntity>> build({
     required UniqueId id,
   });
 }
@@ -57,7 +58,7 @@ abstract class _$WorkoutState extends BuildlessAsyncNotifier<WorkoutEntity> {
 const workoutStateProvider = WorkoutStateFamily();
 
 /// See also [WorkoutState].
-class WorkoutStateFamily extends Family<AsyncValue<WorkoutEntity>> {
+class WorkoutStateFamily extends Family<AsyncValue<Option<WorkoutEntity>>> {
   /// See also [WorkoutState].
   const WorkoutStateFamily();
 
@@ -96,7 +97,7 @@ class WorkoutStateFamily extends Family<AsyncValue<WorkoutEntity>> {
 
 /// See also [WorkoutState].
 class WorkoutStateProvider
-    extends AsyncNotifierProviderImpl<WorkoutState, WorkoutEntity> {
+    extends AsyncNotifierProviderImpl<WorkoutState, Option<WorkoutEntity>> {
   /// See also [WorkoutState].
   WorkoutStateProvider({
     required this.id,
@@ -129,7 +130,7 @@ class WorkoutStateProvider
   }
 
   @override
-  Future<WorkoutEntity> runNotifierBuild(
+  Future<Option<WorkoutEntity>> runNotifierBuild(
     covariant WorkoutState notifier,
   ) {
     return notifier.build(

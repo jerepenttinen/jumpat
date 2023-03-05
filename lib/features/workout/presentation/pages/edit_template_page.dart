@@ -23,49 +23,54 @@ class EditTemplatePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: templateAsync.maybeWhen(
-          data: (template) => Text(template.name.getOrCrash()),
+          data: (template) => Text(
+            template.match(() => '', (t) => t.name.getOrCrash()),
+          ),
           orElse: () => Text(t.exercises),
         ),
         actions: templateAsync.maybeWhen(
-          data: (template) => [
-            IconButton(
-              icon: CircleColor(
-                color: template.color.getOrCrash(),
-                circleSize: 24,
+          data: (template) => template.match(
+            () => List.empty(),
+            (template) => [
+              IconButton(
+                icon: CircleColor(
+                  color: template.color.getOrCrash(),
+                  circleSize: 24,
+                ),
+                onPressed: () async {
+                  final newColor = await changeTemplateColorDialog(
+                    context,
+                    template.color,
+                  );
+
+                  if (newColor == null) {
+                    return;
+                  }
+
+                  await ref
+                      .read(templateStateProvider(id: templateId).notifier)
+                      .updateColor(TemplateColor(newColor));
+                },
               ),
-              onPressed: () async {
-                final newColor = await changeTemplateColorDialog(
-                  context,
-                  template.color,
-                );
+              IconButton(
+                onPressed: () async {
+                  final newName = await changeTemplateNameDialog(
+                    context,
+                    template.name,
+                  );
 
-                if (newColor == null) {
-                  return;
-                }
+                  if (newName == null) {
+                    return;
+                  }
 
-                await ref
-                    .read(templateStateProvider(id: templateId).notifier)
-                    .updateColor(TemplateColor(newColor));
-              },
-            ),
-            IconButton(
-              onPressed: () async {
-                final newName = await changeTemplateNameDialog(
-                  context,
-                  template.name,
-                );
-
-                if (newName == null) {
-                  return;
-                }
-
-                await ref
-                    .read(templateStateProvider(id: templateId).notifier)
-                    .updateName(TemplateName(newName));
-              },
-              icon: const Icon(Icons.edit),
-            )
-          ],
+                  await ref
+                      .read(templateStateProvider(id: templateId).notifier)
+                      .updateName(TemplateName(newName));
+                },
+                icon: const Icon(Icons.edit),
+              )
+            ],
+          ),
           orElse: List.empty,
         ),
       ),
@@ -86,39 +91,42 @@ class EditTemplatePage extends ConsumerWidget {
       ),
       body: templateAsync.when(
         data: (template) {
-          return ListView.builder(
-            itemCount: template.exercises.length,
-            itemBuilder: (context, index) {
-              final exercise = template.exercises[index];
-              return SlidableEditDeleteItem(
-                onDelete: () async {
-                  await ref
-                      .read(TemplateStateProvider(id: templateId).notifier)
-                      .removeExercise(exercise);
-                },
-                onEdit: (context) async {
-                  await selectExerciseDialog(context)
-                      .flatMap(
-                        (newExercise) => TaskOption(() async {
-                          await ref
-                              .read(
-                                templateStateProvider(id: templateId).notifier,
-                              )
-                              .swapExercise(
-                                oldExercise: exercise,
-                                newExercise: newExercise,
-                              );
-                          return some(unit);
-                        }),
-                      )
-                      .run();
-                },
-                child: ListTile(
-                  title: Text(exercise.name.getOrCrash()),
-                ),
-              );
-            },
-          );
+          return template.match(() => null, (template) {
+            return ListView.builder(
+              itemCount: template.exercises.length,
+              itemBuilder: (context, index) {
+                final exercise = template.exercises[index];
+                return SlidableEditDeleteItem(
+                  onDelete: () async {
+                    await ref
+                        .read(TemplateStateProvider(id: templateId).notifier)
+                        .removeExercise(exercise);
+                  },
+                  onEdit: (context) async {
+                    await selectExerciseDialog(context)
+                        .flatMap(
+                          (newExercise) => TaskOption(() async {
+                            await ref
+                                .read(
+                                  templateStateProvider(id: templateId)
+                                      .notifier,
+                                )
+                                .swapExercise(
+                                  oldExercise: exercise,
+                                  newExercise: newExercise,
+                                );
+                            return some(unit);
+                          }),
+                        )
+                        .run();
+                  },
+                  child: ListTile(
+                    title: Text(exercise.name.getOrCrash()),
+                  ),
+                );
+              },
+            );
+          });
         },
         error: (error, stack) => Center(child: Text('$error')),
         loading: () => const Center(child: CircularProgressIndicator()),

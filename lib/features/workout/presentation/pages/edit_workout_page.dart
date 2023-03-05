@@ -22,7 +22,12 @@ class EditWorkoutPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: workoutAsync.maybeWhen(
-          data: (workout) => Text(t.workoutDateShort(workout.date)),
+          data: (workout) => Text(
+            workout.match(
+              () => '',
+              (workout) => t.workoutDateShort(workout.date),
+            ),
+          ),
           orElse: () => null,
         ),
         actions: [
@@ -31,10 +36,17 @@ class EditWorkoutPage extends HookConsumerWidget {
               final workout = await ref.read(
                 workoutStateProvider(id: workoutId).future,
               );
+
+              if (workout.isNone()) {
+                return;
+              }
+
+              final initialDate = workout.toNullable()!.date;
+
               if (context.mounted) {
                 final newDate = await showDatePicker(
                   context: context,
-                  initialDate: workout.date,
+                  initialDate: initialDate,
                   firstDate: DateTime(2010),
                   lastDate: DateTime(2050),
                 );
@@ -56,9 +68,15 @@ class EditWorkoutPage extends HookConsumerWidget {
       floatingActionButton: FloatingActionButton(
         heroTag: UniqueKey(),
         onPressed: () async {
-          final workout = await ref.read(
+          final workoutOpt = await ref.read(
             workoutStateProvider(id: workoutId).future,
           );
+
+          if (workoutOpt.isNone()) {
+            return;
+          }
+
+          final workout = workoutOpt.toNullable()!;
 
           TaskOption<Unit> pushEditMovementRoute(MovementEntity movement) {
             return TaskOption(

@@ -26,74 +26,87 @@ class WorkoutCard extends HookConsumerWidget {
       elevation: 1,
       shape: workout.maybeWhen(
         orElse: () => null,
-        data: (workout) => workout.template.match(
-          () => null,
-          (template) => RoundedRectangleBorder(
-            side: BorderSide(color: template.color.getOrCrash(), width: 2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
+        data: (workout) => workout
+            .map(
+              (w) => w.template
+                  .map(
+                    (template) => RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: template.color.getOrCrash(),
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  )
+                  .toNullable(),
+            )
+            .toNullable(),
       ),
-      child: workout.maybeWhen(
-        orElse: () => null,
-        data: (workout) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              title: Text(t.workoutDate(workout.date)),
-              subtitle: workout.template.match(
-                () => null,
-                (template) => Text(template.name.getOrCrash()),
-              ),
-              trailing: PopupMenuButton<CardMenuItem>(
-                icon: const Icon(Icons.more_vert),
-                onSelected: (value) async {
-                  switch (value) {
-                    case CardMenuItem.edit:
-                      await context.router
-                          .push(EditWorkoutRoute(workoutId: workout.id));
-                      break;
-                    case CardMenuItem.delete:
-                      final delete = await confirmDelete(context);
-                      if (delete ?? false) {
-                        await ref
-                            .read(workoutsProvider.notifier)
-                            .remove(workout);
-                      }
-                      break;
-                    case CardMenuItem.asTemplate:
-                      await showCreateTemplateDialog(context, workout).run();
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: CardMenuItem.edit,
-                    child: Text(t.edit),
+      child: workout
+          .maybeWhen(
+            orElse: () => null,
+            data: (workout) => workout.map(
+              (workout) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTile(
+                    title: Text(t.workoutDate(workout.date)),
+                    subtitle: workout.template
+                        .map((template) => Text(template.name.getOrCrash()))
+                        .toNullable(),
+                    trailing: PopupMenuButton<CardMenuItem>(
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (value) async {
+                        switch (value) {
+                          case CardMenuItem.edit:
+                            await context.router
+                                .push(EditWorkoutRoute(workoutId: workout.id));
+                            break;
+                          case CardMenuItem.delete:
+                            final delete = await confirmDelete(context);
+                            if (delete ?? false) {
+                              await ref
+                                  .read(workoutsProvider.notifier)
+                                  .remove(workout);
+                            }
+                            break;
+                          case CardMenuItem.asTemplate:
+                            await showCreateTemplateDialog(context, workout)
+                                .run();
+                            break;
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: CardMenuItem.edit,
+                          child: Text(t.edit),
+                        ),
+                        PopupMenuItem(
+                          value: CardMenuItem.asTemplate,
+                          child: Text(t.asTemplate),
+                        ),
+                        PopupMenuItem(
+                          value: CardMenuItem.delete,
+                          child: Text(t.delete),
+                        ),
+                      ],
+                    ),
                   ),
-                  PopupMenuItem(
-                    value: CardMenuItem.asTemplate,
-                    child: Text(t.asTemplate),
-                  ),
-                  PopupMenuItem(
-                    value: CardMenuItem.delete,
-                    child: Text(t.delete),
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                    child: movementsAsync.maybeWhen(
+                      data: (movements) => ListBody(
+                        children: movements.map(_buildMovementLine).toList(),
+                      ),
+                      orElse: () => const SizedBox(),
+                    ),
                   ),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: movementsAsync.maybeWhen(
-                data: (movements) => ListBody(
-                  children: movements.map(_buildMovementLine).toList(),
-                ),
-                orElse: () => const SizedBox(),
-              ),
-            ),
-          ],
-        ),
-      ),
+          )
+          ?.toNullable(),
     );
   }
 

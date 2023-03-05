@@ -18,8 +18,10 @@ class Movements extends _$Movements {
   Future<IList<MovementEntity>> build({required UniqueId workoutId}) async {
     final repository = ref.watch(movementRepositoryProvider);
     final workout = await ref.watch(workoutStateProvider(id: workoutId).future);
-
-    return repository.getAll(workout);
+    return workout.match(
+      () => <MovementEntity>[].lock,
+      repository.getAll,
+    );
   }
 
   Future<void> save(MovementEntity movement) async {
@@ -97,68 +99,68 @@ class Movements extends _$Movements {
 @Riverpod(keepAlive: true)
 class MovementState extends _$MovementState {
   @override
-  Future<MovementEntity> build({required UniqueId id}) async {
+  Future<Option<MovementEntity>> build({required UniqueId id}) async {
     final movement = await ref.watch(movementRepositoryProvider).get(id);
     return movement.match(
-      (l) => throw UnimplementedError(l.toString()),
-      (r) => r,
+      (l) => none(),
+      some,
     );
   }
 
   Future<void> saveSet(MovementSetEntity set) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final movement = state.value!;
+    final movement = state.value!.toNullable()!;
     final updatedMovement = movement.copyWith(
       sets: movement.sets.updateById([set], (item) => item.id),
     );
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
     await movements.save(updatedMovement);
-    state = AsyncValue.data(updatedMovement);
+    state = AsyncValue.data(some(updatedMovement));
   }
 
   Future<void> removeSet(MovementSetEntity set) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final movement = state.value!;
+    final movement = state.value!.toNullable()!;
     final updatedMovement = movement.copyWith(
       sets: movement.sets.removeWhere((item) => item.id == set.id),
     );
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
     await movements.save(updatedMovement);
-    state = AsyncValue.data(updatedMovement);
+    state = AsyncValue.data(some(updatedMovement));
   }
 
   Future<void> updateWeight(MovementWeight weight) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final movement = state.value!;
+    final movement = state.value!.toNullable()!;
     final updatedMovement = movement.copyWith(weight: weight);
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
     await movements.save(updatedMovement);
-    state = AsyncValue.data(updatedMovement);
+    state = AsyncValue.data(some(updatedMovement));
   }
 
   Future<void> updateExercise(ExerciseEntity exercise) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final movement = state.value!;
+    final movement = state.value!.toNullable()!;
     final updatedMovement = movement.copyWith(exercise: exercise);
     final movements =
         ref.read(movementsProvider(workoutId: movement.workout.id).notifier);
     await movements.save(updatedMovement);
-    state = AsyncValue.data(updatedMovement);
+    state = AsyncValue.data(some(updatedMovement));
   }
 }
 

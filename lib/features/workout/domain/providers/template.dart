@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
@@ -49,25 +50,22 @@ class Templates extends _$Templates {
 @Riverpod(keepAlive: true)
 class TemplateState extends _$TemplateState {
   @override
-  Future<TemplateEntity> build({required UniqueId id}) async {
+  Future<Option<TemplateEntity>> build({required UniqueId id}) async {
     final repository = ref.watch(templateRepositoryProvider);
     final template = await repository.get(id);
-    if (template.isNone()) {
-      throw UnimplementedError();
-    }
-    return template.toNullable()!;
+    return template;
   }
 
   Future<void> updateName(TemplateName name) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final template = state.value!;
+    final template = state.value!.toNullable()!;
     final updatedTemplate = template.copyWith(name: name);
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
-    state = AsyncValue.data(updatedTemplate);
+    state = AsyncValue.data(some(updatedTemplate));
 
     ref
       ..invalidate(workoutStateProvider)
@@ -75,15 +73,15 @@ class TemplateState extends _$TemplateState {
   }
 
   Future<void> updateColor(TemplateColor color) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final template = state.value!;
+    final template = state.value!.toNullable()!;
     final updatedTemplate = template.copyWith(color: color);
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
-    state = AsyncValue.data(updatedTemplate);
+    state = AsyncValue.data(some(updatedTemplate));
 
     ref
       ..invalidate(workoutStateProvider)
@@ -91,28 +89,28 @@ class TemplateState extends _$TemplateState {
   }
 
   Future<void> addExercise(ExerciseEntity exercise) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final template = state.value!;
+    final template = state.value!.toNullable()!;
     final updatedTemplate = template.copyWith(
       exercises: template.exercises.add(exercise),
     );
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
-    state = AsyncValue.data(updatedTemplate);
+    state = AsyncValue.data(some(updatedTemplate));
   }
 
   Future<void> swapExercise({
     required ExerciseEntity oldExercise,
     required ExerciseEntity newExercise,
   }) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final template = state.value!;
+    final template = state.value!.toNullable()!;
     final updatedTemplate = template.copyWith(
       exercises: template.exercises
           .map((ex) => ex == oldExercise ? newExercise : ex)
@@ -120,21 +118,21 @@ class TemplateState extends _$TemplateState {
     );
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
-    state = AsyncValue.data(updatedTemplate);
+    state = AsyncValue.data(some(updatedTemplate));
   }
 
   Future<void> removeExercise(ExerciseEntity exercise) async {
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value!.isNone()) {
       return;
     }
 
-    final template = state.value!;
+    final template = state.value!.toNullable()!;
     final updatedTemplate = template.copyWith(
       exercises:
           template.exercises.removeWhere((item) => item.id == exercise.id),
     );
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);
-    state = AsyncValue.data(updatedTemplate);
+    state = AsyncValue.data(some(updatedTemplate));
   }
 }

@@ -21,7 +21,7 @@ final templatesProvider =
 );
 
 typedef _$Templates = AsyncNotifier<IList<TemplateEntity>>;
-String _$templateStateHash() => r'e2a8a570a9edf678de87a6744c888c9f9ae20364';
+String _$templateStateHash() => r'7fee7e21133c1ae50fbb2900099626c742d876c2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -44,10 +44,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$TemplateState extends BuildlessAsyncNotifier<TemplateEntity> {
+abstract class _$TemplateState
+    extends BuildlessAsyncNotifier<Option<TemplateEntity>> {
   late final UniqueId id;
 
-  Future<TemplateEntity> build({
+  Future<Option<TemplateEntity>> build({
     required UniqueId id,
   });
 }
@@ -57,7 +58,7 @@ abstract class _$TemplateState extends BuildlessAsyncNotifier<TemplateEntity> {
 const templateStateProvider = TemplateStateFamily();
 
 /// See also [TemplateState].
-class TemplateStateFamily extends Family<AsyncValue<TemplateEntity>> {
+class TemplateStateFamily extends Family<AsyncValue<Option<TemplateEntity>>> {
   /// See also [TemplateState].
   const TemplateStateFamily();
 
@@ -96,7 +97,7 @@ class TemplateStateFamily extends Family<AsyncValue<TemplateEntity>> {
 
 /// See also [TemplateState].
 class TemplateStateProvider
-    extends AsyncNotifierProviderImpl<TemplateState, TemplateEntity> {
+    extends AsyncNotifierProviderImpl<TemplateState, Option<TemplateEntity>> {
   /// See also [TemplateState].
   TemplateStateProvider({
     required this.id,
@@ -129,7 +130,7 @@ class TemplateStateProvider
   }
 
   @override
-  Future<TemplateEntity> runNotifierBuild(
+  Future<Option<TemplateEntity>> runNotifierBuild(
     covariant TemplateState notifier,
   ) {
     return notifier.build(

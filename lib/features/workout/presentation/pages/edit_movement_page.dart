@@ -24,94 +24,101 @@ class EditMovementPage extends ConsumerWidget {
     final movementAsync = ref.watch(movementStateProvider(id: movementId));
     return movementAsync.maybeWhen(
       orElse: () => const SizedBox(),
-      data: (movement) => GestureDetector(
-        onTap: () {
-          final currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              movement.exercise.name.getOrCrash(),
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  context.router.push(
-                    ExerciseHistoryRoute(
-                      exercise: movement.exercise,
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.history),
+      data: (movementOpt) => movementOpt.match(
+        () => const SizedBox(),
+        (movement) => GestureDetector(
+          onTap: () {
+            final currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                movement.exercise.name.getOrCrash(),
               ),
-              IconButton(
-                onPressed: () async {
-                  await selectExerciseDialog(context)
-                      .flatMap(
-                        (exercise) => TaskOption.fromTask(
-                          Task(
-                            () => ref
-                                .read(
-                                  movementStateProvider(id: movementId)
-                                      .notifier,
-                                )
-                                .updateExercise(exercise),
-                          ),
-                        ),
-                      )
-                      .run();
-                },
-                icon: const Icon(Icons.edit),
-              ),
-            ],
-          ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: WeightInput(
-                  initial: movement.weight.getOrCrash(),
-                  onWeightChanged: (weight) async {
-                    await ref
-                        .read(movementStateProvider(id: movementId).notifier)
-                        .updateWeight(MovementWeight(weight));
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.router.push(
+                      ExerciseHistoryRoute(
+                        exercise: movement.exercise,
+                      ),
+                    );
                   },
+                  icon: const Icon(Icons.history),
                 ),
-              ),
-              SetsList(movement: movement),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            heroTag: UniqueKey(),
-            onPressed: () async {
-              FocusScope.of(context).requestFocus(FocusNode());
+                IconButton(
+                  onPressed: () async {
+                    await selectExerciseDialog(context)
+                        .flatMap(
+                          (exercise) => TaskOption.fromTask(
+                            Task(
+                              () => ref
+                                  .read(
+                                    movementStateProvider(id: movementId)
+                                        .notifier,
+                                  )
+                                  .updateExercise(exercise),
+                            ),
+                          ),
+                        )
+                        .run();
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+              ],
+            ),
+            body: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: WeightInput(
+                    initial: movement.weight.getOrCrash(),
+                    onWeightChanged: (weight) async {
+                      await ref
+                          .read(
+                            movementStateProvider(id: movementId).notifier,
+                          )
+                          .updateWeight(MovementWeight(weight));
+                    },
+                  ),
+                ),
+                SetsList(movement: movement),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              heroTag: UniqueKey(),
+              onPressed: () async {
+                FocusScope.of(context).requestFocus(FocusNode());
 
-              final defaultRepetitionCount = movement.sets.isNotEmpty
-                  ? movement.sets.last.count.getOrCrash()
-                  : ref.read(defaultRepetitionCountProvider);
+                final defaultRepetitionCount = movement.sets.isNotEmpty
+                    ? movement.sets.last.count.getOrCrash()
+                    : ref.read(defaultRepetitionCountProvider);
 
-              final count =
-                  await chooseRepCountDialog(context, defaultRepetitionCount);
+                final count = await chooseRepCountDialog(
+                  context,
+                  defaultRepetitionCount,
+                );
 
-              await count.match(
-                () => null,
-                (count) async {
-                  await ref
-                      .read(
-                        movementStateProvider(id: movementId).notifier,
-                      )
-                      .saveSet(
-                        MovementSetEntity.create(
-                          count: RepetitionCount(count),
-                        ),
-                      );
-                },
-              );
-            },
-            child: const Icon(Icons.add),
+                await count.match(
+                  () => null,
+                  (count) async {
+                    await ref
+                        .read(
+                          movementStateProvider(id: movementId).notifier,
+                        )
+                        .saveSet(
+                          MovementSetEntity.create(
+                            count: RepetitionCount(count),
+                          ),
+                        );
+                  },
+                );
+              },
+              child: const Icon(Icons.add),
+            ),
           ),
         ),
       ),
