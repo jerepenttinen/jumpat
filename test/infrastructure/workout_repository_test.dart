@@ -1,4 +1,5 @@
-import 'package:isar/isar.dart';
+import 'package:drift/native.dart';
+import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
@@ -10,23 +11,14 @@ import 'package:jumpat/features/workout/infrastructure/repositories/movement_rep
 import 'package:jumpat/features/workout/infrastructure/repositories/workout_repository.dart';
 import 'package:test/test.dart';
 
-import 'isar.dart';
-
 void main() async {
-  await Isar.initializeIsarCore(download: true);
-  final client = await openIsar();
+  final db = AppDatabase(NativeDatabase.memory());
 
-  final IWorkoutRepository workoutRepository =
-      WorkoutRepository(client: client);
-  final IMovementRepository movementRepository =
-      MovementRepository(client: client);
-  final IExerciseRepository exerciseRepository = ExerciseRepository(db: client);
+  final IWorkoutRepository workoutRepository = WorkoutRepository(db: db);
+  final IMovementRepository movementRepository = MovementRepository(db: db);
+  final IExerciseRepository exerciseRepository = ExerciseRepository(db: db);
 
   group('WorkoutRepository', () {
-    setUp(
-      () => client.writeTxn(() async => client.clear()),
-    );
-
     test('should delete movements when deleting workout', () async {
       final workout = WorkoutEntity.empty();
       await workoutRepository.save(workout);

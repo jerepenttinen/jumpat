@@ -12,7 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final sharedPreferences = await SharedPreferences.getInstance();
-  final appDatabase = AppDatabase();
+  final appDatabase = AppDatabase(openConnection());
 
   runApp(
     ProviderScope(
