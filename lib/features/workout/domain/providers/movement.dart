@@ -26,6 +26,10 @@ class Movements extends _$Movements {
     final repository = ref.watch(movementRepositoryProvider);
     await repository.save(movement);
 
+    final exerciseMovements = ref
+        .read(exerciseMovementsProvider(exercise: movement.exercise).notifier);
+    await exerciseMovements.save(movement);
+
     await update((currentList) {
       return currentList.updateById([movement], (item) => item.id);
     });
@@ -165,5 +169,11 @@ class ExerciseMovements extends _$ExerciseMovements {
     final repository = ref.watch(movementRepositoryProvider);
 
     return repository.getAllByExercise(exercise);
+  }
+
+  Future<void> save(MovementEntity movement) async {
+    await update((currentList) {
+      return currentList.updateById([movement], (item) => item.id);
+    });
   }
 }

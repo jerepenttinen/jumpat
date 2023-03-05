@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/movement.dart';
@@ -55,6 +57,9 @@ class MovementsListItem extends StatelessWidget {
         '${weight}kg $sets = $sum',
       ),
       subtitle: Text(t.workoutDate(movement.workout.date)),
+      onTap: () {
+        context.router.push(EditMovementRoute(movementId: movement.id));
+      },
     );
   }
 }
