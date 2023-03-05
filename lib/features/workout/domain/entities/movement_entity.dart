@@ -19,14 +19,6 @@ class MovementEntity with _$MovementEntity implements IEntity {
     required ExerciseEntity exercise,
   }) = _MovementEntity;
 
-  factory MovementEntity.empty() => MovementEntity(
-        id: UniqueId(),
-        weight: MovementWeight(0),
-        sets: IList(),
-        workout: WorkoutEntity.empty(),
-        exercise: ExerciseEntity.empty(),
-      );
-
   factory MovementEntity.create({
     required WorkoutEntity workout,
     required ExerciseEntity exercise,

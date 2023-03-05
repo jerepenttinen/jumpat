@@ -25,7 +25,11 @@ class TemplateRepository extends DatabaseAccessor<AppDatabase>
     await db.transaction(() async {
       await db.into(templates).insertOnConflictUpdate(aggregate.template);
       await batch((batch) {
-        batch.insertAllOnConflictUpdate(exercises, aggregate.exercises);
+        batch.insertAll(
+          exercises,
+          aggregate.exercises,
+          mode: InsertMode.insertOrIgnore,
+        );
       });
 
       await (delete(templatesExercises)
