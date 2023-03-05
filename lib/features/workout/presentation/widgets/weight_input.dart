@@ -23,7 +23,8 @@ class WeightInput extends HookWidget {
   Widget build(BuildContext context) {
     final focusNode = useFocusNode();
     final controller = useTextEditingController(text: initial.toString());
-    final weight = useState(initial);
+    final weightState = useState(initial);
+    final weight = useValueListenable(weightState);
 
     useEffect(
       () {
@@ -33,14 +34,21 @@ class WeightInput extends HookWidget {
           } else {
             final d = double.tryParse(controller.text);
             if (d != null) {
-              weight.value = d;
-              await onWeightChanged(d);
+              weightState.value = d;
             }
           }
         });
         return;
       },
       [controller, focusNode],
+    );
+
+    useEffect(
+      () {
+        onWeightChanged(weight);
+        return;
+      },
+      [weight],
     );
 
     final t = AppLocalizations.of(context)!;
@@ -57,15 +65,15 @@ class WeightInput extends HookWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         IconButton(
-          onPressed: weight.value > 0
+          onPressed: weightState.value > 0
               ? () {
-                  final tens = weight.value * 10;
+                  final tens = weightState.value * 10;
                   if (tens % 25 == 0) {
-                    weight.value -= 2.5;
+                    weightState.value -= 2.5;
                   } else {
-                    weight.value -= (tens % 25) / 10;
+                    weightState.value -= (tens % 25) / 10;
                   }
-                  controller.text = weight.value.toString();
+                  controller.text = weightState.value.toString();
                 }
               : null,
           icon: const Icon(Icons.remove),
@@ -90,13 +98,13 @@ class WeightInput extends HookWidget {
         ),
         IconButton(
           onPressed: () {
-            final tens = weight.value * 10;
+            final tens = weightState.value * 10;
             if (tens % 25 == 0) {
-              weight.value += 2.5;
+              weightState.value += 2.5;
             } else {
-              weight.value += 2.5 - (tens % 25) / 10;
+              weightState.value += 2.5 - (tens % 25) / 10;
             }
-            controller.text = weight.value.toString();
+            controller.text = weightState.value.toString();
           },
           icon: const Icon(Icons.add),
         ),
