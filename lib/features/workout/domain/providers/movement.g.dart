@@ -6,7 +6,7 @@ part of 'movement.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$movementsHash() => r'241bddb2d6a843e2947e380d5f8ae856126efe1c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,21 +29,73 @@ class _SystemHash {
   }
 }
 
-String _$MovementsHash() => r'241bddb2d6a843e2947e380d5f8ae856126efe1c';
+abstract class _$Movements
+    extends BuildlessAsyncNotifier<IList<MovementEntity>> {
+  late final UniqueId workoutId;
+
+  Future<IList<MovementEntity>> build({
+    required UniqueId workoutId,
+  });
+}
+
+/// See also [Movements].
+@ProviderFor(Movements)
+const movementsProvider = MovementsFamily();
+
+/// See also [Movements].
+class MovementsFamily extends Family<AsyncValue<IList<MovementEntity>>> {
+  /// See also [Movements].
+  const MovementsFamily();
+
+  /// See also [Movements].
+  MovementsProvider call({
+    required UniqueId workoutId,
+  }) {
+    return MovementsProvider(
+      workoutId: workoutId,
+    );
+  }
+
+  @override
+  MovementsProvider getProviderOverride(
+    covariant MovementsProvider provider,
+  ) {
+    return call(
+      workoutId: provider.workoutId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'movementsProvider';
+}
 
 /// See also [Movements].
 class MovementsProvider
     extends AsyncNotifierProviderImpl<Movements, IList<MovementEntity>> {
+  /// See also [Movements].
   MovementsProvider({
     required this.workoutId,
-  }) : super(
+  }) : super.internal(
           () => Movements()..workoutId = workoutId,
           from: movementsProvider,
           name: r'movementsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$MovementsHash,
+                  : _$movementsHash,
+          dependencies: MovementsFamily._dependencies,
+          allTransitiveDependencies: MovementsFamily._allTransitiveDependencies,
         );
 
   final UniqueId workoutId;
@@ -62,8 +114,8 @@ class MovementsProvider
   }
 
   @override
-  FutureOr<IList<MovementEntity>> runNotifierBuild(
-    covariant _$Movements notifier,
+  Future<IList<MovementEntity>> runNotifierBuild(
+    covariant Movements notifier,
   ) {
     return notifier.build(
       workoutId: workoutId,
@@ -71,66 +123,75 @@ class MovementsProvider
   }
 }
 
-typedef MovementsRef = AsyncNotifierProviderRef<IList<MovementEntity>>;
+String _$movementStateHash() => r'c492c8a90e801109f3dd188fffd1f192931f6f5a';
 
-/// See also [Movements].
-final movementsProvider = MovementsFamily();
+abstract class _$MovementState extends BuildlessAsyncNotifier<MovementEntity> {
+  late final UniqueId id;
 
-class MovementsFamily extends Family<AsyncValue<IList<MovementEntity>>> {
-  MovementsFamily();
-
-  MovementsProvider call({
-    required UniqueId workoutId,
-  }) {
-    return MovementsProvider(
-      workoutId: workoutId,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<Movements, IList<MovementEntity>>
-      getProviderOverride(
-    covariant MovementsProvider provider,
-  ) {
-    return call(
-      workoutId: provider.workoutId,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'movementsProvider';
-}
-
-abstract class _$Movements
-    extends BuildlessAsyncNotifier<IList<MovementEntity>> {
-  late final UniqueId workoutId;
-
-  FutureOr<IList<MovementEntity>> build({
-    required UniqueId workoutId,
+  Future<MovementEntity> build({
+    required UniqueId id,
   });
 }
 
-String _$MovementStateHash() => r'c492c8a90e801109f3dd188fffd1f192931f6f5a';
+/// See also [MovementState].
+@ProviderFor(MovementState)
+const movementStateProvider = MovementStateFamily();
+
+/// See also [MovementState].
+class MovementStateFamily extends Family<AsyncValue<MovementEntity>> {
+  /// See also [MovementState].
+  const MovementStateFamily();
+
+  /// See also [MovementState].
+  MovementStateProvider call({
+    required UniqueId id,
+  }) {
+    return MovementStateProvider(
+      id: id,
+    );
+  }
+
+  @override
+  MovementStateProvider getProviderOverride(
+    covariant MovementStateProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'movementStateProvider';
+}
 
 /// See also [MovementState].
 class MovementStateProvider
     extends AsyncNotifierProviderImpl<MovementState, MovementEntity> {
+  /// See also [MovementState].
   MovementStateProvider({
     required this.id,
-  }) : super(
+  }) : super.internal(
           () => MovementState()..id = id,
           from: movementStateProvider,
           name: r'movementStateProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$MovementStateHash,
+                  : _$movementStateHash,
+          dependencies: MovementStateFamily._dependencies,
+          allTransitiveDependencies:
+              MovementStateFamily._allTransitiveDependencies,
         );
 
   final UniqueId id;
@@ -149,8 +210,8 @@ class MovementStateProvider
   }
 
   @override
-  FutureOr<MovementEntity> runNotifierBuild(
-    covariant _$MovementState notifier,
+  Future<MovementEntity> runNotifierBuild(
+    covariant MovementState notifier,
   ) {
     return notifier.build(
       id: id,
@@ -158,64 +219,77 @@ class MovementStateProvider
   }
 }
 
-typedef MovementStateRef = AsyncNotifierProviderRef<MovementEntity>;
+String _$exerciseMovementsHash() => r'7349c99ac1e96bf1a1008b0a7850d683dae9dde6';
 
-/// See also [MovementState].
-final movementStateProvider = MovementStateFamily();
+abstract class _$ExerciseMovements
+    extends BuildlessAutoDisposeAsyncNotifier<IList<MovementEntity>> {
+  late final ExerciseEntity exercise;
 
-class MovementStateFamily extends Family<AsyncValue<MovementEntity>> {
-  MovementStateFamily();
-
-  MovementStateProvider call({
-    required UniqueId id,
-  }) {
-    return MovementStateProvider(
-      id: id,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<MovementState, MovementEntity> getProviderOverride(
-    covariant MovementStateProvider provider,
-  ) {
-    return call(
-      id: provider.id,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'movementStateProvider';
-}
-
-abstract class _$MovementState extends BuildlessAsyncNotifier<MovementEntity> {
-  late final UniqueId id;
-
-  FutureOr<MovementEntity> build({
-    required UniqueId id,
+  Future<IList<MovementEntity>> build({
+    required ExerciseEntity exercise,
   });
 }
 
-String _$ExerciseMovementsHash() => r'7349c99ac1e96bf1a1008b0a7850d683dae9dde6';
+/// See also [ExerciseMovements].
+@ProviderFor(ExerciseMovements)
+const exerciseMovementsProvider = ExerciseMovementsFamily();
+
+/// See also [ExerciseMovements].
+class ExerciseMovementsFamily
+    extends Family<AsyncValue<IList<MovementEntity>>> {
+  /// See also [ExerciseMovements].
+  const ExerciseMovementsFamily();
+
+  /// See also [ExerciseMovements].
+  ExerciseMovementsProvider call({
+    required ExerciseEntity exercise,
+  }) {
+    return ExerciseMovementsProvider(
+      exercise: exercise,
+    );
+  }
+
+  @override
+  ExerciseMovementsProvider getProviderOverride(
+    covariant ExerciseMovementsProvider provider,
+  ) {
+    return call(
+      exercise: provider.exercise,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'exerciseMovementsProvider';
+}
 
 /// See also [ExerciseMovements].
 class ExerciseMovementsProvider extends AutoDisposeAsyncNotifierProviderImpl<
     ExerciseMovements, IList<MovementEntity>> {
+  /// See also [ExerciseMovements].
   ExerciseMovementsProvider({
     required this.exercise,
-  }) : super(
+  }) : super.internal(
           () => ExerciseMovements()..exercise = exercise,
           from: exerciseMovementsProvider,
           name: r'exerciseMovementsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$ExerciseMovementsHash,
+                  : _$exerciseMovementsHash,
+          dependencies: ExerciseMovementsFamily._dependencies,
+          allTransitiveDependencies:
+              ExerciseMovementsFamily._allTransitiveDependencies,
         );
 
   final ExerciseEntity exercise;
@@ -234,58 +308,12 @@ class ExerciseMovementsProvider extends AutoDisposeAsyncNotifierProviderImpl<
   }
 
   @override
-  FutureOr<IList<MovementEntity>> runNotifierBuild(
-    covariant _$ExerciseMovements notifier,
+  Future<IList<MovementEntity>> runNotifierBuild(
+    covariant ExerciseMovements notifier,
   ) {
     return notifier.build(
       exercise: exercise,
     );
   }
 }
-
-typedef ExerciseMovementsRef
-    = AutoDisposeAsyncNotifierProviderRef<IList<MovementEntity>>;
-
-/// See also [ExerciseMovements].
-final exerciseMovementsProvider = ExerciseMovementsFamily();
-
-class ExerciseMovementsFamily
-    extends Family<AsyncValue<IList<MovementEntity>>> {
-  ExerciseMovementsFamily();
-
-  ExerciseMovementsProvider call({
-    required ExerciseEntity exercise,
-  }) {
-    return ExerciseMovementsProvider(
-      exercise: exercise,
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderImpl<ExerciseMovements, IList<MovementEntity>>
-      getProviderOverride(
-    covariant ExerciseMovementsProvider provider,
-  ) {
-    return call(
-      exercise: provider.exercise,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'exerciseMovementsProvider';
-}
-
-abstract class _$ExerciseMovements
-    extends BuildlessAutoDisposeAsyncNotifier<IList<MovementEntity>> {
-  late final ExerciseEntity exercise;
-
-  FutureOr<IList<MovementEntity>> build({
-    required ExerciseEntity exercise,
-  });
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

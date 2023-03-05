@@ -6,7 +6,22 @@ part of 'workout.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$workoutsHash() => r'4738c9aba7af9969d6ff04a152b8539478415982';
+
+/// See also [Workouts].
+@ProviderFor(Workouts)
+final workoutsProvider =
+    AsyncNotifierProvider<Workouts, IList<WorkoutEntity>>.internal(
+  Workouts.new,
+  name: r'workoutsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$workoutsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Workouts = AsyncNotifier<IList<WorkoutEntity>>;
+String _$workoutStateHash() => r'38c9930644b92538baa8ba35fe900e66d6524161';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,37 +44,73 @@ class _SystemHash {
   }
 }
 
-String _$WorkoutsHash() => r'4738c9aba7af9969d6ff04a152b8539478415982';
+abstract class _$WorkoutState extends BuildlessAsyncNotifier<WorkoutEntity> {
+  late final UniqueId id;
 
-/// See also [Workouts].
-final workoutsProvider = AsyncNotifierProvider<Workouts, IList<WorkoutEntity>>(
-  Workouts.new,
-  name: r'workoutsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$WorkoutsHash,
-);
-typedef WorkoutsRef = AsyncNotifierProviderRef<IList<WorkoutEntity>>;
-
-abstract class _$Workouts extends AsyncNotifier<IList<WorkoutEntity>> {
-  @override
-  FutureOr<IList<WorkoutEntity>> build();
+  Future<WorkoutEntity> build({
+    required UniqueId id,
+  });
 }
 
-String _$WorkoutStateHash() => r'38c9930644b92538baa8ba35fe900e66d6524161';
+/// See also [WorkoutState].
+@ProviderFor(WorkoutState)
+const workoutStateProvider = WorkoutStateFamily();
+
+/// See also [WorkoutState].
+class WorkoutStateFamily extends Family<AsyncValue<WorkoutEntity>> {
+  /// See also [WorkoutState].
+  const WorkoutStateFamily();
+
+  /// See also [WorkoutState].
+  WorkoutStateProvider call({
+    required UniqueId id,
+  }) {
+    return WorkoutStateProvider(
+      id: id,
+    );
+  }
+
+  @override
+  WorkoutStateProvider getProviderOverride(
+    covariant WorkoutStateProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'workoutStateProvider';
+}
 
 /// See also [WorkoutState].
 class WorkoutStateProvider
     extends AsyncNotifierProviderImpl<WorkoutState, WorkoutEntity> {
+  /// See also [WorkoutState].
   WorkoutStateProvider({
     required this.id,
-  }) : super(
+  }) : super.internal(
           () => WorkoutState()..id = id,
           from: workoutStateProvider,
           name: r'workoutStateProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$WorkoutStateHash,
+                  : _$workoutStateHash,
+          dependencies: WorkoutStateFamily._dependencies,
+          allTransitiveDependencies:
+              WorkoutStateFamily._allTransitiveDependencies,
         );
 
   final UniqueId id;
@@ -78,54 +129,12 @@ class WorkoutStateProvider
   }
 
   @override
-  FutureOr<WorkoutEntity> runNotifierBuild(
-    covariant _$WorkoutState notifier,
+  Future<WorkoutEntity> runNotifierBuild(
+    covariant WorkoutState notifier,
   ) {
     return notifier.build(
       id: id,
     );
   }
 }
-
-typedef WorkoutStateRef = AsyncNotifierProviderRef<WorkoutEntity>;
-
-/// See also [WorkoutState].
-final workoutStateProvider = WorkoutStateFamily();
-
-class WorkoutStateFamily extends Family<AsyncValue<WorkoutEntity>> {
-  WorkoutStateFamily();
-
-  WorkoutStateProvider call({
-    required UniqueId id,
-  }) {
-    return WorkoutStateProvider(
-      id: id,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<WorkoutState, WorkoutEntity> getProviderOverride(
-    covariant WorkoutStateProvider provider,
-  ) {
-    return call(
-      id: provider.id,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'workoutStateProvider';
-}
-
-abstract class _$WorkoutState extends BuildlessAsyncNotifier<WorkoutEntity> {
-  late final UniqueId id;
-
-  FutureOr<WorkoutEntity> build({
-    required UniqueId id,
-  });
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/settings/presentation/pages/settings_page.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
+import 'package:jumpat/features/workout/presentation/pages/backup_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/edit_movement_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/edit_template_page.dart';
 import 'package:jumpat/features/workout/presentation/pages/edit_workout_page.dart';
@@ -24,6 +25,7 @@ part 'app_router.gr.dart';
     AutoRoute(page: SettingsPage),
     AutoRoute(page: ExercisesPage),
     AutoRoute(page: TemplatesPage),
+    AutoRoute(page: BackupPage),
   ],
 )
 class AppRouter extends _$AppRouter {}

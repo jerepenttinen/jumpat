@@ -66,5 +66,8 @@
   "newWorkout": "New workout",
   "useTemplate": "Use template",
   "changeTemplateName": "Change template name",
-  "changeTemplateColor": "Change template color"
+  "changeTemplateColor": "Change template color",
+  "backupTitle": "Backup",
+  "importDatabase": "Import database",
+  "invalidFileFormat": "Invalid file format"
 }

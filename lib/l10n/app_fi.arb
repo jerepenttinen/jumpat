@@ -36,5 +36,7 @@
   "newWorkout": "Uusi jumppa",
   "useTemplate": "Käytä mallia",
   "changeTemplateName": "Muuta mallin nimeä",
-  "changeTemplateColor": "Muuta mallin väriä"
+  "changeTemplateColor": "Muuta mallin väriä",
+  "backupTitle": "Varmuuskopionti",
+  "importDatabase": "Tuo tietokanta"
 }

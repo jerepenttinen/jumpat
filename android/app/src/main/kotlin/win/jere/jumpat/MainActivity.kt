@@ -1,4 +1,4 @@
-package com.example.jumpat
+package win.jere.jumpat
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -73,6 +73,14 @@ class WorkoutsDrawer extends StatelessWidget {
               },
             ),
             ListTile(
+              title: Text(t.backupTitle),
+              leading: const Icon(Icons.backup),
+              onTap: () {
+                Navigator.pop(context);
+                context.router.push(const BackupRoute());
+              },
+            ),
+            ListTile(
               title: Text(t.settingsTitle),
               leading: const Icon(Icons.settings),
               onTap: () {

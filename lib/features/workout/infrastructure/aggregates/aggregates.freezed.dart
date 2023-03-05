@@ -48,11 +48,11 @@ class _$WorkoutAggregateCopyWithImpl<$Res, $Val extends WorkoutAggregate>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? workout = freezed,
+    Object? workout = null,
     Object? template = freezed,
   }) {
     return _then(_value.copyWith(
-      workout: freezed == workout
+      workout: null == workout
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
               as Workout,
@@ -101,11 +101,11 @@ class __$$_WorkoutAggregateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? workout = freezed,
+    Object? workout = null,
     Object? template = freezed,
   }) {
     return _then(_$_WorkoutAggregate(
-      workout: freezed == workout
+      workout: null == workout
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
               as Workout,
@@ -137,14 +137,13 @@ class _$_WorkoutAggregate implements _WorkoutAggregate {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_WorkoutAggregate &&
-            const DeepCollectionEquality().equals(other.workout, workout) &&
+            (identical(other.workout, workout) || other.workout == workout) &&
             (identical(other.template, template) ||
                 other.template == template));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(workout), template);
+  int get hashCode => Object.hash(runtimeType, workout, template);
 
   @JsonKey(ignore: true)
   @override
@@ -208,13 +207,13 @@ class _$MovementAggregateCopyWithImpl<$Res, $Val extends MovementAggregate>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? movement = freezed,
+    Object? movement = null,
     Object? sets = null,
     Object? workout = null,
-    Object? exercise = freezed,
+    Object? exercise = null,
   }) {
     return _then(_value.copyWith(
-      movement: freezed == movement
+      movement: null == movement
           ? _value.movement
           : movement // ignore: cast_nullable_to_non_nullable
               as Movement,
@@ -226,7 +225,7 @@ class _$MovementAggregateCopyWithImpl<$Res, $Val extends MovementAggregate>
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
               as WorkoutAggregate,
-      exercise: freezed == exercise
+      exercise: null == exercise
           ? _value.exercise
           : exercise // ignore: cast_nullable_to_non_nullable
               as Exercise,
@@ -271,13 +270,13 @@ class __$$_MovementAggregateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? movement = freezed,
+    Object? movement = null,
     Object? sets = null,
     Object? workout = null,
-    Object? exercise = freezed,
+    Object? exercise = null,
   }) {
     return _then(_$_MovementAggregate(
-      movement: freezed == movement
+      movement: null == movement
           ? _value.movement
           : movement // ignore: cast_nullable_to_non_nullable
               as Movement,
@@ -289,7 +288,7 @@ class __$$_MovementAggregateCopyWithImpl<$Res>
           ? _value.workout
           : workout // ignore: cast_nullable_to_non_nullable
               as WorkoutAggregate,
-      exercise: freezed == exercise
+      exercise: null == exercise
           ? _value.exercise
           : exercise // ignore: cast_nullable_to_non_nullable
               as Exercise,
@@ -332,19 +331,17 @@ class _$_MovementAggregate implements _MovementAggregate {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MovementAggregate &&
-            const DeepCollectionEquality().equals(other.movement, movement) &&
+            (identical(other.movement, movement) ||
+                other.movement == movement) &&
             const DeepCollectionEquality().equals(other._sets, _sets) &&
             (identical(other.workout, workout) || other.workout == workout) &&
-            const DeepCollectionEquality().equals(other.exercise, exercise));
+            (identical(other.exercise, exercise) ||
+                other.exercise == exercise));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(movement),
-      const DeepCollectionEquality().hash(_sets),
-      workout,
-      const DeepCollectionEquality().hash(exercise));
+  int get hashCode => Object.hash(runtimeType, movement,
+      const DeepCollectionEquality().hash(_sets), workout, exercise);
 
   @JsonKey(ignore: true)
   @override
@@ -407,11 +404,11 @@ class _$TemplateAggregateCopyWithImpl<$Res, $Val extends TemplateAggregate>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? template = freezed,
+    Object? template = null,
     Object? exercises = null,
   }) {
     return _then(_value.copyWith(
-      template: freezed == template
+      template: null == template
           ? _value.template
           : template // ignore: cast_nullable_to_non_nullable
               as Template,
@@ -445,11 +442,11 @@ class __$$_TemplateAggregateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? template = freezed,
+    Object? template = null,
     Object? exercises = null,
   }) {
     return _then(_$_TemplateAggregate(
-      template: freezed == template
+      template: null == template
           ? _value.template
           : template // ignore: cast_nullable_to_non_nullable
               as Template,
@@ -488,16 +485,15 @@ class _$_TemplateAggregate implements _TemplateAggregate {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_TemplateAggregate &&
-            const DeepCollectionEquality().equals(other.template, template) &&
+            (identical(other.template, template) ||
+                other.template == template) &&
             const DeepCollectionEquality()
                 .equals(other._exercises, _exercises));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(template),
-      const DeepCollectionEquality().hash(_exercises));
+      runtimeType, template, const DeepCollectionEquality().hash(_exercises));
 
   @JsonKey(ignore: true)
   @override

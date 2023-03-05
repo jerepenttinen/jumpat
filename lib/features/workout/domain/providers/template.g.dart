@@ -6,7 +6,22 @@ part of 'template.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$templatesHash() => r'00ac495774c367da3b63e29b2ef711a32dc49167';
+
+/// See also [Templates].
+@ProviderFor(Templates)
+final templatesProvider =
+    AsyncNotifierProvider<Templates, IList<TemplateEntity>>.internal(
+  Templates.new,
+  name: r'templatesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$templatesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Templates = AsyncNotifier<IList<TemplateEntity>>;
+String _$templateStateHash() => r'e2a8a570a9edf678de87a6744c888c9f9ae20364';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,38 +44,73 @@ class _SystemHash {
   }
 }
 
-String _$TemplatesHash() => r'00ac495774c367da3b63e29b2ef711a32dc49167';
+abstract class _$TemplateState extends BuildlessAsyncNotifier<TemplateEntity> {
+  late final UniqueId id;
 
-/// See also [Templates].
-final templatesProvider =
-    AsyncNotifierProvider<Templates, IList<TemplateEntity>>(
-  Templates.new,
-  name: r'templatesProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$TemplatesHash,
-);
-typedef TemplatesRef = AsyncNotifierProviderRef<IList<TemplateEntity>>;
-
-abstract class _$Templates extends AsyncNotifier<IList<TemplateEntity>> {
-  @override
-  FutureOr<IList<TemplateEntity>> build();
+  Future<TemplateEntity> build({
+    required UniqueId id,
+  });
 }
 
-String _$TemplateStateHash() => r'e2a8a570a9edf678de87a6744c888c9f9ae20364';
+/// See also [TemplateState].
+@ProviderFor(TemplateState)
+const templateStateProvider = TemplateStateFamily();
+
+/// See also [TemplateState].
+class TemplateStateFamily extends Family<AsyncValue<TemplateEntity>> {
+  /// See also [TemplateState].
+  const TemplateStateFamily();
+
+  /// See also [TemplateState].
+  TemplateStateProvider call({
+    required UniqueId id,
+  }) {
+    return TemplateStateProvider(
+      id: id,
+    );
+  }
+
+  @override
+  TemplateStateProvider getProviderOverride(
+    covariant TemplateStateProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'templateStateProvider';
+}
 
 /// See also [TemplateState].
 class TemplateStateProvider
     extends AsyncNotifierProviderImpl<TemplateState, TemplateEntity> {
+  /// See also [TemplateState].
   TemplateStateProvider({
     required this.id,
-  }) : super(
+  }) : super.internal(
           () => TemplateState()..id = id,
           from: templateStateProvider,
           name: r'templateStateProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$TemplateStateHash,
+                  : _$templateStateHash,
+          dependencies: TemplateStateFamily._dependencies,
+          allTransitiveDependencies:
+              TemplateStateFamily._allTransitiveDependencies,
         );
 
   final UniqueId id;
@@ -79,54 +129,12 @@ class TemplateStateProvider
   }
 
   @override
-  FutureOr<TemplateEntity> runNotifierBuild(
-    covariant _$TemplateState notifier,
+  Future<TemplateEntity> runNotifierBuild(
+    covariant TemplateState notifier,
   ) {
     return notifier.build(
       id: id,
     );
   }
 }
-
-typedef TemplateStateRef = AsyncNotifierProviderRef<TemplateEntity>;
-
-/// See also [TemplateState].
-final templateStateProvider = TemplateStateFamily();
-
-class TemplateStateFamily extends Family<AsyncValue<TemplateEntity>> {
-  TemplateStateFamily();
-
-  TemplateStateProvider call({
-    required UniqueId id,
-  }) {
-    return TemplateStateProvider(
-      id: id,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<TemplateState, TemplateEntity> getProviderOverride(
-    covariant TemplateStateProvider provider,
-  ) {
-    return call(
-      id: provider.id,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'templateStateProvider';
-}
-
-abstract class _$TemplateState extends BuildlessAsyncNotifier<TemplateEntity> {
-  late final UniqueId id;
-
-  FutureOr<TemplateEntity> build({
-    required UniqueId id,
-  });
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
