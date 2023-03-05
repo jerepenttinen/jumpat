@@ -28,7 +28,8 @@ class Exercises extends _$Exercises {
     final exercises = state.value!;
     return exercises
         .filter((t) => t.name.getOrCrash().toLowerCase().contains(lowerName))
-        .toIList();
+        .toIList()
+        .sortOrdered(exerciseEntityComparator);
   }
 
   bool hasExact(String name) {

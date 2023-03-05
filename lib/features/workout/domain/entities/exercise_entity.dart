@@ -22,3 +22,9 @@ class ExerciseEntity with _$ExerciseEntity implements IEntity {
         name: ExerciseName(name),
       );
 }
+
+int exerciseEntityComparator(ExerciseEntity e1, ExerciseEntity e2) {
+  final name1 = e1.name.getOrCrash().toLowerCase();
+  final name2 = e2.name.getOrCrash().toLowerCase();
+  return name1.compareTo(name2);
+}
