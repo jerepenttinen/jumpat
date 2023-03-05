@@ -48,6 +48,9 @@ class ExerciseListItem extends ConsumerWidget {
             return;
           }
 
+          // Load exercise, so updateName has value when called
+          await ref.read(exerciseStateProvider(id: exercise.id).future);
+
           await ref
               .read(exerciseStateProvider(id: exercise.id).notifier)
               .updateName(ExerciseName(newName));
