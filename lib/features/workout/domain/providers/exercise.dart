@@ -2,6 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
+import 'package:jumpat/features/workout/domain/providers/movement.dart';
+import 'package:jumpat/features/workout/domain/providers/template.dart';
 import 'package:jumpat/features/workout/domain/values/exercise_name.dart';
 import 'package:jumpat/features/workout/infrastructure/providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -43,6 +45,13 @@ class Exercises extends _$Exercises {
   Future<void> save(ExerciseEntity exercise) async {
     final repository = ref.watch(exerciseRepositoryProvider);
     await repository.save(exercise);
+
+    ref
+      ..invalidate(movementsProvider)
+      ..invalidate(templatesProvider)
+      ..invalidate(templateStateProvider)
+      ..invalidate(exerciseMovementsProvider)
+      ..invalidate(movementStateProvider);
 
     await update((currentList) {
       return currentList.updateById([exercise], (item) => item.id);
