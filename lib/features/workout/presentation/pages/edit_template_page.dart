@@ -30,7 +30,7 @@ class EditTemplatePage extends ConsumerWidget {
         ),
         actions: templateAsync.maybeWhen(
           data: (template) => template.match(
-            () => List.empty(),
+            List.empty,
             (template) => [
               IconButton(
                 icon: CircleColor(

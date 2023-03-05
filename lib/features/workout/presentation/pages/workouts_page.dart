@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
@@ -19,7 +18,6 @@ class WorkoutsPage extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.name),
       ),
       body: const WorkoutsList(),
-      floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: const WorkoutsFab(),
       drawer: const WorkoutsDrawer(),
     );
@@ -101,25 +99,15 @@ class WorkoutsFab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = AppLocalizations.of(context)!;
-    final fabKey = GlobalKey<ExpandableFabState>();
-    return ExpandableFab(
-      openButtonHeroTag: UniqueKey(),
-      closeButtonHeroTag: UniqueKey(),
-      key: fabKey,
-      child: const Icon(Icons.add),
-      type: ExpandableFabType.up,
-      childrenOffset: const Offset(8, 8),
-      distance: 60,
-      overlayStyle: ExpandableFabOverlayStyle(
-        color: Colors.black54,
-      ),
+
+    return Wrap(
+      direction: Axis.vertical,
+      spacing: 16,
       children: [
-        FloatingActionButton.small(
+        FloatingActionButton(
           heroTag: UniqueKey(),
           tooltip: t.useTemplate,
           onPressed: () async {
-            fabKey.currentState?.toggle();
-
             final template = await chooseTemplateDialog(context);
             if (template == null) {
               return;
@@ -136,12 +124,11 @@ class WorkoutsFab extends ConsumerWidget {
           },
           child: const Icon(Icons.control_point_duplicate_rounded),
         ),
-        FloatingActionButton.small(
+        FloatingActionButton(
           heroTag: UniqueKey(),
           tooltip: t.newWorkout,
           child: const Icon(Icons.add),
           onPressed: () async {
-            fabKey.currentState?.toggle();
             final workout = WorkoutEntity.empty();
             await ref.read(workoutsProvider.notifier).save(workout);
             if (context.mounted) {

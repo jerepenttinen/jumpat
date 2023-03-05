@@ -12,7 +12,6 @@ dependencies:
   file_picker: ^5.2.5
   flutter:
     sdk: flutter
-  flutter_expandable_fab: ^1.7.0
   flutter_hooks: ^0.18.5+1
   flutter_localizations:
     sdk: flutter
