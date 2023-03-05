@@ -27,6 +27,17 @@ class TemplateRepository extends DatabaseAccessor<AppDatabase>
       await batch((batch) {
         batch.insertAllOnConflictUpdate(exercises, aggregate.exercises);
       });
+      await batch((batch) {
+        batch.insertAllOnConflictUpdate(
+          templatesExercises,
+          aggregate.exercises.map(
+            (e) => TemplatesExercise(
+              template: aggregate.template.id,
+              exercise: e.id,
+            ),
+          ),
+        );
+      });
     });
 
     return right(unit);

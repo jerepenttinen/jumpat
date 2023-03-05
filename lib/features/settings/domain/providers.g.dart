@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$LocaleStateHash() => r'f7b9917c802d587893bae24e9f00d4a5e2374e2c';
+String _$LocaleStateHash() => r'c66de1a5dca26c16e1104db7ed6bc54685708c23';
 
 /// See also [LocaleState].
 final localeStateProvider = NotifierProvider<LocaleState, Locale>(
@@ -46,7 +46,7 @@ abstract class _$LocaleState extends Notifier<Locale> {
 }
 
 String _$DefaultRepetitionCountHash() =>
-    r'6ca71e8a2afb086e7b0984fc9bc3063f6a962276';
+    r'e347d164eac1dd51e3a63e6d4a4541426ab51a42';
 
 /// See also [DefaultRepetitionCount].
 final defaultRepetitionCountProvider =

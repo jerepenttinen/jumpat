@@ -64,6 +64,9 @@ class TemplatesExercises extends Table {
   IntColumn get exercise => integer()();
 
   @override
+  Set<Column> get primaryKey => {template, exercise};
+
+  @override
   List<String> get customConstraints => [
         'FOREIGN KEY (template) REFERENCES templates (id) ON DELETE CASCADE',
         'FOREIGN KEY (exercise) REFERENCES exercises (id) ON DELETE CASCADE',

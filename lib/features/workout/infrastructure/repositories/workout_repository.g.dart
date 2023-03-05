@@ -4,9 +4,9 @@ part of 'workout_repository.dart';
 
 // ignore_for_file: type=lint
 mixin _$WorkoutRepositoryMixin on DatabaseAccessor<AppDatabase> {
-  $TemplatesTable get templates => attachedDatabase.templates;
   $WorkoutsTable get workouts => attachedDatabase.workouts;
-  $ExercisesTable get exercises => attachedDatabase.exercises;
+  $TemplatesTable get templates => attachedDatabase.templates;
   $TemplatesExercisesTable get templatesExercises =>
       attachedDatabase.templatesExercises;
+  $ExercisesTable get exercises => attachedDatabase.exercises;
 }

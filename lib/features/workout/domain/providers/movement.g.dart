@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$MovementsHash() => r'7642eccb24d2260e56dd9c1ac4b0946d1b19d5c8';
+String _$MovementsHash() => r'31472c680ad8d102bafdda05a8304bcac1f39291';
 
 /// See also [Movements].
 class MovementsProvider
@@ -201,7 +201,7 @@ abstract class _$MovementState extends BuildlessAsyncNotifier<MovementEntity> {
   });
 }
 
-String _$ExerciseMovementsHash() => r'eb3dfef150c80c3c1497c0fa061987d963ea5ea0';
+String _$ExerciseMovementsHash() => r'7349c99ac1e96bf1a1008b0a7850d683dae9dde6';
 
 /// See also [ExerciseMovements].
 class ExerciseMovementsProvider extends AutoDisposeAsyncNotifierProviderImpl<

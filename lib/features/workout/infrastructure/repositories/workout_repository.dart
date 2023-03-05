@@ -11,7 +11,7 @@ import 'package:jumpat/features/workout/infrastructure/converters/workout_conver
 
 part 'workout_repository.g.dart';
 
-@DriftAccessor(tables: [Workouts, Templates, TemplatesExercises])
+@DriftAccessor(tables: [Workouts, Templates, TemplatesExercises, Exercises])
 class WorkoutRepository extends DatabaseAccessor<AppDatabase>
     with _$WorkoutRepositoryMixin
     implements IWorkoutRepository {
