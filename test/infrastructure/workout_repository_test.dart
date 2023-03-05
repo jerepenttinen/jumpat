@@ -1,4 +1,5 @@
 import 'package:drift/native.dart';
+import 'package:flutter/material.dart';
 import 'package:jumpat/features/core/infrastructure/drift.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/movement_entity.dart';
@@ -29,6 +30,25 @@ void main() async {
       final movement =
           MovementEntity.create(workout: workout, exercise: exercise);
       await movementRepository.save(movement);
+
+      final retrievedMovement = await movementRepository.get(movement.id);
+
+      retrievedMovement.match((l) => fail('not found'), (r) {
+        expect(
+          movement,
+          equals(
+            r.copyWith(
+              workout: r.workout.copyWith(date: movement.workout.date),
+              // Date loses precision when put into db
+            ),
+          ),
+        );
+
+        assert(
+          DateUtils.isSameDay(movement.workout.date, r.workout.date),
+          'jere',
+        );
+      });
 
       await workoutRepository.remove(workout);
 
