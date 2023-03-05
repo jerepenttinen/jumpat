@@ -45,7 +45,7 @@ abstract class _$Workouts extends AsyncNotifier<IList<WorkoutEntity>> {
   FutureOr<IList<WorkoutEntity>> build();
 }
 
-String _$WorkoutStateHash() => r'c79759c38d409c657a21df80a3fe2e2366f09ab5';
+String _$WorkoutStateHash() => r'38c9930644b92538baa8ba35fe900e66d6524161';
 
 /// See also [WorkoutState].
 class WorkoutStateProvider

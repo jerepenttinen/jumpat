@@ -71,7 +71,7 @@ class Movements extends _$Movements {
 
   Future<void> createAll(
     WorkoutEntity workout,
-    IList<ExerciseEntity> exercises,
+    Iterable<ExerciseEntity> exercises,
   ) async {
     final repository = ref.watch(movementRepositoryProvider);
     final movements = (await Future.wait(

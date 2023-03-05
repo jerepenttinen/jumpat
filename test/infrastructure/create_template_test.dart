@@ -19,21 +19,33 @@ void main() {
   final ITemplateRepository templateRepository = TemplateRepository(db: db);
 
   test('should create template correctly', () async {
-    final exercise = ExerciseEntity.create(name: 'testi');
-    await exerciseRepository.save(exercise);
+    final exercise1 = ExerciseEntity.create(name: 'testi');
+    await exerciseRepository.save(exercise1);
+
+    final exercise2 = ExerciseEntity.create(name: 'hyppy');
+    await exerciseRepository.save(exercise2);
 
     final template = TemplateEntity.create(
       name: TemplateName('Jumppa'),
       color: TemplateColor(Colors.black),
-      exercises: [exercise].lock,
+      exercises: [exercise1, exercise2].toISet(),
     );
 
     await templateRepository.save(template);
-    await templateRepository.save(template);
 
-    final retrievedTemplate = await templateRepository.get(template.id);
-    retrievedTemplate.match(() => fail('not found'), (t) {
-      expect(t, equals(template));
-    });
+    (await templateRepository.get(template.id)).match(
+      () => fail('not found'),
+      (t) => expect(t, equals(template)),
+    );
+
+    // Remove one exercise
+    final updatedTemplate = template.copyWith(exercises: [exercise1].toISet());
+
+    await templateRepository.save(updatedTemplate);
+
+    (await templateRepository.get(updatedTemplate.id)).match(
+      () => fail('not found'),
+      (t) => expect(t, equals(updatedTemplate)),
+    );
   });
 }

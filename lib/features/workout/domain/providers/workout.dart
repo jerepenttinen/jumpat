@@ -96,7 +96,7 @@ class WorkoutState extends _$WorkoutState {
     final movements =
         await ref.read(movementsProvider(workoutId: workout.id).future);
 
-    final exercises = movements.map((movement) => movement.exercise).toIList();
+    final exercises = movements.map((movement) => movement.exercise).toISet();
 
     final template =
         TemplateEntity.create(name: name, color: color, exercises: exercises);

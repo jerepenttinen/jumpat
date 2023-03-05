@@ -19,8 +19,7 @@ class TemplateConverter
       id: UniqueId.fromUniqueInt(aggregate.template.id),
       name: TemplateName(aggregate.template.name),
       color: TemplateColor(Color(aggregate.template.color)),
-      exercises:
-          aggregate.exercises.map(ExerciseConverter().toDomain).toIList(),
+      exercises: aggregate.exercises.map(ExerciseConverter().toDomain).toISet(),
     );
   }
 

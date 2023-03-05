@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/exercise_entity.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
@@ -113,15 +114,10 @@ class TemplateState extends _$TemplateState {
     }
 
     final template = state.value!;
-    final index =
-        template.exercises.indexWhere((item) => item.id == oldExercise.id);
-
-    if (index == -1) {
-      return;
-    }
-
     final updatedTemplate = template.copyWith(
-      exercises: template.exercises.replace(index, newExercise),
+      exercises: template.exercises
+          .map((ex) => ex == oldExercise ? newExercise : ex)
+          .toISet(),
     );
     final templates = ref.read(templatesProvider.notifier);
     await templates.save(updatedTemplate);

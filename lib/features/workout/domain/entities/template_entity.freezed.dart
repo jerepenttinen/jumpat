@@ -19,7 +19,7 @@ mixin _$TemplateEntity {
   UniqueId get id => throw _privateConstructorUsedError;
   TemplateName get name => throw _privateConstructorUsedError;
   TemplateColor get color => throw _privateConstructorUsedError;
-  IList<ExerciseEntity> get exercises => throw _privateConstructorUsedError;
+  ISet<ExerciseEntity> get exercises => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TemplateEntityCopyWith<TemplateEntity> get copyWith =>
@@ -36,7 +36,7 @@ abstract class $TemplateEntityCopyWith<$Res> {
       {UniqueId id,
       TemplateName name,
       TemplateColor color,
-      IList<ExerciseEntity> exercises});
+      ISet<ExerciseEntity> exercises});
 }
 
 /// @nodoc
@@ -73,7 +73,7 @@ class _$TemplateEntityCopyWithImpl<$Res, $Val extends TemplateEntity>
       exercises: null == exercises
           ? _value.exercises
           : exercises // ignore: cast_nullable_to_non_nullable
-              as IList<ExerciseEntity>,
+              as ISet<ExerciseEntity>,
     ) as $Val);
   }
 }
@@ -90,7 +90,7 @@ abstract class _$$_TemplateEntityCopyWith<$Res>
       {UniqueId id,
       TemplateName name,
       TemplateColor color,
-      IList<ExerciseEntity> exercises});
+      ISet<ExerciseEntity> exercises});
 }
 
 /// @nodoc
@@ -125,7 +125,7 @@ class __$$_TemplateEntityCopyWithImpl<$Res>
       exercises: null == exercises
           ? _value.exercises
           : exercises // ignore: cast_nullable_to_non_nullable
-              as IList<ExerciseEntity>,
+              as ISet<ExerciseEntity>,
     ));
   }
 }
@@ -146,7 +146,7 @@ class _$_TemplateEntity implements _TemplateEntity {
   @override
   final TemplateColor color;
   @override
-  final IList<ExerciseEntity> exercises;
+  final ISet<ExerciseEntity> exercises;
 
   @override
   String toString() {
@@ -180,7 +180,7 @@ abstract class _TemplateEntity implements TemplateEntity {
       {required final UniqueId id,
       required final TemplateName name,
       required final TemplateColor color,
-      required final IList<ExerciseEntity> exercises}) = _$_TemplateEntity;
+      required final ISet<ExerciseEntity> exercises}) = _$_TemplateEntity;
 
   @override
   UniqueId get id;
@@ -189,7 +189,7 @@ abstract class _TemplateEntity implements TemplateEntity {
   @override
   TemplateColor get color;
   @override
-  IList<ExerciseEntity> get exercises;
+  ISet<ExerciseEntity> get exercises;
   @override
   @JsonKey(ignore: true)
   _$$_TemplateEntityCopyWith<_$_TemplateEntity> get copyWith =>

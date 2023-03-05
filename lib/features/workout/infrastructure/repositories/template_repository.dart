@@ -27,6 +27,11 @@ class TemplateRepository extends DatabaseAccessor<AppDatabase>
       await batch((batch) {
         batch.insertAllOnConflictUpdate(exercises, aggregate.exercises);
       });
+
+      await (delete(templatesExercises)
+            ..where((tbl) => tbl.template.equals(template.id.getOrCrash())))
+          .go();
+
       await batch((batch) {
         batch.insertAllOnConflictUpdate(
           templatesExercises,

@@ -16,20 +16,20 @@ class TemplateEntity with _$TemplateEntity implements IEntity {
     required UniqueId id,
     required TemplateName name,
     required TemplateColor color,
-    required IList<ExerciseEntity> exercises,
+    required ISet<ExerciseEntity> exercises,
   }) = _TemplateEntity;
 
   factory TemplateEntity.empty() => TemplateEntity(
         id: UniqueId(),
         name: TemplateName(''),
         color: TemplateColor(const Color(0x00000000)),
-        exercises: IList(),
+        exercises: ISet(),
       );
 
   factory TemplateEntity.create({
     required TemplateName name,
     required TemplateColor color,
-    required IList<ExerciseEntity> exercises,
+    required ISet<ExerciseEntity> exercises,
   }) =>
       TemplateEntity(
         id: UniqueId(),
