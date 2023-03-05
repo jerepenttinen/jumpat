@@ -19,7 +19,7 @@ part '../../workout/infrastructure/models/tables.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase(QueryExecutor e) : super(e);
+  AppDatabase(super.e);
 
   @override
   int get schemaVersion => 1;

@@ -18,9 +18,7 @@ class LocaleState extends _$LocaleState {
   }
 
   void set(SupportedLocale newLocale) {
-    final repo = ref.watch(settingsRepositoryProvider);
-
-    repo.setLocale(newLocale);
+    final repo = ref.watch(settingsRepositoryProvider)..setLocale(newLocale);
 
     state = repo.getLocale();
   }
@@ -39,9 +37,8 @@ class DefaultRepetitionCount extends _$DefaultRepetitionCount {
   }
 
   void set(int newRepetitionCount) {
-    final repo = ref.watch(settingsRepositoryProvider);
-
-    repo.setDefaultRepetitionCount(newRepetitionCount);
+    final repo = ref.watch(settingsRepositoryProvider)
+      ..setDefaultRepetitionCount(newRepetitionCount);
 
     state = repo.getDefaultRepetitionCount();
   }

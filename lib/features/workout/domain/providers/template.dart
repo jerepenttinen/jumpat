@@ -52,7 +52,9 @@ class TemplateState extends _$TemplateState {
   Future<TemplateEntity> build({required UniqueId id}) async {
     final repository = ref.watch(templateRepositoryProvider);
     final template = await repository.get(id);
-    // TODO(jere): handle better
+    if (template.isNone()) {
+      throw UnimplementedError();
+    }
     return template.toNullable()!;
   }
 

@@ -3,12 +3,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/core/infrastructure/drift.dart';
-import 'package:jumpat/features/core/infrastructure/fast_hash.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/failures/workout_failure.dart';
 import 'package:jumpat/features/workout/domain/repositories/i_workout_repository.dart';
 import 'package:jumpat/features/workout/infrastructure/aggregates/aggregates.dart';
-import 'package:jumpat/features/workout/infrastructure/converters/template_converter.dart';
 import 'package:jumpat/features/workout/infrastructure/converters/workout_converter.dart';
 
 part 'workout_repository.g.dart';
