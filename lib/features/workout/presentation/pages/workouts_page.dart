@@ -63,6 +63,16 @@ class CalendarWorkoutsView extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: TableCalendar<WorkoutEntity>(
+                calendarStyle: CalendarStyle(
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
                 weekendDays: const [],
                 headerStyle: const HeaderStyle(formatButtonVisible: false),
                 startingDayOfWeek: StartingDayOfWeek.monday,
