@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:jumpat/features/core/domain/unique_id.dart';
 import 'package:jumpat/features/workout/domain/entities/template_entity.dart';
@@ -61,6 +64,25 @@ class Workouts extends _$Workouts {
     });
 
     return workout;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class WorkoutsByDate extends _$WorkoutsByDate {
+  @override
+  Future<Map<DateTime, List<WorkoutEntity>>> build() async {
+    final workouts = await ref.watch(workoutsProvider.future);
+    return await workouts.fold(
+      LinkedHashMap(
+        equals: DateUtils.isSameDay,
+        hashCode: (date) => date.day + date.month + date.year,
+      ),
+      (m, workout) async {
+        final j = await m;
+        j.putIfAbsent(workout.date, () => []).add(workout);
+        return j;
+      },
+    );
   }
 }
 

@@ -29,6 +29,7 @@ dependencies:
   share_plus: ^6.3.1
   shared_preferences: ^2.0.17
   sqlite3_flutter_libs: ^0.5.13
+  table_calendar: ^3.0.8
   tsid_creator:
     git:
       url: https://github.com/jerepenttinen/tsid_creator

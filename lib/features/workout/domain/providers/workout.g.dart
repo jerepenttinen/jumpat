@@ -21,6 +21,22 @@ final workoutsProvider =
 );
 
 typedef _$Workouts = AsyncNotifier<IList<WorkoutEntity>>;
+String _$workoutsByDateHash() => r'086abd0d34c46457f38554771d1af3064cbebee3';
+
+/// See also [WorkoutsByDate].
+@ProviderFor(WorkoutsByDate)
+final workoutsByDateProvider = AsyncNotifierProvider<WorkoutsByDate,
+    Map<DateTime, List<WorkoutEntity>>>.internal(
+  WorkoutsByDate.new,
+  name: r'workoutsByDateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$workoutsByDateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$WorkoutsByDate = AsyncNotifier<Map<DateTime, List<WorkoutEntity>>>;
 String _$workoutStateHash() => r'666cd5592c4abaa72f250b6644745365752215d3';
 
 /// Copied from Dart SDK

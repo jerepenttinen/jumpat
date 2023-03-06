@@ -71,5 +71,7 @@
   "importDatabase": "Import database",
   "exportDatabase": "Export database",
   "invalidFileFormat": "Invalid file format",
-  "databaseImported": "Database imported"
+  "databaseImported": "Database imported",
+  "calendarView": "Calendar",
+  "listView": "List"
 }

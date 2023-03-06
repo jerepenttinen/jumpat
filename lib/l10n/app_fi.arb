@@ -41,5 +41,7 @@
   "importDatabase": "Tuo tietokanta",
   "exportDatabase": "Vie tietokanta",
   "invalidFileFormat": "Ei tuettu tiedosto",
-  "databaseImported": "Tietokanta tuotu"
+  "databaseImported": "Tietokanta tuotu",
+  "calendarView": "Kalenteri",
+  "listView": "Lista"
 }

@@ -1,25 +1,110 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
+import 'package:jumpat/features/settings/domain/providers.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/choose_template_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class WorkoutsPage extends ConsumerWidget {
+class WorkoutsPage extends HookConsumerWidget {
   const WorkoutsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selected = useState(0);
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.name),
+        title: Text(t.name),
       ),
-      body: const WorkoutsList(),
+      body: IndexedStack(
+        index: selected.value,
+        children: const [CalendarWorkoutsView(), WorkoutsList()],
+      ),
       floatingActionButton: const WorkoutsFab(),
       drawer: const WorkoutsDrawer(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.calendar_month),
+            label: t.calendarView,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.list),
+            label: t.listView,
+          ),
+        ],
+        currentIndex: selected.value,
+        onTap: (value) => selected.value = value,
+      ),
+    );
+  }
+}
+
+class CalendarWorkoutsView extends HookConsumerWidget {
+  const CalendarWorkoutsView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final workoutsByDateAsync = ref.watch(workoutsByDateProvider);
+    final locale = ref.watch(localeStateProvider);
+    final focusedDayState = useState(DateTime.now());
+    final selectedDayState = useState(DateTime.now());
+    return workoutsByDateAsync.when(
+      data: (workoutsByDate) => SingleChildScrollView(
+        child: Wrap(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TableCalendar<WorkoutEntity>(
+                weekendDays: const [],
+                headerStyle: const HeaderStyle(formatButtonVisible: false),
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                locale: locale.toString(),
+                firstDay: DateTime.utc(2010, 0, 0),
+                lastDay: DateTime.utc(2050, 0, 0),
+                focusedDay: focusedDayState.value,
+                selectedDayPredicate: (day) =>
+                    DateUtils.isSameDay(selectedDayState.value, day),
+                onDaySelected: (selectedDay, focusedDay) {
+                  selectedDayState.value = selectedDay;
+                  focusedDayState.value = focusedDay;
+                },
+                eventLoader: (day) => workoutsByDate[day] ?? [],
+                calendarBuilders: CalendarBuilders(
+                  singleMarkerBuilder: (context, day, event) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: event.template
+                                .map((t) => t.color.getOrCrash())
+                                .toNullable() ??
+                            Colors.white,
+                      ),
+                      width: 8,
+                      height: 8,
+                    );
+                  },
+                ),
+              ),
+            ),
+            ...(workoutsByDate[selectedDayState.value] ?? <WorkoutEntity>[])
+                .map((e) => WorkoutCard(workoutId: e.id)),
+            const SizedBox(
+              height: 120,
+              width: double.infinity,
+            )
+          ],
+        ),
+      ),
+      error: (error, stackTrace) => Center(child: Text('$error')),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
