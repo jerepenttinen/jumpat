@@ -56,6 +56,7 @@ class CalendarWorkoutsView extends HookConsumerWidget {
     final locale = ref.watch(localeStateProvider);
     final focusedDayState = useState(DateTime.now());
     final selectedDayState = useState(DateTime.now());
+    final colorScheme = Theme.of(context).colorScheme;
     return workoutsByDateAsync.when(
       data: (workoutsByDate) => SingleChildScrollView(
         child: Wrap(
@@ -66,11 +67,16 @@ class CalendarWorkoutsView extends HookConsumerWidget {
                 calendarStyle: CalendarStyle(
                   selectedDecoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primaryContainer,
+                    color: colorScheme.primaryContainer,
                   ),
+                  selectedTextStyle:
+                      TextStyle(color: colorScheme.onPrimaryContainer),
                   todayDecoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: colorScheme.primary,
+                  ),
+                  todayTextStyle: TextStyle(
+                    color: colorScheme.onPrimary,
                   ),
                 ),
                 weekendDays: const [],
