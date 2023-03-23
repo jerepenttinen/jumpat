@@ -37,7 +37,7 @@ void main() async {
 
     await container.read(templateRepositoryProvider).save(template);
 
-    final workout = await workouts.addFromTemplate(template);
+    final workout = await workouts.addFromTemplate(template: template);
 
     expect(workout.template, equals(some(template)));
 

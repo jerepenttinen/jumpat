@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:jumpat/app_router.dart';
 import 'package:jumpat/features/settings/domain/providers.dart';
 import 'package:jumpat/features/workout/domain/entities/workout_entity.dart';
+import 'package:jumpat/features/workout/domain/providers/selected_day.dart';
 import 'package:jumpat/features/workout/domain/providers/workout.dart';
 import 'package:jumpat/features/workout/presentation/widgets/choose_template_dialog.dart';
 import 'package:jumpat/features/workout/presentation/widgets/workout_card.dart';
@@ -55,7 +56,8 @@ class CalendarWorkoutsView extends HookConsumerWidget {
     final workoutsByDateAsync = ref.watch(workoutsByDateProvider);
     final locale = ref.watch(localeStateProvider);
     final focusedDayState = useState(DateTime.now());
-    final selectedDayState = useState(DateTime.now());
+    final selectedDayState = ref.watch(selectedDayProvider);
+
     final colorScheme = Theme.of(context).colorScheme;
     return workoutsByDateAsync.when(
       data: (workoutsByDate) => SingleChildScrollView(
@@ -87,9 +89,9 @@ class CalendarWorkoutsView extends HookConsumerWidget {
                 lastDay: DateTime.utc(2050, 0, 0),
                 focusedDay: focusedDayState.value,
                 selectedDayPredicate: (day) =>
-                    DateUtils.isSameDay(selectedDayState.value, day),
+                    DateUtils.isSameDay(selectedDayState, day),
                 onDaySelected: (selectedDay, focusedDay) {
-                  selectedDayState.value = selectedDay;
+                  ref.read(selectedDayProvider.notifier).update(selectedDay);
                   focusedDayState.value = focusedDay;
                 },
                 eventLoader: (day) => workoutsByDate[day] ?? [],
@@ -110,7 +112,7 @@ class CalendarWorkoutsView extends HookConsumerWidget {
                 ),
               ),
             ),
-            ...(workoutsByDate[selectedDayState.value] ?? <WorkoutEntity>[])
+            ...(workoutsByDate[selectedDayState] ?? <WorkoutEntity>[])
                 .map((e) => WorkoutCard(workoutId: e.id)),
             const SizedBox(
               height: 120,
@@ -214,9 +216,11 @@ class WorkoutsFab extends ConsumerWidget {
               return;
             }
 
-            final workout = await ref
-                .read(workoutsProvider.notifier)
-                .addFromTemplate(template);
+            final workout =
+                await ref.read(workoutsProvider.notifier).addFromTemplate(
+                      template: template,
+                      date: ref.read(selectedDayProvider),
+                    );
 
             if (context.mounted) {
               await context.router
@@ -230,7 +234,8 @@ class WorkoutsFab extends ConsumerWidget {
           tooltip: t.newWorkout,
           child: const Icon(Icons.add),
           onPressed: () async {
-            final workout = WorkoutEntity.empty();
+            final workout =
+                WorkoutEntity.withDate(date: ref.read(selectedDayProvider));
             await ref.read(workoutsProvider.notifier).save(workout);
             if (context.mounted) {
               await context.router

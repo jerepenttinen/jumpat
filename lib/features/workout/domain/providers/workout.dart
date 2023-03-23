@@ -45,8 +45,13 @@ class Workouts extends _$Workouts {
     });
   }
 
-  Future<WorkoutEntity> addFromTemplate(TemplateEntity template) async {
-    final workout = WorkoutEntity.template(template: template);
+  Future<WorkoutEntity> addFromTemplate({
+    required TemplateEntity template,
+    DateTime? date,
+  }) async {
+    final workout = date == null
+        ? WorkoutEntity.template(template: template)
+        : WorkoutEntity.templateWithDate(template: template, date: date);
 
     final repository = ref.watch(workoutRepositoryProvider);
     await repository.save(workout);

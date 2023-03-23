@@ -19,10 +19,27 @@ class WorkoutEntity with _$WorkoutEntity implements IEntity {
         date: DateTime.now(),
         template: const None(),
       );
+
+  factory WorkoutEntity.withDate({required DateTime date}) => WorkoutEntity(
+        id: UniqueId(),
+        date: date,
+        template: const None(),
+      );
+
   factory WorkoutEntity.template({required TemplateEntity template}) =>
       WorkoutEntity(
         id: UniqueId(),
         date: DateTime.now(),
+        template: some(template),
+      );
+
+  factory WorkoutEntity.templateWithDate({
+    required TemplateEntity template,
+    required DateTime date,
+  }) =>
+      WorkoutEntity(
+        id: UniqueId(),
+        date: date,
         template: some(template),
       );
 }
