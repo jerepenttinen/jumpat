@@ -27,19 +27,26 @@ class SettingsRepository implements ISettingsRepository {
   @override
   Locale getLocale() {
     final l = sharedPreferences.getInt('locale');
-    if (l == null) {
-      return Locale(Platform.localeName);
+
+    String locale;
+    if (Platform.localeName.contains('_')) {
+      locale = Platform.localeName.split('_').first;
+    } else {
+      locale = Platform.localeName;
     }
 
+    if (l == null) {
+      return Locale(locale);
+    }
     if (l >= SupportedLocale.values.length || l < 0) {
       setLocale(SupportedLocale.system);
-      return Locale(Platform.localeName);
+      return Locale(locale);
     }
 
     if (l == SupportedLocale.finnish.index) {
       return const Locale('fi');
     }
-    return Locale(Platform.localeName);
+    return Locale(locale);
   }
 
   @override
