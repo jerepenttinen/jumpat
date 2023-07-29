@@ -16,13 +16,13 @@ void main() async {
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       ],
-      child: MyApp(),
+      child: Jumpat(),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
-  MyApp({super.key});
+class Jumpat extends ConsumerWidget {
+  Jumpat({super.key});
 
   final _appRouter = AppRouter();
 
