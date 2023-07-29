@@ -20,7 +20,9 @@ class ExerciseRepository extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<IList<ExerciseEntity>> getAll() async {
-    final result = await select(exercises).get();
+    final result = await (select(exercises)
+          ..orderBy([(t) => OrderingTerm(expression: t.name)]))
+        .get();
     return result.map(ExerciseConverter().toDomain).toIList();
   }
 
